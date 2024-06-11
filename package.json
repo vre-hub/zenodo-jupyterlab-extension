@@ -7,9 +7,9 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/vre-hub/zenodo-jupyterlab-extension.git",
+    "homepage": "",
     "bugs": {
-        "url": "https://github.com/vre-hub/zenodo-jupyterlab-extension.git/issues"
+        "url": "/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -26,7 +26,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vre-hub/zenodo-jupyterlab-extension.git.git"
+        "url": ".git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
