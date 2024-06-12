@@ -2,7 +2,7 @@ print("Please enter your access token:")
 ACCESS_TOKEN = input()
 COMMUNITY_ID = 'escape2020'
 
-import requests;
+import requests
 
 morePages = True
 page = 1
