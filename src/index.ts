@@ -12,47 +12,39 @@ import {
 
 import { Widget } from '@lumino/widgets';
 
-interface APODResponse {
+/* interface APODResponse {
   copyright: string;
   date: string;
   explanation: string;
   media_type: 'video' | 'image';
   title: string;
   url: string;
-};
+}; */
 
-class APODWidget extends Widget {
-  /**
-  * Construct a new APOD widget.
-  */
+class ZenodoWidget extends Widget {
   constructor() {
     super();
 
     this.addClass('my-apodWidget');
 
-    // Add an image element to the panel
+/*     // Add an image element to the panel
     this.img = document.createElement('img');
-    this.node.appendChild(this.img);
+    this.node.appendChild(this.img); */
 
     // Add a summary element to the panel
     this.summary = document.createElement('p');
     this.node.appendChild(this.summary);
   }
 
-  /**
-  * The image element associated with the widget.
-  */
-  readonly img: HTMLImageElement;
+  //readonly img: HTMLImageElement;
 
-  /**
-  * The summary text element associated with the widget.
-  */
   readonly summary: HTMLParagraphElement;
 
-  /**
-  * Handle update requests for the widget.
-  */
-  async updateAPODImage(): Promise<void> {
+  async fillContent(): Promise<void> {
+    this.summary.innerText = 'Hello';
+    return;
+  }
+  /* async updateAPODImage(): Promise<void> {
 
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`);
 
@@ -79,17 +71,13 @@ class APODWidget extends Widget {
     } else {
       this.summary.innerText = 'Random APOD fetched was not an image.';
     }
-  }
-
-  /**
-  * Get a random date string in YYYY-MM-DD format.
-  */
-  randomDate(): string {
+  } */
+  /* randomDate(): string {
     const start = new Date(2010, 1, 1);
     const end = new Date();
     const randomDate = new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
     return randomDate.toISOString().slice(0, 10);
-  }
+  } */
 }
 
 /**
@@ -99,7 +87,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
   // Declare a widget variable
-  let widget: MainAreaWidget<APODWidget>;
+  let widget: MainAreaWidget<ZenodoWidget>;
 
   // Add an application command
   const command: string = 'apod:open';
@@ -107,10 +95,10 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
     label: 'Random Astronomy Picture',
     execute: () => {
       if (!widget || widget.isDisposed) {
-        const content = new APODWidget();
+        const content = new ZenodoWidget();
         widget = new MainAreaWidget({content});
         widget.id = 'apod-jupyterlab';
-        widget.title.label = 'Astronomy Picture';
+        widget.title.label = 'Z';
         widget.title.closable = true;
       }
       if (!tracker.has(widget)) {
@@ -119,9 +107,9 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
       }
       if (!widget.isAttached) {
         // Attach the widget to the main work area if it's not there
-        app.shell.add(widget, 'main');
+        app.shell.add(widget, 'left');
       }
-      widget.content.updateAPODImage();
+      widget.content.fillContent();
 
       // Activate the widget
       app.shell.activateById(widget.id);
@@ -132,7 +120,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
   palette.addItem({ command, category: 'Tutorial' });
 
   // Track and restore the widget state
-  let tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
+  let tracker = new WidgetTracker<MainAreaWidget<ZenodoWidget>>({
     namespace: 'apod'
   });
   if (restorer) {
@@ -144,13 +132,12 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
 }
 
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab-apod',
+  id: 'zenodo_jupyterlab_extension',
   description: 'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
   autoStart: true,
   requires: [ICommandPalette],
   optional: [ILayoutRestorer],
-  activate: activate 
+  activate: activate
 };
-
 
 export default plugin;
