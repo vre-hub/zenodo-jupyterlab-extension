@@ -27,24 +27,26 @@ class ZenodoWidget extends Widget {
 
     this.addClass('my-apodWidget');
 
-/*     // Add an image element to the panel
+    // Add an image element to the panel
     this.img = document.createElement('img');
-    this.node.appendChild(this.img); */
+    this.img.width = 150;
+    this.node.appendChild(this.img);
 
     // Add a summary element to the panel
     this.summary = document.createElement('p');
     this.node.appendChild(this.summary);
   }
 
-  //readonly img: HTMLImageElement;
+  readonly img: HTMLImageElement;
 
   readonly summary: HTMLParagraphElement;
 
   async fillContent(): Promise<void> {
+    this.img.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
     this.summary.innerText = 'Hello';
     return;
   }
-  /* async updateAPODImage(): Promise<void> {
+  /* async updateAPODImage(): Promise<void> { http://localhost:8890/lab/icon/zenodo-gradient-square.png
 
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`);
 
