@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.1
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: michael.ryan.zengel@cern.ch
+author_name: Michael Zengel
+has_binder: true
+has_settings: false
+kind: frontend
+labextension_name: zenodo_jupyterlab_extension
+project_short_description: Provide an easy-to-use jupyterlab extension that is able
+    to upload, edit, etc entries in Zenodo.
+python_name: zenodo_jupyterlab_extension
+repository: https://github.com/vre-hub/zenodo-jupyterlab-extension/tree/dev
+test: true
+
