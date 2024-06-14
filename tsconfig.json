@@ -19,5 +19,5 @@
     "strictNullChecks": true,
     "target": "ES2018"
   },
-  "include": ["src/*"]
+  "include": ["src/*", "*.tsx", "src/icon/zenodoBlack.tsx"]
 }

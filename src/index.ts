@@ -18,7 +18,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icon/z_icon.svg';
 //import title_icon from '/src/icon/zenodo-black.svg';
 
-import zenodoBlack from './icon/zenodoBlack';
+//import zenodoBlack from './icon/zenodoBlack';
 
 /* const z_icon = `
   <svg width="288" height="288" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.046 51.046">
@@ -59,6 +59,8 @@ class ZenodoWidget extends Widget {
     this.title.icon = icon.bindprops();
 
     this.title_container = document.createElement('div');
+    //const svg = document.createElement('svg');
+
     //this.title_container.appendChild(zenodoBlack);
   }
 
