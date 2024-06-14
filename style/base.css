@@ -10,3 +10,8 @@
   align-items: left;
   overflow: auto;
 }
+
+icon {
+  font-size: '10pt';
+  vertical-align: 'middle'
+}
