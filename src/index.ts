@@ -16,6 +16,9 @@ import { Widget } from '@lumino/widgets';
 
 import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icon/z_icon.svg';
+//import title_icon from '/src/icon/zenodo-black.svg';
+
+import zenodoBlack from './icon/zenodoBlack';
 
 /* const z_icon = `
   <svg width="288" height="288" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.046 51.046">
@@ -54,11 +57,16 @@ class ZenodoWidget extends Widget {
       svgstr: z_icon,
     });
     this.title.icon = icon.bindprops();
+
+    this.title_container = document.createElement('div');
+    //this.title_container.appendChild(zenodoBlack);
   }
 
   readonly img: HTMLImageElement;
 
   readonly summary: HTMLParagraphElement;
+
+  readonly title_container: HTMLDivElement;
 
   async fillContent(): Promise<void> {
     this.img.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
@@ -104,16 +112,20 @@ class ZenodoWidget extends Widget {
 /**
 * Activate the APOD widget extension.
 */
-function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
+async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
   // Declare a widget variable
   let widget: MainAreaWidget<ZenodoWidget>;
 
+  /* const content = new ZenodoWidget();
+  widget = new MainAreaWidget({content});
+  app.shell.add(widget, 'left');
+  app.shell.activateById(widget.id); */
+
   // Add an application command
   const command: string = 'apod:open';
   app.commands.addCommand(command, {
-    label: 'Random Astronomy Picture',
     execute: () => {
       if (!widget || widget.isDisposed) {
         const content = new ZenodoWidget();
@@ -134,8 +146,8 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
     }
   });
 
-  // Add the command to the palette.
-  palette.addItem({ command, category: 'Tutorial' });
+/*   // Add the command to the palette.
+  palette.addItem({ command, category: 'Tutorial' }); */
 
   // Track and restore the widget state
   let tracker = new WidgetTracker<MainAreaWidget<ZenodoWidget>>({
@@ -147,6 +159,8 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
       name: () => 'apod'
     });
   }
+
+  app.commands.execute(command)
 }
 
 const plugin: JupyterFrontEndPlugin<void> = {
