@@ -18,7 +18,7 @@ import {
 
 import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icons/z_icon.svg';
-import title_icon from '/src/icons/zenodo-black.svg';
+import title_icon from '/src/icons/zenodo-blue.svg';
 
 /* interface APODResponse {
   copyright: string;
