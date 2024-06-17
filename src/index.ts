@@ -7,10 +7,16 @@ import {
 import {
   ICommandPalette,
   MainAreaWidget,
+  //Toolbar,
   WidgetTracker
 } from '@jupyterlab/apputils';
 
-import { Widget } from '@lumino/widgets';
+import { 
+  Menu,
+  MenuBar,
+  //MenuBar, 
+  Widget 
+ } from '@lumino/widgets';
 
 //import { zenodoIcon }from './icon/ZenodoIcon'
 
@@ -18,6 +24,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icon/z_icon.svg';
 //import {ReactSVG} from "react-svg";
 import title_icon from '/src/icon/zenodo-black.svg';
+//import { CommandRegistry } from '@lumino/commands';
 
 //import zenodoBlack from './icon/zenodoBlack';
 
@@ -40,19 +47,10 @@ import title_icon from '/src/icon/zenodo-black.svg';
 
 
 class ZenodoWidget extends Widget {
-  constructor() {
+  constructor(app: JupyterFrontEnd) {
     super();
 
     this.addClass('my-apodWidget');
-
-    // Add an image element to the panel
-    // this.img1 = document.createElement('img');
-    // this.img1.width = 150;
-    // this.node.appendChild(this.img1);
-
-    // Add a summary element to the panel
-    // this.summary = document.createElement('p');
-    // this.node.appendChild(this.summary);
     this.id = 'zenodo-jupyterlab-extension';
     //this.title.label = 'Zenodo';
     this.title.closable = true;
@@ -64,26 +62,41 @@ class ZenodoWidget extends Widget {
 
     this.title_container = document.createElement('div');
     this.title_container.id = 'Zenodo-Title';
-    this.title_container.setAttribute("style", "padding-left: 40px");
+    this.title_container.setAttribute("style", "text-align: center");
     this.title_container.innerHTML = title_icon;
     this.node.appendChild(this.title_container);
 
-    
-    //this.svg = document.createElement('ReactSVG')
-    /* const svg = document.createElement('svg');
-    svg = zenodoBlack */
-    
+    this.main_text = document.createElement('p');
+    this.main_text.innerText = 'Testing';
+    this.node.appendChild(this.main_text);
 
-    //this.title_container.appendChild(zenodoBlack);
+    const menuBar = new MenuBar();
+    
+    // Create a menu
+    const fileMenu = new Menu({ commands: app.commands });
+    fileMenu.title.label = 'File';
+    
+    // Add commands to the menu
+    fileMenu.addItem({ command: 'my-extension:new-file' });
+    fileMenu.addItem({ command: 'my-extension:open-file' });
+    
+    // Add the menu to the menu bar
+    menuBar.addMenu(fileMenu);
+
+    // Create another menu if needed
+    const editMenu = new Menu({ commands: app.commands });
+    editMenu.title.label = 'Edit';
+    editMenu.addItem({ command: 'my-extension:copy' });
+    editMenu.addItem({ command: 'my-extension:paste' });
+
+    menuBar.addMenu(editMenu);
+
+    // Add the menu bar to the content node
+    this.node.insertBefore(menuBar.node, this.main_text);
   }
 
-  // readonly img1: HTMLImageElement;
-
-  // readonly summary: HTMLParagraphElement;
-
   readonly title_container: HTMLDivElement;
-
-  //readonly svg: ReactSVG;
+  readonly main_text: HTMLParagraphElement;
 
   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
@@ -131,7 +144,34 @@ class ZenodoWidget extends Widget {
 */
 async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
+  // Define commands
+  app.commands.addCommand('my-extension:new-file', {
+    label: 'New File',
+    execute: () => {
+      console.log('New File command executed');
+    }
+  });
 
+  app.commands.addCommand('my-extension:open-file', {
+    label: 'Open File',
+    execute: () => {
+      console.log('Open File command executed');
+    }
+  });
+
+  app.commands.addCommand('my-extension:copy', {
+    label: 'Copy',
+    execute: () => {
+      console.log('Copy command executed');
+    }
+  });
+
+  app.commands.addCommand('my-extension:paste', {
+    label: 'Paste',
+    execute: () => {
+      console.log('Paste command executed');
+    }
+  });
   // Declare a widget variable
   let widget: MainAreaWidget<ZenodoWidget>;
 
@@ -145,7 +185,7 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
   app.commands.addCommand(command, {
     execute: () => {
       if (!widget || widget.isDisposed) {
-        const content = new ZenodoWidget();
+        const content = new ZenodoWidget(app);
         widget = new MainAreaWidget({content});
       }
       if (!tracker.has(widget)) {
