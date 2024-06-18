@@ -11,10 +11,53 @@
     overflow: auto;
   }
   
-  icon {
+icon {
     font-size: '10pt';
     vertical-align: 'middle';
   }
-  .jp-Toolbar-micro {
+.jp-Toolbar-micro {
     display: none;
   }
+
+  /* src/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-left: 1rem;
+}
+
+.navbar-links a {
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.navbar-links a:hover {
+  color: #ddd;
+}
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    display: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+}

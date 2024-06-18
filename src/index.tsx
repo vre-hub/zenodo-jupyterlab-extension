@@ -1,7 +1,8 @@
 import {
   ILayoutRestorer,
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
+  //JupyterLab
 } from '@jupyterlab/application';
 
 import {
@@ -10,15 +11,24 @@ import {
   WidgetTracker
 } from '@jupyterlab/apputils';
 
-import { 
-  Menu,
-  MenuBar,
+import {
   Widget 
  } from '@lumino/widgets';
+
+ //import {Search} from './pages/search';
 
 import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icons/z_icon.svg';
 import title_icon from '/src/icons/zenodo-blue.svg';
+
+import { createRoot, Root } from 'react-dom/client';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// //import ReactDOM from 'react-dom';
+import React from 'react';
+
+import SideBarPanel from './components/SideBarPanel';
 
 //import React from 'react';
 
@@ -33,30 +43,6 @@ import title_icon from '/src/icons/zenodo-blue.svg';
   url: string;
 }; */
 
-class navBar extends MenuBar {
-  constructor(app: JupyterFrontEnd) {
-    super();
-    // Create a menu
-    const fileMenu = new Menu({ commands: app.commands });
-    fileMenu.title.label = 'Item 1';
-    
-    // Add commands to the menu
-    fileMenu.addItem({ command: 'my-extension:new-file' });
-    fileMenu.addItem({ command: 'my-extension:open-file' });
-    
-    // Add the menu to the menu bar
-    this.addMenu(fileMenu);
-
-    // Create another menu if needed
-    const editMenu = new Menu({ commands: app.commands });
-    editMenu.title.label = 'Item 2';
-    editMenu.addItem({ command: 'my-extension:copy' });
-    editMenu.addItem({ command: 'my-extension:paste' });
-
-    this.addMenu(editMenu);
-  }
-}
-
 /* const Navigation: React.FC = () => {
   return (
     <MenuBar />
@@ -65,9 +51,14 @@ class navBar extends MenuBar {
 
 
 class ZenodoWidget extends Widget {
-  constructor(app: JupyterFrontEnd) {
-    super();
+  private root: Root | null = null;
+  //private app=JupyterFrontEnd<any,any>;
+  //private app = JupyterFrontEnd<ILabShell, "desktop">;
+  private app: JupyterFrontEnd;
 
+  constructor(app: JupyterFrontEnd<JupyterFrontEnd.IShell, "desktop" | "mobile">) {
+    super();
+    this.app = app;
     this.addClass('my-apodWidget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
@@ -87,17 +78,23 @@ class ZenodoWidget extends Widget {
     this.main_text.innerText = 'Testing';
     this.node.appendChild(this.main_text);
 
-    const menuBar = new navBar(app);
-
-    // Add the menu bar to the content node
-    this.node.insertBefore(menuBar.node, this.main_text);
-
     this.menuDiv = document.createElement('div');
   }
 
   readonly title_container: HTMLDivElement;
   readonly main_text: HTMLParagraphElement;
   readonly menuDiv: HTMLDivElement;
+
+  onAfterAttach(msg: any): void {
+    this.root = createRoot(this.node);
+    this.root.render(<SideBarPanel app={this.app} />);
+  }
+
+  onBeforeDetach(msg: any): void {
+    if (this.root) {
+      this.root.unmount();
+    }
+  }
 
   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
@@ -143,9 +140,15 @@ class ZenodoWidget extends Widget {
 /**
 * Activate the APOD widget extension.
 */
-async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
+async function activate(app: JupyterFrontEnd<any, any>, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
   // Define commands
+  app.commands.addCommand('zenodo-jupyterlab: search', {
+    label: 'Search Field',
+    execute: () => {
+      console.log('You pressed search!');
+    }
+  })
   app.commands.addCommand('my-extension:new-file', {
     label: 'New File',
     execute: () => {
