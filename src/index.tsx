@@ -20,6 +20,10 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icons/z_icon.svg';
 import title_icon from '/src/icons/zenodo-blue.svg';
 
+//import React from 'react';
+
+//import { MenuBar } from '../components'
+
 /* interface APODResponse {
   copyright: string;
   date: string;
@@ -28,6 +32,36 @@ import title_icon from '/src/icons/zenodo-blue.svg';
   title: string;
   url: string;
 }; */
+
+class navBar extends MenuBar {
+  constructor(app: JupyterFrontEnd) {
+    super();
+    // Create a menu
+    const fileMenu = new Menu({ commands: app.commands });
+    fileMenu.title.label = 'Item 1';
+    
+    // Add commands to the menu
+    fileMenu.addItem({ command: 'my-extension:new-file' });
+    fileMenu.addItem({ command: 'my-extension:open-file' });
+    
+    // Add the menu to the menu bar
+    this.addMenu(fileMenu);
+
+    // Create another menu if needed
+    const editMenu = new Menu({ commands: app.commands });
+    editMenu.title.label = 'Item 2';
+    editMenu.addItem({ command: 'my-extension:copy' });
+    editMenu.addItem({ command: 'my-extension:paste' });
+
+    this.addMenu(editMenu);
+  }
+}
+
+/* const Navigation: React.FC = () => {
+  return (
+    <MenuBar />
+  );
+} */
 
 
 class ZenodoWidget extends Widget {
@@ -53,33 +87,17 @@ class ZenodoWidget extends Widget {
     this.main_text.innerText = 'Testing';
     this.node.appendChild(this.main_text);
 
-    const menuBar = new MenuBar();
-    
-    // Create a menu
-    const fileMenu = new Menu({ commands: app.commands });
-    fileMenu.title.label = 'Item 1';
-    
-    // Add commands to the menu
-    fileMenu.addItem({ command: 'my-extension:new-file' });
-    fileMenu.addItem({ command: 'my-extension:open-file' });
-    
-    // Add the menu to the menu bar
-    menuBar.addMenu(fileMenu);
-
-    // Create another menu if needed
-    const editMenu = new Menu({ commands: app.commands });
-    editMenu.title.label = 'Item 2';
-    editMenu.addItem({ command: 'my-extension:copy' });
-    editMenu.addItem({ command: 'my-extension:paste' });
-
-    menuBar.addMenu(editMenu);
+    const menuBar = new navBar(app);
 
     // Add the menu bar to the content node
     this.node.insertBefore(menuBar.node, this.main_text);
+
+    this.menuDiv = document.createElement('div');
   }
 
   readonly title_container: HTMLDivElement;
   readonly main_text: HTMLParagraphElement;
+  readonly menuDiv: HTMLDivElement;
 
   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
