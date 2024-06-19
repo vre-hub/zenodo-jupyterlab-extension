@@ -50,6 +50,7 @@ runs:
     - name: Install yarn
       run: |
         source activate jupyterlab-ext
+        conda list
         npm install -g yarn
       shell: bash
 
