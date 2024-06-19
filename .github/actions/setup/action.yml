@@ -33,10 +33,10 @@ runs:
         conda install yarn
       shell: bash
 
-    # - name: Verify yarn installation
-    #   run: |
-    #     yarn --version
-    #   shell: bash
+    - name: Verify yarn installation
+      run: |
+        yarn --version
+      shell: bash
     
     # - name: Running Yarn Build
     #   run: |
