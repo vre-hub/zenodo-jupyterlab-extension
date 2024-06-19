@@ -22,6 +22,11 @@ runs:
     #     pip install -v .
     #   shell: bash
 
+    - name: Clearing cache to ensure correct yarn usage
+      run: |
+        rm -rf node_modules
+        rm -rf .yarn/cache
+
     - name: Install yarn
       run: |
         conda install yarn
