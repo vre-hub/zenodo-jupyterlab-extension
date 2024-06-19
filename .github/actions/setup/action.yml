@@ -28,6 +28,7 @@ runs:
 
     - name: Verify Node.js Installation
       run: |
+        source activate jupyterlab-ext
         node -v
         npm -v
       shell: bash
