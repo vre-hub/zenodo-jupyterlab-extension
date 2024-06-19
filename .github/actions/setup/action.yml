@@ -49,11 +49,13 @@ runs:
 
     - name: Install yarn
       run: |
-        conda install yarn
+        source activate jupyterlab-ext
+        npm install -g yarn
       shell: bash
 
     - name: Verify yarn installation
       run: |
+        source activate jupyterlab-ext
         yarn --version
       shell: bash
     
