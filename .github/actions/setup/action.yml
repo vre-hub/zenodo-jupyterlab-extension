@@ -29,7 +29,7 @@ runs:
     - name: Testing conda env in separate job
       run: |
         conda info --envs
-      shell: bash
+      shell: bash -l {0}
 
     - name: Verify Node.js Installation
       run: |
