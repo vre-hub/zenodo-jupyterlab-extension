@@ -14,8 +14,11 @@ runs:
 
     - name: Create and activate conda environment
       run: |
+          conda config --set always_yes yes --set changeps1 no
+          conda init bash
+          source ~/.bashrc
           conda create -n jupyterlab-ext --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab=4 nodejs=20 git copier=9 jinja2-time
-          conda activate jupyterlab-ext
+          source activate jupyterlab-ext
       shell: bash
 
     # - name: Setup Node
