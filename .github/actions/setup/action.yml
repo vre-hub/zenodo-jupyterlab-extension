@@ -24,7 +24,7 @@ runs:
 
     - name: Install yarn
       run: |
-        pip install yarn
+        conda install yarn
       shell: bash
 
     - name: Verify yarn installation
