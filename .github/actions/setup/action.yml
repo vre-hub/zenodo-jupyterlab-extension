@@ -15,7 +15,8 @@ runs:
 
     - name: Install yarn
       run: |
-      conda install yarn
+        conda install yarn
+      shell: bash
     
     # - name: Running Yarn Build
     #   run: |
