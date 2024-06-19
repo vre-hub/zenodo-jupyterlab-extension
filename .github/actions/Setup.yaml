@@ -1,6 +1,6 @@
 name: "Setup"
 runs:
-  using: "composte"
+  using: "composite"
   steps:
     - name: Install Node
     uses: actions/setup-node@v4
