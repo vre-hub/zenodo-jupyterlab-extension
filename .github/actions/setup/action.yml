@@ -12,3 +12,8 @@ runs:
         node -v
         npm -v
       shell: bash
+    
+    - name: Running Yarn Build
+      run: |
+        yarn run build
+      shell: bash
