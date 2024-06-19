@@ -13,14 +13,23 @@ runs:
         npm -v
       shell: bash
 
-    - name: Install environmental variables
-      run: |
-        pip install -v .
-      shell: bash
+    # - name: Install JupyterLab
+    #   run: |
+
+
+    # - name: Install environmental variables
+    #   run: |
+    #     pip install -v .
+    #   shell: bash
 
     - name: Install yarn
       run: |
-        conda install yarn
+        pip install yarn
+      shell: bash
+
+    - name: Verify yarn installation
+      run: |
+        yarn --version
       shell: bash
     
     # - name: Running Yarn Build
