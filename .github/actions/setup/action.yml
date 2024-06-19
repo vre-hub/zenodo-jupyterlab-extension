@@ -26,6 +26,7 @@ runs:
       run: |
         rm -rf node_modules
         rm -rf .yarn/cache
+      shell: bash
 
     - name: Install yarn
       run: |
