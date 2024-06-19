@@ -15,7 +15,7 @@ runs:
 
     - name: Install environmental variables
       run: |
-        pip install -ve .
+        pip install -v .
       shell: bash
 
     - name: Install yarn
