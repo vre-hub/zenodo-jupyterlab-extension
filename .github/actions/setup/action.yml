@@ -11,6 +11,11 @@ runs:
       uses: conda-incubator/setup-miniconda@v3
       with:
         auto-update-conda: true
+        
+    - name: Testing conda env in separate job
+      run: |
+        conda info --envs
+      shell: bash -l {0}
 
     - name: Create and activate conda environment
       run: |
