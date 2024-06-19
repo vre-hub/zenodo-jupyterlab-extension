@@ -3,7 +3,7 @@ import { JupyterFrontEnd } from '@jupyterlab/application';
 import React, {useState} from 'react';
 
 interface NavBarProps {
-    app: JupyterFrontEnd<any,any>;
+    app: JupyterFrontEnd;
 }
 
 const NavBar: React.FC<NavBarProps> = (

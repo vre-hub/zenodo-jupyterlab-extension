@@ -19,5 +19,5 @@
     "strictNullChecks": true,
     "target": "ES2018"
   },
-  "include": ["src/*", "src/pages/*", "src/components/*", "src/icons/*"]
+  "include": ["src/*", "src/pages/*", "src/components/*", "src/icons/*", "src/API/*"]
 }

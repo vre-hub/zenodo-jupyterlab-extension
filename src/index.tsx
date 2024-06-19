@@ -56,9 +56,10 @@ class ZenodoWidget extends Widget {
   //private app = JupyterFrontEnd<ILabShell, "desktop">;
   private app: JupyterFrontEnd;
 
-  constructor(app: JupyterFrontEnd<JupyterFrontEnd.IShell, "desktop" | "mobile">) {
+  constructor(app: JupyterFrontEnd) {
     super();
     this.app = app;
+    this.isTrue = true;
     this.addClass('my-apodWidget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
@@ -84,16 +85,21 @@ class ZenodoWidget extends Widget {
   readonly title_container: HTMLDivElement;
   readonly main_text: HTMLParagraphElement;
   readonly menuDiv: HTMLDivElement;
+  isTrue: boolean;
 
   onAfterAttach(msg: any): void {
     this.root = createRoot(this.node);
-    this.root.render(<SideBarPanel app={this.app} />);
+    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue}/>);
   }
 
   onBeforeDetach(msg: any): void {
     if (this.root) {
       this.root.unmount();
     }
+  }
+
+  setIsTrue(value: boolean): void {
+    this.isTrue = value;
   }
 
   async fillContent(): Promise<void> {
@@ -140,16 +146,10 @@ class ZenodoWidget extends Widget {
 /**
 * Activate the APOD widget extension.
 */
-async function activate(app: JupyterFrontEnd<any, any>, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
+async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
   // Define commands
-  app.commands.addCommand('zenodo-jupyterlab: search', {
-    label: 'Search Field',
-    execute: () => {
-      console.log('You pressed search!');
-    }
-  })
-  app.commands.addCommand('my-extension:new-file', {
+  /* app.commands.addCommand('my-extension:new-file', {
     label: 'New File',
     execute: () => {
       console.log('New File command executed');
@@ -175,9 +175,16 @@ async function activate(app: JupyterFrontEnd<any, any>, palette: ICommandPalette
     execute: () => {
       console.log('Paste command executed');
     }
-  });
+  }); */
   // Declare a widget variable
   let widget: MainAreaWidget<ZenodoWidget>;
+  app.commands.addCommand('zenodo-jupyterlab: search', {
+    label: 'Search Field',
+    execute: () => {
+      //widget.content.setIsTrue(true);
+      console.log('You pressed search!');
+    }
+  })
 
   /* const content = new ZenodoWidget();
   widget = new MainAreaWidget({content});
