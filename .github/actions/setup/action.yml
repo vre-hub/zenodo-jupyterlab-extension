@@ -13,6 +13,11 @@ runs:
         npm -v
       shell: bash
 
+    - name: Install environmental variables
+      run: |
+        pip install -ve .
+      shell: bash
+
     - name: Install yarn
       run: |
         conda install yarn
