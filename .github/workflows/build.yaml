@@ -44,7 +44,7 @@ jobs:
         shell: bash
 
       - name: Install JS dependencies
-        run: yarn install
+        run: jlpm
         shell: bash
 
   install_extension:
