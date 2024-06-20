@@ -47,31 +47,25 @@ jobs:
         run: yarn install
         shell: bash
 
-      - name: Save Python dependencies
-        run: tar -czf python-dependencies.tar.gz -C ${{ runner.tool_cache }} .
-        shell: bash
-        if: success()
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: python-dependencies
-          path: python-dependencies.tar.gz
-
-  install_extension:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: python-dependencies
-          path: .
-
-      - run: |
+      - name: Install Extension
+        un: |
           set -eux
-          pip list
-          export PATH="$HOME/.local/bin:$PATH"
-          jupyterlab --version
           python -m pip install .
+
+  # install_extension:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: python-dependencies
+  #         path: .
+
+  #     - run: |
+  #         set -eux
+  #         pip list
+  #         export PATH="$HOME/.local/bin:$PATH"
+  #         jupyterlab --version
+  #         python -m pip install .
