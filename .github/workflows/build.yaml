@@ -1,4 +1,4 @@
-name: Build 
+name: Build and install extension
 
 on:
   push:
@@ -49,6 +49,7 @@ jobs:
 
   install_extension:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - run: |
           set -eux
