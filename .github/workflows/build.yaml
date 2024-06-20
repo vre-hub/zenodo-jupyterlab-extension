@@ -56,5 +56,6 @@ jobs:
           set -eux
           which yarn
           export PATH="$HOME/.local/bin:$PATH"
+          yarn global list | grep jupyterlab
           which jlpm
           python -m pip install .
