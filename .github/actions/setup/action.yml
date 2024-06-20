@@ -36,6 +36,8 @@ runs:
 
     - name: Testing conda env in separate job
       run: |
+        source ~/.bashrc
+        conda activate jupyterlab-ext
         conda info --envs
       shell: bash -l {0}
 
