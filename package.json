@@ -57,18 +57,26 @@
     },
     "dependencies": {
         "@jupyterlab/application": "^4.0.0",
+        "boostrap": "^2.0.0",
+        "bootstrap": "^5.3.3",
+        "primereact": "^10.6.6",
+        "react-bootstrap": "^2.10.2",
+        "react-dom": "^18.3.1",
+        "react-jss": "^10.10.0",
         "yarn": "^1.22.22"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
         "@jupyterlab/testutils": "^4.0.0",
+        "@types/bootstrap": "^5",
         "@types/jest": "^29.2.0",
         "@types/json-schema": "^7.0.11",
-        "@types/react": "^18.0.26",
+        "@types/react": "^18.3.3",
         "@types/react-addons-linked-state-mixin": "^0.14.22",
+        "@types/react-dom": "^18.3.0",
         "@typescript-eslint/eslint-plugin": "^6.1.0",
         "@typescript-eslint/parser": "^6.1.0",
-        "css-loader": "^6.7.1",
+        "css-loader": "^7.1.2",
         "eslint": "^8.36.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^5.0.0",
@@ -192,5 +200,5 @@
             "value-no-vendor-prefix": null
         }
     },
-    "packageManager": "yarn@4.3.0"
+    "packageManager": "yarn@1.22.22"
 }
