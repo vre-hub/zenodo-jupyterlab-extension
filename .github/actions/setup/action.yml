@@ -54,12 +54,12 @@ runs:
         export PATH=$(npm bin -g):$PATH
         echo "path"
         which yarn
+        sed -i 's/yarnPath/# yarnPath/' .yarnrc.yml
         yarn --version
         npm list
         npm list yarn
         echo $PATH
         which yarn
-        sed -i 's/yarnPath/# yarnPath/' .yarnrc.yml
         yarn --version
         yarn cache clean
         yarn install
