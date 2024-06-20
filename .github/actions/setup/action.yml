@@ -47,7 +47,8 @@ runs:
       run: |
         source ~/.bashrc
         conda activate jupyterlab-ext
-        conda install yarn=1.22.22
+        conda install yarn
+        npm install -g yarn
         yarn set version stable
         echo $PATH
         which yarn
