@@ -54,8 +54,7 @@ runs:
         which yarn
         conda list yarn
         pwd
-        cat ./.yarnrc
-        cat ./.yarnrc.yml
+        ls -a
         yarn --version
       shell: bash
 
