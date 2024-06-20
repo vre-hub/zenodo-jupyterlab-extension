@@ -55,4 +55,6 @@ jobs:
       - run: |
           set -eux
           which yarn
+          export PATH="$HOME/.local/bin:$PATH"
+          which jlpm
           python -m pip install .
