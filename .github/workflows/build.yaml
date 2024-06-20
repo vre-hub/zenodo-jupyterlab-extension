@@ -47,7 +47,6 @@ jobs:
         run: |
           npm install
           yarn install
-          yarn build yarn@npm:1.22.22
         shell: bash
 
       - name: JLPM Test
