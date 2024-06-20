@@ -47,7 +47,9 @@ runs:
       run: |
         source ~/.bashrc
         conda activate jupyterlab-ext
-        npm install yarn
+        conda info --envs
+        npm uninstall yarn
+        npm install yarn@1.22.22
         npm list
         npm list yarn
         echo $PATH
@@ -57,7 +59,7 @@ runs:
         ls -a
         ls -a ~
         yarn --version
-      shell: bash
+      shell: bash -l {0}
 
     - name: Verify yarn installation
       run: |
