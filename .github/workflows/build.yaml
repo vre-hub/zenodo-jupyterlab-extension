@@ -49,14 +49,14 @@ jobs:
       #     yarn install
       #   shell: bash
 
-      # - name: JLPM Test
-      #   run: jlpm
-      #   shell: bash
+      - name: JLPM Test
+        run: yarn install
+        shell: bash
 
       - name: Install Extension
         run: |
           set -eux
-          python -m pip install -ve .
+          python -m pip install .
 
   # install_extension:
   #   runs-on: ubuntu-latest
