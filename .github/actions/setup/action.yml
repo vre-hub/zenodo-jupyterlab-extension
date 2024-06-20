@@ -50,11 +50,11 @@ runs:
         npm install yarn
         npm list
         npm list yarn
-        yarn set version stable
         echo $PATH
         which yarn
         conda list yarn
         cat ~/.yarnrc
+        cat ~/.yarnrc.yml
         yarn --version
       shell: bash
 
