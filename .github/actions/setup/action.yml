@@ -53,8 +53,8 @@ runs:
         echo $PATH
         which yarn
         conda list yarn
-        cat ~/.yarnrc
-        cat ~/.yarnrc.yml
+        cat ./.yarnrc
+        cat ./.yarnrc.yml
         yarn --version
       shell: bash
 
