@@ -1,0 +1,2 @@
+jupyterlab>4,<5
+notebook<7
