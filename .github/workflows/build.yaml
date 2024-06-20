@@ -49,10 +49,6 @@ jobs:
           npm install
         shell: bash
 
-      -name: JLPM Test
-        run: jlpm
-        shell: bash
-
       - name: Install Extension
         run: |
           set -eux
