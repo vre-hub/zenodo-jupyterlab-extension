@@ -53,4 +53,5 @@ jobs:
     steps:
       - run: |
           set -eux
+          pwd
           python -m pip install .
