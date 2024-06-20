@@ -19,7 +19,9 @@ jobs:
       
       - name: Install yarn
         run: |
+          npm install -g corepack
           npm install -g yarn
+          corepack enable
           yarn -v
 
       - name: Install Python
