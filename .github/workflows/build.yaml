@@ -45,13 +45,12 @@ jobs:
 
       - name: Install JS dependencies
         run: |
-          yarn set version stable
-          yarn install
           npm install
+          yarn install
         shell: bash
 
       - name: JLPM Test
-        run: jlpm install --force
+        run: jlpm install
         shell: bash
 
       - name: Install Extension
