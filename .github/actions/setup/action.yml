@@ -70,5 +70,7 @@ runs:
     
     - name: Running Yarn Build
       run: |
+        source ~/.bashrc
+        conda activate jupyterlab-ext
         yarn run build
       shell: bash
