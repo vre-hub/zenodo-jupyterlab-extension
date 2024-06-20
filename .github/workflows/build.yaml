@@ -50,7 +50,9 @@ jobs:
       #   shell: bash
 
       - name: JLPM Test
-        run: yarn install
+        run: |
+          npm cache clean --force
+          yarn install
         shell: bash
 
       - name: Install Extension
