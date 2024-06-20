@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Install Extension
-        un: |
+        run: |
           set -eux
           python -m pip install .
 
