@@ -44,7 +44,7 @@ jobs:
         shell: bash
 
       - name: Install JS dependencies
-        run: jlpm install --frozen-lockfile
+        run: jlpm install --immutable
         shell: bash
 
   install_extension:
