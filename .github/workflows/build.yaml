@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: JLPM Dependency Check
-        run: jlpm install
+        run: diff <(yarn list --pattern '') <(jlpm list --pattern '')
 
       - name: Install Extension
         run: |
