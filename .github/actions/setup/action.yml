@@ -48,8 +48,9 @@ runs:
         source ~/.bashrc
         conda activate jupyterlab-ext
         conda info --envs
-        npm uninstall yarn
-        npm install yarn@1.22.22
+        npm uninstall -g yarn
+        npm install -g yarn@1.22.22
+        export PATH=$(npm bin -g):$PATH
         npm list
         npm list yarn
         echo $PATH
