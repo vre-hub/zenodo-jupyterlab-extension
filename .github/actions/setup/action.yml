@@ -56,8 +56,6 @@ runs:
         which yarn
         sed -i 's/yarnPath/# yarnPath/' .yarnrc.yml
         yarn --version
-        npm list
-        npm list yarn
         echo $PATH
         which yarn
         yarn --version
