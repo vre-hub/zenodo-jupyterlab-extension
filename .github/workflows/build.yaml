@@ -47,7 +47,7 @@ jobs:
         run: |
           npm install
           yarn install
-          yarn update
+          yarn upgrade
         shell: bash
 
       - name: JLPM Test
