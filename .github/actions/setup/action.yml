@@ -34,15 +34,9 @@ runs:
     #     conda install -y -c conda-forge nodejs=20
     #   shell: bash
 
-    - name: Testing conda env in separate job
-      run: |
-        source ~/.bashrc
-        conda activate jupyterlab-ext
-        conda info --envs
-      shell: bash -l {0}
-
     - name: Verify Node.js Installation
       run: |
+        source ~/.bashrc
         conda activate jupyterlab-ext
         node -v
         npm -v
