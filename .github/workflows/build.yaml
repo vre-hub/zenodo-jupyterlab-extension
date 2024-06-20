@@ -47,8 +47,8 @@ jobs:
         run: yarn install
         shell: bash
 
-      - name: JLPM Version check
-        run: jlpm --version
+      - name: JLPM Dependency Check
+        run: jlpm install
 
       - name: Install Extension
         run: |
