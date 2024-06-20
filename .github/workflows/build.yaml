@@ -54,11 +54,15 @@ jobs:
       #     npm cache clean --force
       #     yarn install
       #   shell: bash
+      - name: Clear NPM Cache
+        run: python -m pip cache purge
+        shell: bash
 
       - name: Install Extension
         run: |
           set -eux
           python -m pip install .
+        shell: bash
 
   # install_extension:
   #   runs-on: ubuntu-latest
