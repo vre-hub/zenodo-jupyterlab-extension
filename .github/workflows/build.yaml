@@ -47,6 +47,9 @@ jobs:
         run: yarn install
         shell: bash
 
+      - name: JLPM Version check
+        run: jlpm --version
+
       - name: Install Extension
         run: |
           set -eux
