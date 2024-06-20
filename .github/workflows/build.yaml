@@ -44,7 +44,7 @@ jobs:
         shell: bash
 
       - name: Install JS dependencies
-        run: jlpm install --immutable
+        run: jlpm install
         shell: bash
 
   install_extension:
