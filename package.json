@@ -57,12 +57,15 @@
     },
     "dependencies": {
         "@jupyterlab/application": "^4.0.0",
+        "@popperjs/core": "^2.11.8",
         "boostrap": "^2.0.0",
         "bootstrap": "^5.3.3",
         "primereact": "^10.6.6",
+        "react": "^18.3.1",
         "react-bootstrap": "^2.10.2",
         "react-dom": "^18.3.1",
         "react-jss": "^10.10.0",
+        "webpack": "^5.92.1",
         "yarn": "^1.22.22"
     },
     "devDependencies": {
