@@ -29,11 +29,6 @@ runs:
           conda info --envs
       shell: bash -l {0}
 
-    # - name: Setup Node
-    #   run: |
-    #     conda install -y -c conda-forge nodejs=20
-    #   shell: bash
-
     - name: Verify Node.js Installation
       run: |
         source ~/.bashrc
@@ -41,15 +36,6 @@ runs:
         node -v
         npm -v
       shell: bash
-
-    # - name: Install JupyterLab
-    #   run: |
-
-
-    # - name: Install environmental variables
-    #   run: |
-    #     pip install -v .
-    #   shell: bash
 
     - name: Clearing cache to ensure correct yarn usage
       run: |
@@ -59,14 +45,16 @@ runs:
 
     - name: Install yarn
       run: |
-        source activate jupyterlab-ext
+        source ~/.bashrc
+        conda activate jupyterlab-ext
         conda list
         npm install -g yarn
       shell: bash
 
     - name: Verify yarn installation
       run: |
-        source activate jupyterlab-ext
+        source ~/.bashrc
+        conda activate jupyterlab-ext
         yarn --version
       shell: bash
     
