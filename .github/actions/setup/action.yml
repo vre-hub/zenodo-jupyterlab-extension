@@ -47,8 +47,8 @@ runs:
       run: |
         source ~/.bashrc
         conda activate jupyterlab-ext
-        conda list
-        npm install -g yarn
+        conda install yarn
+        yarn --version
       shell: bash
 
     - name: Verify yarn installation
