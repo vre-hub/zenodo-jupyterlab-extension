@@ -53,6 +53,7 @@ runs:
         echo "installed"
         export PATH=$(npm bin -g):$PATH
         echo "path"
+        which yarn
         npm list
         npm list yarn
         echo $PATH
