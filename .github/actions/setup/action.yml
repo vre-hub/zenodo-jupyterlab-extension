@@ -54,6 +54,7 @@ runs:
         export PATH=$(npm bin -g):$PATH
         echo "path"
         which yarn
+        yarn --version
         npm list
         npm list yarn
         echo $PATH
