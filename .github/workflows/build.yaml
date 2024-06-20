@@ -51,7 +51,7 @@ jobs:
         shell: bash
 
       - name: JLPM Test
-        run: jlpm install
+        run: jlpm
         shell: bash
 
       - name: Install Extension
