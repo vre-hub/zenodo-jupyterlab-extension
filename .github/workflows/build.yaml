@@ -47,6 +47,11 @@ jobs:
         run: yarn install
         shell: bash
 
+      - name: Save Python dependencies
+        run: tar -czf python-dependencies.tar.gz -C ${{ runner.tool_cache }} .
+        shell: bash
+        if: success()
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -63,7 +68,7 @@ jobs:
         with:
           name: python-dependencies
           path: .
-          
+
       - run: |
           set -eux
           pip list
