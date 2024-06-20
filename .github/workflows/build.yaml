@@ -45,6 +45,7 @@ jobs:
 
       - name: Install JS dependencies
         run: |
+          yarn set version stable
           yarn install
           npm install
         shell: bash
