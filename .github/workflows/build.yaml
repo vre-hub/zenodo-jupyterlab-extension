@@ -54,5 +54,5 @@ jobs:
       - run: |
           set -eux
           pwd
-          ls
+          ls -la
           python -m pip install .
