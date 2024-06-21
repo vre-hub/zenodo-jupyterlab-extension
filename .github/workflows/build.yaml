@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Install Yarn Dependencies
-        run: jlpm
+        run: yarn run install
         shell: bash
       
       - name: Build the Extension
