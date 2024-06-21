@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Install Yarn Dependencies
-        run: yarn run install
+        run: yarn install
         shell: bash
       
       - name: Build the Extension
