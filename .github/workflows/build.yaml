@@ -42,8 +42,13 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt
         shell: bash
+
       - name: Clear NPM Cache
         run: python -m pip cache purge
+        shell: bash
+
+      - name: Install Yarn Dependencies
+        run: yarn install
         shell: bash
 
       - name: Install Extension
