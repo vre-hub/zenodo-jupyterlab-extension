@@ -118,7 +118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const SearchWidget = ({ isTrue }) => {
     return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'searchWidget' },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { style: { display: 'none' } }, "Hello")));
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "This is the Search Panel!!")));
 };
 //<GreetingComponent isTrue={isTrue} />
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SearchWidget);
@@ -177,7 +177,7 @@ const useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_1__.createUseStyles)({
         alignItems: 'center'
     }
 });
-const SideBarPanel = ({ app, isTrue, showLogin }) => {
+const SideBarPanel = ({ app, isTrue, showLogin, showSearch }) => {
     const classes = useStyles();
     /* const runSearch = async (query: string) => {
         try {
@@ -205,7 +205,7 @@ const SideBarPanel = ({ app, isTrue, showLogin }) => {
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_icons_ZenodoBlueTitle__WEBPACK_IMPORTED_MODULE_2__["default"], null)),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_NavBar__WEBPACK_IMPORTED_MODULE_3__["default"], { app: app }),
         showLogin && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_login__WEBPACK_IMPORTED_MODULE_4__["default"], null)),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_SearchPanel__WEBPACK_IMPORTED_MODULE_5__["default"], { isTrue: isTrue }));
+        showSearch && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_SearchPanel__WEBPACK_IMPORTED_MODULE_5__["default"], { isTrue: isTrue })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SideBarPanel);
 
@@ -400,6 +400,7 @@ class ZenodoWidget extends _lumino_widgets__WEBPACK_IMPORTED_MODULE_2__.Widget {
         this.app = app;
         this.isTrue = true;
         this.showLogin = false;
+        this.showSearch = true;
         this.addClass('my-apodWidget');
         this.id = 'zenodo-jupyterlab-extension';
         this.title.closable = true;
@@ -411,7 +412,7 @@ class ZenodoWidget extends _lumino_widgets__WEBPACK_IMPORTED_MODULE_2__.Widget {
     }
     onAfterAttach(msg) {
         this.root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_4__.createRoot)(this.node);
-        this.root.render(react__WEBPACK_IMPORTED_MODULE_6___default().createElement(_components_SideBarPanel__WEBPACK_IMPORTED_MODULE_9__["default"], { app: this.app, isTrue: this.isTrue, showLogin: this.showLogin }));
+        this.root.render(react__WEBPACK_IMPORTED_MODULE_6___default().createElement(_components_SideBarPanel__WEBPACK_IMPORTED_MODULE_9__["default"], { app: this.app, isTrue: this.isTrue, showLogin: this.showLogin, showSearch: this.showSearch }));
     }
     onBeforeDetach(msg) {
         if (this.root) {
@@ -422,12 +423,18 @@ class ZenodoWidget extends _lumino_widgets__WEBPACK_IMPORTED_MODULE_2__.Widget {
         this.isTrue = value;
     }
     toggleLogin() {
-        this.showLogin = !this.showLogin;
+        this.showLogin = true;
+        this.showSearch = false;
+        this.render();
+    }
+    toggleSearch() {
+        this.showSearch = true;
+        this.showLogin = false;
         this.render();
     }
     render() {
         var _a;
-        (_a = this.root) === null || _a === void 0 ? void 0 : _a.render(react__WEBPACK_IMPORTED_MODULE_6___default().createElement(_components_SideBarPanel__WEBPACK_IMPORTED_MODULE_9__["default"], { app: this.app, isTrue: this.isTrue, showLogin: this.showLogin }));
+        (_a = this.root) === null || _a === void 0 ? void 0 : _a.render(react__WEBPACK_IMPORTED_MODULE_6___default().createElement(_components_SideBarPanel__WEBPACK_IMPORTED_MODULE_9__["default"], { app: this.app, isTrue: this.isTrue, showLogin: this.showLogin, showSearch: this.showSearch }));
     }
 }
 /**
@@ -442,6 +449,7 @@ async function activate(app, palette, restorer) {
         execute: () => {
             //widget.content.setIsTrue(true);
             console.log('You pressed search!');
+            widget.content.toggleSearch();
         }
     });
     app.commands.addCommand('zenodo-jupyterlab:login', {
@@ -700,4 +708,4 @@ module.exports = "<svg width=\"288\" height=\"288\" xmlns=\"http://www.w3.org/20
 /***/ })
 
 }]);
-//# sourceMappingURL=lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c.5f847b098352dfa037cf.js.map
+//# sourceMappingURL=lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c.04d9362d7da84e298246.js.map

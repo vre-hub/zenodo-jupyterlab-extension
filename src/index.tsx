@@ -65,6 +65,7 @@ class ZenodoWidget extends Widget {
     this.app = app;
     this.isTrue = true;
     this.showLogin = false;
+    this.showSearch = true;
     this.addClass('my-apodWidget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
@@ -76,10 +77,11 @@ class ZenodoWidget extends Widget {
   }
   isTrue: boolean;
   showLogin: boolean;
+  showSearch: boolean;
 
   onAfterAttach(msg: any): void {
     this.root = createRoot(this.node);
-    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin}/>);
+    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
   }
 
   onBeforeDetach(msg: any): void {
@@ -93,12 +95,19 @@ class ZenodoWidget extends Widget {
   }
 
   toggleLogin(): void {
-    this.showLogin = !this.showLogin;
+    this.showLogin = true;
+    this.showSearch = false;
+    this.render();
+  }
+
+  toggleSearch(): void {
+    this.showSearch = true;
+    this.showLogin = false;
     this.render();
   }
 
   render() {
-    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin}/>);
+    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
   }
 /*   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
@@ -153,6 +162,7 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
     execute: () => {
       //widget.content.setIsTrue(true);
       console.log('You pressed search!');
+      widget.content.toggleSearch();
     }
   });
 

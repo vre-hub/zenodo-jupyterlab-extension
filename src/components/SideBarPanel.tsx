@@ -40,14 +40,16 @@ import { createUseStyles } from 'react-jss';
   interface SideBarProps {
     app: JupyterFrontEnd;
     isTrue: boolean;
-    showLogin: boolean
+    showLogin: boolean;
+    showSearch: boolean;
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
     { 
       app,
       isTrue,
-      showLogin
+      showLogin,
+      showSearch
      }
   ) => {
     const classes = useStyles();
@@ -80,7 +82,7 @@ import { createUseStyles } from 'react-jss';
             {showLogin && (
               <Login />
             )}
-            <SearchWidget isTrue = {isTrue}/>
+            {showSearch && (<SearchWidget isTrue={isTrue} />)}
     </div>
   }
 

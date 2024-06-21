@@ -127,7 +127,7 @@
     "extension": true,
     "outputDir": "zenodo_jupyterlab/labextension",
     "_build": {
-      "load": "static/remoteEntry.7df404642e79210926b6.js",
+      "load": "static/remoteEntry.4916476512bbefd025e0.js",
       "extension": "./extension",
       "style": "./style"
     }

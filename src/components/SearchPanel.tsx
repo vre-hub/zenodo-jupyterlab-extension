@@ -8,7 +8,7 @@ interface Props {
 const SearchWidget: React.FC<Props> = ({isTrue}) => {
     return (
         <div className='searchWidget'>
-            <p style={{display: 'none'}}>Hello</p>
+            <p>This is the Search Panel!!</p>
             
         </div>
     );
