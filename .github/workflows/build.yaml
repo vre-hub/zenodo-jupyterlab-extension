@@ -43,16 +43,12 @@ jobs:
         run: python -m pip install -r requirements.txt
         shell: bash
 
-      - name: Clear NPM Cache
-        run: rm -rf node_modules yarn.lock
-        shell: bash
-
       - name: Install Extension
         run: |
           set -eux
           python -m pip install .
         shell: bash
-        
+
       - name: Install Yarn Dependencies
         run: yarn install
         shell: bash
