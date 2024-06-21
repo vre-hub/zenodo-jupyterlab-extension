@@ -12763,7 +12763,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zenodo_jupyterlab@npm:^0.1.0, zenodo_jupyterlab@workspace:.":
+"zenodo_jupyterlab@workspace:.":
   version: 0.0.0-use.local
   resolution: "zenodo_jupyterlab@workspace:."
   dependencies:
@@ -12823,6 +12823,5 @@ __metadata:
     webpack-dev-server: "npm:^5.0.4"
     yarn: "npm:^1.22.22"
     yjs: "npm:^13.6.18"
-    zenodo_jupyterlab: "npm:^0.1.0"
   languageName: unknown
   linkType: soft
