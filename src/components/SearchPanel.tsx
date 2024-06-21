@@ -1,5 +1,5 @@
 import React from 'react';
-import GreetingComponent from '../API/GreetingTest';
+//import GreetingComponent from '../API/GreetingTest';
 
 interface Props {
     isTrue: boolean;
@@ -8,10 +8,10 @@ interface Props {
 const SearchWidget: React.FC<Props> = ({isTrue}) => {
     return (
         <div className='searchWidget'>
-            <p>Hello</p>
-            <GreetingComponent isTrue={isTrue} />
+            <p style={{display: 'none'}}>Hello</p>
+            
         </div>
     );
 };
-
+//<GreetingComponent isTrue={isTrue} />
 export default SearchWidget;

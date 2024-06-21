@@ -13,31 +13,17 @@ const NavBar: React.FC<NavBarProps> = (
   
     const handleSearchClick = () => {
       app.commands.execute('zenodo-jupyterlab: search');
-      // Place your home command here
     };
   
-    const handleAboutClick = () => {
-      console.log('About clicked');
-      // Place your about command here
-    };
-  
-    const handleServicesClick = () => {
-      console.log('Services clicked');
-      // Place your services command here
-    };
-  
-    const handleContactClick = () => {
-      console.log('Contact clicked');
-      // Place your contact command here
+    const handleLoginClick = () => {
+      app.commands.execute('zenodo-jupyterlab:login');
     };
   
     return (
       <nav className="navbar">
         <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
           <li><a href="#" onClick={handleSearchClick}>Search</a></li>
-          <li><a href="#" onClick={handleAboutClick}>About</a></li>
-          <li><a href="#" onClick={handleServicesClick}>Services</a></li>
-          <li><a href="#" onClick={handleContactClick}>Contact</a></li>
+          <li><a href="#" onClick={handleLoginClick}>Login</a></li>
         </ul>
       </nav>
     );

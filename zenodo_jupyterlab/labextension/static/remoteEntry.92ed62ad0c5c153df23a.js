@@ -11,10 +11,10 @@ var _JUPYTERLAB;
 
 var moduleMap = {
 	"./index": () => {
-		return Promise.all([__webpack_require__.e("vendors-node_modules_react-dom_client_js-node_modules_bootstrap_dist_css_bootstrap_min_css"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => ((__webpack_require__(/*! ./lib/index.js */ "./lib/index.js")))));
+		return Promise.all([__webpack_require__.e("vendors-node_modules_process_browser_js-node_modules_react-dom_client_js-node_modules_bootstr-0ca5c3"), __webpack_require__.e("webpack_sharing_consume_default_react"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => ((__webpack_require__(/*! ./lib/index.js */ "./lib/index.js")))));
 	},
 	"./extension": () => {
-		return Promise.all([__webpack_require__.e("vendors-node_modules_react-dom_client_js-node_modules_bootstrap_dist_css_bootstrap_min_css"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => ((__webpack_require__(/*! ./lib/index.js */ "./lib/index.js")))));
+		return Promise.all([__webpack_require__.e("vendors-node_modules_process_browser_js-node_modules_react-dom_client_js-node_modules_bootstr-0ca5c3"), __webpack_require__.e("webpack_sharing_consume_default_react"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => ((__webpack_require__(/*! ./lib/index.js */ "./lib/index.js")))));
 	},
 	"./style": () => {
 		return __webpack_require__.e("style_index_js").then(() => (() => ((__webpack_require__(/*! ./style/index.js */ "./style/index.js")))));
@@ -64,12 +64,15 @@ __webpack_require__.d(exports, {
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
 /******/ 			id: moduleId,
-/******/ 			// no module.loaded needed
+/******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -124,7 +127,7 @@ __webpack_require__.d(exports, {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + "." + {"vendors-node_modules_react-dom_client_js-node_modules_bootstrap_dist_css_bootstrap_min_css":"031a78d03a757677c19c","lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c":"b025a5629a64247a4d4e","style_index_js":"7f0b2116919431483df7"}[chunkId] + ".js";
+/******/ 			return "" + chunkId + "." + {"vendors-node_modules_process_browser_js-node_modules_react-dom_client_js-node_modules_bootstr-0ca5c3":"8f4e1754d759bad4cf84","webpack_sharing_consume_default_react":"45c05f751bdcd39c854e","lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c":"61c064255e2a4e7d58b5","style_index_js":"7f0b2116919431483df7","vendors-node_modules_dotenv_lib_main_js":"c64044c53ee2753a415d","webpack_sharing_consume_default_os_os":"19d65536e10288b48999","node_modules_process_browser_js":"258482d08077b4b6879e","node_modules_os_index_js-_2bfd0":"69118a5a18a5754425b1","vendors-node_modules_react-jss_dist_react-jss_esm_js":"de8d8022d190efb1f96d","_1d45-_8e0a":"68226ad0cc4cd175193a","node_modules_os_index_js-_2bfd1":"bb0796dbf5bf7215501a"}[chunkId] + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -138,6 +141,21 @@ __webpack_require__.d(exports, {
 /******/ 				if (typeof window === 'object') return window;
 /******/ 			}
 /******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/harmony module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.hmd = (module) => {
+/******/ 			module = Object.create(module);
+/******/ 			if (!module.children) module.children = [];
+/******/ 			Object.defineProperty(module, 'exports', {
+/******/ 				enumerable: true,
+/******/ 				set: () => {
+/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
+/******/ 				}
+/******/ 			});
+/******/ 			return module;
+/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -243,7 +261,10 @@ __webpack_require__.d(exports, {
 /******/ 			var promises = [];
 /******/ 			switch(name) {
 /******/ 				case "default": {
-/******/ 					register("zenodo_jupyterlab", "0.1.0", () => (Promise.all([__webpack_require__.e("vendors-node_modules_react-dom_client_js-node_modules_bootstrap_dist_css_bootstrap_min_css"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => (__webpack_require__(/*! ./lib/index.js */ "./lib/index.js"))))));
+/******/ 					register("dotenv", "16.4.5", () => (Promise.all([__webpack_require__.e("vendors-node_modules_dotenv_lib_main_js"), __webpack_require__.e("webpack_sharing_consume_default_os_os"), __webpack_require__.e("node_modules_process_browser_js")]).then(() => (() => (__webpack_require__(/*! ./node_modules/dotenv/lib/main.js */ "./node_modules/dotenv/lib/main.js"))))));
+/******/ 					register("os", "0.1.2", () => (Promise.all([__webpack_require__.e("webpack_sharing_consume_default_os_os"), __webpack_require__.e("node_modules_os_index_js-_2bfd0")]).then(() => (() => (__webpack_require__(/*! ./node_modules/os/index.js */ "./node_modules/os/index.js"))))));
+/******/ 					register("react-jss", "10.10.0", () => (Promise.all([__webpack_require__.e("vendors-node_modules_react-jss_dist_react-jss_esm_js"), __webpack_require__.e("webpack_sharing_consume_default_react")]).then(() => (() => (__webpack_require__(/*! ./node_modules/react-jss/dist/react-jss.esm.js */ "./node_modules/react-jss/dist/react-jss.esm.js"))))));
+/******/ 					register("zenodo_jupyterlab", "0.1.0", () => (Promise.all([__webpack_require__.e("vendors-node_modules_process_browser_js-node_modules_react-dom_client_js-node_modules_bootstr-0ca5c3"), __webpack_require__.e("webpack_sharing_consume_default_react"), __webpack_require__.e("lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c")]).then(() => (() => (__webpack_require__(/*! ./lib/index.js */ "./lib/index.js"))))));
 /******/ 				}
 /******/ 				break;
 /******/ 			}
@@ -413,22 +434,32 @@ __webpack_require__.d(exports, {
 /******/ 		});
 /******/ 		var installedModules = {};
 /******/ 		var moduleToHandlerMapping = {
+/******/ 			"webpack/sharing/consume/default/react": () => (loadSingletonVersionCheck("default", "react", [1,18,2,0])),
 /******/ 			"webpack/sharing/consume/default/@jupyterlab/application": () => (loadSingletonVersionCheck("default", "@jupyterlab/application", [1,4,2,2])),
 /******/ 			"webpack/sharing/consume/default/@jupyterlab/apputils": () => (loadSingletonVersionCheck("default", "@jupyterlab/apputils", [1,4,3,2])),
 /******/ 			"webpack/sharing/consume/default/@lumino/widgets": () => (loadSingletonVersionCheck("default", "@lumino/widgets", [1,2,3,1,,"alpha",0])),
 /******/ 			"webpack/sharing/consume/default/@jupyterlab/ui-components": () => (loadSingletonVersionCheck("default", "@jupyterlab/ui-components", [1,4,2,2])),
 /******/ 			"webpack/sharing/consume/default/react-dom": () => (loadSingletonVersionCheck("default", "react-dom", [1,18,2,0])),
-/******/ 			"webpack/sharing/consume/default/react": () => (loadSingletonVersionCheck("default", "react", [1,18,2,0]))
+/******/ 			"webpack/sharing/consume/default/react-jss/react-jss": () => (loadStrictVersionCheckFallback("default", "react-jss", [1,10,10,0], () => (__webpack_require__.e("vendors-node_modules_react-jss_dist_react-jss_esm_js").then(() => (() => (__webpack_require__(/*! react-jss */ "./node_modules/react-jss/dist/react-jss.esm.js"))))))),
+/******/ 			"webpack/sharing/consume/default/dotenv/dotenv": () => (loadStrictVersionCheckFallback("default", "dotenv", [1,16,4,5], () => (Promise.all([__webpack_require__.e("vendors-node_modules_dotenv_lib_main_js"), __webpack_require__.e("webpack_sharing_consume_default_os_os"), __webpack_require__.e("_1d45-_8e0a")]).then(() => (() => (__webpack_require__(/*! dotenv */ "./node_modules/dotenv/lib/main.js"))))))),
+/******/ 			"webpack/sharing/consume/default/os/os": () => (loadFallback("default", "os", () => (__webpack_require__.e("node_modules_os_index_js-_2bfd1").then(() => (() => (__webpack_require__(/*! os */ "./node_modules/os/index.js")))))))
 /******/ 		};
 /******/ 		// no consumes in initial chunks
 /******/ 		var chunkMapping = {
+/******/ 			"webpack_sharing_consume_default_react": [
+/******/ 				"webpack/sharing/consume/default/react"
+/******/ 			],
 /******/ 			"lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c": [
 /******/ 				"webpack/sharing/consume/default/@jupyterlab/application",
 /******/ 				"webpack/sharing/consume/default/@jupyterlab/apputils",
 /******/ 				"webpack/sharing/consume/default/@lumino/widgets",
 /******/ 				"webpack/sharing/consume/default/@jupyterlab/ui-components",
 /******/ 				"webpack/sharing/consume/default/react-dom",
-/******/ 				"webpack/sharing/consume/default/react"
+/******/ 				"webpack/sharing/consume/default/react-jss/react-jss",
+/******/ 				"webpack/sharing/consume/default/dotenv/dotenv"
+/******/ 			],
+/******/ 			"webpack_sharing_consume_default_os_os": [
+/******/ 				"webpack/sharing/consume/default/os/os"
 /******/ 			]
 /******/ 		};
 /******/ 		var startedInstallModules = {};
@@ -484,7 +515,7 @@ __webpack_require__.d(exports, {
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if(true) { // all chunks have JS
+/******/ 						if(!/^webpack_sharing_consume_default_(os_os|react)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
 /******/ 							promises.push(installedChunkData[2] = promise);
@@ -509,7 +540,7 @@ __webpack_require__.d(exports, {
 /******/ 								}
 /******/ 							};
 /******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						}
+/******/ 						} else installedChunks[chunkId] = 0;
 /******/ 					}
 /******/ 				}
 /******/ 		};
@@ -569,4 +600,4 @@ __webpack_require__.d(exports, {
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=remoteEntry.f842ef65f53c0f86be87.js.map
+//# sourceMappingURL=remoteEntry.92ed62ad0c5c153df23a.js.map

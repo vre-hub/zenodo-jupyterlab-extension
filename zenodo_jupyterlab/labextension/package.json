@@ -7,7 +7,7 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "",
+  "homepage": "https://github.com/vre-hub/zenodo-jupyterlab-extension",
   "bugs": {
     "url": "/issues"
   },
@@ -26,7 +26,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": ".git"
+    "url": "https://github.com/vre-hub/zenodo-jupyterlab-extension.git"
   },
   "scripts": {
     "build": "jlpm build:lib && jlpm build:labextension:dev",
@@ -57,13 +57,19 @@
   },
   "dependencies": {
     "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@babel/types": "^7.24.7",
     "@jupyterlab/application": "^4.2.2",
     "@popperjs/core": "^2.11.8",
+    "@types/node": "^20.14.7",
     "@types/webpack": "^5.28.5",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
     "eslint": "8.0.0",
     "node-notifier": "^10.0.1",
+    "os": "^0.1.2",
     "primereact": "^10.6.6",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.3",
@@ -82,6 +88,7 @@
     "@jupyterlab/builder": "^4.2.2",
     "@jupyterlab/testutils": "^4.2.2",
     "@types/babel__core": "^7.20.5",
+    "@types/babel__preset-env": "^7",
     "@types/bootstrap": "^5.2.10",
     "@types/jest": "^29.5.12",
     "@types/json-schema": "^7.0.15",
@@ -120,7 +127,7 @@
     "extension": true,
     "outputDir": "zenodo_jupyterlab/labextension",
     "_build": {
-      "load": "static/remoteEntry.f842ef65f53c0f86be87.js",
+      "load": "static/remoteEntry.92ed62ad0c5c153df23a.js",
       "extension": "./extension",
       "style": "./style"
     }

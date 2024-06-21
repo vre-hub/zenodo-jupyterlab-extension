@@ -4,6 +4,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import SearchWidget from './SearchPanel';
+import Login from './login';
   
   //import React from 'react';
   
@@ -21,12 +22,14 @@ import SearchWidget from './SearchPanel';
   interface SideBarProps {
     app: JupyterFrontEnd;
     isTrue: boolean;
+    showLogin: boolean
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
     { 
       app,
-      isTrue
+      isTrue,
+      showLogin
      }
   ) => {
     /* const runSearch = async (query: string) => {
@@ -54,6 +57,9 @@ import SearchWidget from './SearchPanel';
         <div id='title_container'>
             <ZenodoBlueTitle />
             <NavBar app={app} />
+            {showLogin && (
+              <Login />
+            )}
             <SearchWidget isTrue = {isTrue}/>
         </div>
     </div>
