@@ -44,7 +44,7 @@ jobs:
         shell: bash
 
       - name: Clear NPM Cache
-        run: python -m pip cache purge
+        run: rm -rf node_modules yarn.lock
         shell: bash
 
       - name: Install Yarn Dependencies
