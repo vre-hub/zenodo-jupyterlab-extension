@@ -11,8 +11,8 @@ const useStyles = createUseStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f0f0f0',
+        height: '60vh',
+        backgroundColor: '#fff',
     },
     loginContainer: {
         backgroundColor: '#fff',

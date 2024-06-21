@@ -13,21 +13,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "webpack/sharing/consume/default/react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-jss */ "webpack/sharing/consume/default/react-jss/react-jss");
+/* harmony import */ var react_jss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jss__WEBPACK_IMPORTED_MODULE_1__);
 
+
+const useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_1__.createUseStyles)({
+    navbar: {
+        width: '100%',
+        padding: '10px 0',
+        backgroundColor: '#fff',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    navButton: {
+        backgroundColor: '#007bff',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '10px 20px',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#0056b3',
+        },
+    },
+    navbarLinks: {
+        listStyle: 'none',
+        display: 'flex',
+        gap: '20px', // Add some space between the buttons
+        margin: 0,
+        padding: 0,
+    },
+});
 const NavBar = ({ app }) => {
-    const [isOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+    const classes = useStyles();
+    //const [isOpen] = useState(false);
     const handleSearchClick = () => {
         app.commands.execute('zenodo-jupyterlab: search');
     };
     const handleLoginClick = () => {
         app.commands.execute('zenodo-jupyterlab:login');
     };
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("nav", { className: "navbar" },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", { className: `navbar-links ${isOpen ? 'active' : ''}` },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("nav", { className: classes.navbar },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", { className: classes.navbarLinks },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#", onClick: handleSearchClick }, "Search")),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { className: classes.navButton, onClick: handleSearchClick }, "Search")),
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#", onClick: handleLoginClick }, "Login")))));
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { className: classes.navButton, onClick: handleLoginClick }, "Login")))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NavBar);
 /* interface IMenuBarProps {
@@ -105,19 +136,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _icons_ZenodoBlueTitle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../icons/ZenodoBlueTitle */ "./lib/icons/ZenodoBlueTitle.js");
+/* harmony import */ var _icons_ZenodoBlueTitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../icons/ZenodoBlueTitle */ "./lib/icons/ZenodoBlueTitle.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "webpack/sharing/consume/default/react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _NavBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NavBar */ "./lib/components/NavBar.js");
-/* harmony import */ var _SearchPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SearchPanel */ "./lib/components/SearchPanel.js");
-/* harmony import */ var _login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./login */ "./lib/components/login.js");
+/* harmony import */ var _NavBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./NavBar */ "./lib/components/NavBar.js");
+/* harmony import */ var _SearchPanel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SearchPanel */ "./lib/components/SearchPanel.js");
+/* harmony import */ var _login__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./login */ "./lib/components/login.js");
+/* harmony import */ var react_jss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-jss */ "webpack/sharing/consume/default/react-jss/react-jss");
+/* harmony import */ var react_jss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jss__WEBPACK_IMPORTED_MODULE_1__);
 
 // //import ReactDOM from 'react-dom';
 
 
 
 
+
+//import React from 'react';
+//import { MenuBar } from '../components'
+/* interface APODResponse {
+  copyright: string;
+  date: string;
+  explanation: string;
+  media_type: 'video' | 'image';
+  title: string;
+  url: string;
+}; */
+const useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_1__.createUseStyles)({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        height: '100vh',
+        padding: '20px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    },
+    titleContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    }
+});
 const SideBarPanel = ({ app, isTrue, showLogin }) => {
+    const classes = useStyles();
     /* const runSearch = async (query: string) => {
         try {
             const response = await fetch('/run_search', {
@@ -139,12 +200,12 @@ const SideBarPanel = ({ app, isTrue, showLogin }) => {
             return [];
         }
     }; */
-    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { id: 'SideBarPanel' },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { id: 'title_container' },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_icons_ZenodoBlueTitle__WEBPACK_IMPORTED_MODULE_1__["default"], null),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_NavBar__WEBPACK_IMPORTED_MODULE_2__["default"], { app: app }),
-            showLogin && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_login__WEBPACK_IMPORTED_MODULE_3__["default"], null)),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_SearchPanel__WEBPACK_IMPORTED_MODULE_4__["default"], { isTrue: isTrue })));
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { id: 'SideBarPanel', className: classes.container },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: classes.titleContainer },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_icons_ZenodoBlueTitle__WEBPACK_IMPORTED_MODULE_2__["default"], null)),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_NavBar__WEBPACK_IMPORTED_MODULE_3__["default"], { app: app }),
+        showLogin && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_login__WEBPACK_IMPORTED_MODULE_4__["default"], null)),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_SearchPanel__WEBPACK_IMPORTED_MODULE_5__["default"], { isTrue: isTrue }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SideBarPanel);
 
@@ -176,8 +237,8 @@ const useStyles = (0,react_jss__WEBPACK_IMPORTED_MODULE_1__.createUseStyles)({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f0f0f0',
+        height: '60vh',
+        backgroundColor: '#fff',
     },
     loginContainer: {
         backgroundColor: '#fff',
@@ -639,4 +700,4 @@ module.exports = "<svg width=\"288\" height=\"288\" xmlns=\"http://www.w3.org/20
 /***/ })
 
 }]);
-//# sourceMappingURL=lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c.61c064255e2a4e7d58b5.js.map
+//# sourceMappingURL=lib_index_js-data_image_svg_xml_3csvg_xmlns_27http_www_w3_org_2000_svg_27_viewBox_27-4_-4_8_8-23b64c.5f847b098352dfa037cf.js.map

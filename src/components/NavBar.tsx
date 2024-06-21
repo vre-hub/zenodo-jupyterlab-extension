@@ -1,6 +1,35 @@
 //import ZenodoBlueTitle from '../icons/ZenodoBlueTitle'
 import { JupyterFrontEnd } from '@jupyterlab/application';
-import React, {useState} from 'react';
+import React from 'react';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  navbar: {
+    width: '100%',
+    padding: '10px 0',
+    backgroundColor: '#fff',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  navButton: {
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '10px 20px',
+    cursor: 'pointer',
+    '&:hover': {
+        backgroundColor: '#0056b3',
+    },
+  },
+  navbarLinks: {
+    listStyle: 'none',
+    display: 'flex',
+    gap: '20px', // Add some space between the buttons
+    margin: 0,
+    padding: 0,
+  },
+})
 
 interface NavBarProps {
     app: JupyterFrontEnd;
@@ -9,7 +38,10 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = (
     { app }
 ) => {
-    const [isOpen] = useState(false);
+
+    const classes = useStyles();
+
+    //const [isOpen] = useState(false);
   
     const handleSearchClick = () => {
       app.commands.execute('zenodo-jupyterlab: search');
@@ -20,10 +52,10 @@ const NavBar: React.FC<NavBarProps> = (
     };
   
     return (
-      <nav className="navbar">
-        <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
-          <li><a href="#" onClick={handleSearchClick}>Search</a></li>
-          <li><a href="#" onClick={handleLoginClick}>Login</a></li>
+      <nav className={classes.navbar}>
+        <ul className={classes.navbarLinks}>
+          <li><button className={classes.navButton} onClick={handleSearchClick}>Search</button></li>
+          <li><button className={classes.navButton} onClick = {handleLoginClick}>Login</button></li>
         </ul>
       </nav>
     );
