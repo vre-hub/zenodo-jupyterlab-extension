@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: main
+    branches: *
   pull_request:
     branches: '*'
 
@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Install Yarn Dependencies
-        run: yarn install
+        run: jlpm
         shell: bash
       
       - name: Build the Extension
