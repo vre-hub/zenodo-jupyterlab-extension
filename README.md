@@ -5,7 +5,7 @@ Zenodo JupyterLab plugin
 This project integrates [Zenodo](https://zenodo.org) into Jupyter Lab extension.
 
 # Requirements
-JupyterLab > 5
+JupyterLab > 4, < 5
 Notebook < 7
 
 # Install
