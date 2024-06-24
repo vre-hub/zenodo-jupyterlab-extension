@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: main
+    branches: dev
   pull_request:
     branches: '*'
 
@@ -49,13 +49,13 @@ jobs:
           python -m pip install .
         shell: bash
 
-      # - name: Install Yarn Dependencies
-      #   run: yarn install
-      #   shell: bash
+      - name: Install Yarn Dependencies
+        run: yarn install
+        shell: bash
       
-      # - name: Build the Extension
-      #   run: yarn run build
-      #   shell: bash
+      - name: Build the Extension
+        run: yarn run build
+        shell: bash
 
   # install_extension:
   #   runs-on: ubuntu-latest
