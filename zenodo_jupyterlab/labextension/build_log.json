@@ -708,6 +708,7 @@
             "@types/node": {},
             "@types/webpack": {},
             "bootstrap": {},
+            "corepack": {},
             "dotenv": {},
             "eslint": {},
             "node-notifier": {},
