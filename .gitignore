@@ -9,6 +9,8 @@ node_modules/
 *.tsbuildinfo
 # Version file is handled by hatchling
 zenodo_jupyterlab/__pycache__
+zenodo_jupyterlab/labextension/build_log.json
+zenodo_jupyterlab/labextension/package.json
 
 # Integration tests
 ui-tests/test-results/
