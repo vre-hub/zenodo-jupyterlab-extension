@@ -11,6 +11,9 @@
     "bugs": {
         "url": "/issues"
     },
+    "workspaces": [
+        "zenodo_jupyterlab"
+    ],
     "license": "BSD-3-Clause",
     "author": {
         "name": "Michael Zengel",
@@ -83,8 +86,7 @@
         "webpack-bundle-analyzer": "^4.10.2",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.0.4",
-        "yarn": "^1.22.22",
-        "zenodo_jupyterlab": "^0.1.0"
+        "yarn": "^1.22.22"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.2.2",
