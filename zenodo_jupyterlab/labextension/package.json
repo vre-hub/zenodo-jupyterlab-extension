@@ -11,6 +11,10 @@
   "bugs": {
     "url": "/issues"
   },
+  "private": true,
+  "workspaces": [
+    "zenodo_jupyterlab"
+  ],
   "license": "BSD-3-Clause",
   "author": {
     "name": "Michael Zengel",
@@ -128,7 +132,7 @@
     "extension": true,
     "outputDir": "zenodo_jupyterlab/labextension",
     "_build": {
-      "load": "static/remoteEntry.a28fd5e7e12f6cbe1599.js",
+      "load": "static/remoteEntry.4916476512bbefd025e0.js",
       "extension": "./extension",
       "style": "./style"
     }
