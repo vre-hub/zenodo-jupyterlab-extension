@@ -11,6 +11,7 @@
     "bugs": {
         "url": "/issues"
     },
+    "private": true,
     "workspaces": [
         "zenodo_jupyterlab"
     ],
