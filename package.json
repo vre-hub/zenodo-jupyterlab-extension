@@ -11,11 +11,7 @@
     "bugs": {
         "url": "/issues"
     },
-    "private": true,
-    "workspaces": [
-        "zenodo_jupyterlab"
-    ],
-    "license": "BSD-3-Clause",
+    "license": "Apache-2.0",
     "author": {
         "name": "Michael Zengel",
         "email": "michael.ryan.zengel@cern.ch"
