@@ -4,6 +4,8 @@ import React from 'react';
 import NavBar from './NavBar';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import SearchWidget from './SearchPanel';
+import Login from './login';
+import { createUseStyles } from 'react-jss';
   
   //import React from 'react';
   
@@ -18,17 +20,39 @@ import SearchWidget from './SearchPanel';
     url: string;
   }; */
 
+  const useStyles = createUseStyles({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      height: '100vh',
+      padding: '20px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    },
+    titleContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
+  });
+
   interface SideBarProps {
     app: JupyterFrontEnd;
     isTrue: boolean;
+    showLogin: boolean;
+    showSearch: boolean;
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
     { 
       app,
-      isTrue
+      isTrue,
+      showLogin,
+      showSearch
      }
   ) => {
+    const classes = useStyles();
     /* const runSearch = async (query: string) => {
         try {
             const response = await fetch('/run_search', {
@@ -50,12 +74,15 @@ import SearchWidget from './SearchPanel';
             return [];
         }
     }; */
-    return <div id='SideBarPanel'>
-        <div id='title_container'>
-            <ZenodoBlueTitle />
-            <NavBar app={app} />
-            <SearchWidget isTrue = {isTrue}/>
+    return <div id='SideBarPanel' className={classes.container}>
+        <div className={classes.titleContainer}>
+          <ZenodoBlueTitle />
         </div>
+            <NavBar app={app} />
+            {showLogin && (
+              <Login />
+            )}
+            {showSearch && (<SearchWidget isTrue={isTrue} />)}
     </div>
   }
 

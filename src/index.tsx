@@ -19,16 +19,19 @@ import {
 
 import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icons/z_icon.svg';
-import title_icon from '/src/icons/zenodo-blue.svg';
 
 import { createRoot, Root } from 'react-dom/client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+//import dotenv from 'dotenv';
+
 // //import ReactDOM from 'react-dom';
 import React from 'react';
 
 import SideBarPanel from './components/SideBarPanel';
+
+import { ACCESS_TOKEN } from './config';
 
 //import React from 'react';
 
@@ -49,6 +52,7 @@ import SideBarPanel from './components/SideBarPanel';
   );
 } */
 
+console.log(ACCESS_TOKEN);
 
 class ZenodoWidget extends Widget {
   private root: Root | null = null;
@@ -60,6 +64,8 @@ class ZenodoWidget extends Widget {
     super();
     this.app = app;
     this.isTrue = true;
+    this.showLogin = false;
+    this.showSearch = true;
     this.addClass('my-apodWidget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
@@ -68,28 +74,14 @@ class ZenodoWidget extends Widget {
       svgstr: z_icon,
     });
     this.title.icon = icon.bindprops();
-
-    this.title_container = document.createElement('div');
-    this.title_container.id = 'Zenodo-Title';
-    this.title_container.setAttribute("style", "text-align: center");
-    this.title_container.innerHTML = title_icon;
-    this.node.appendChild(this.title_container);
-
-    this.main_text = document.createElement('p');
-    this.main_text.innerText = 'Testing';
-    this.node.appendChild(this.main_text);
-
-    this.menuDiv = document.createElement('div');
   }
-
-  readonly title_container: HTMLDivElement;
-  readonly main_text: HTMLParagraphElement;
-  readonly menuDiv: HTMLDivElement;
   isTrue: boolean;
+  showLogin: boolean;
+  showSearch: boolean;
 
   onAfterAttach(msg: any): void {
     this.root = createRoot(this.node);
-    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue}/>);
+    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
   }
 
   onBeforeDetach(msg: any): void {
@@ -102,11 +94,26 @@ class ZenodoWidget extends Widget {
     this.isTrue = value;
   }
 
-  async fillContent(): Promise<void> {
+  toggleLogin(): void {
+    this.showLogin = true;
+    this.showSearch = false;
+    this.render();
+  }
+
+  toggleSearch(): void {
+    this.showSearch = true;
+    this.showLogin = false;
+    this.render();
+  }
+
+  render() {
+    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
+  }
+/*   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
     // this.summary.innerText = 'Hello';
     return;
-  }
+  } */
   /* async updateAPODImage(): Promise<void> { http://localhost:8890/lab/icon/zenodo-gradient-square.png
 
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`);
@@ -148,34 +155,6 @@ class ZenodoWidget extends Widget {
 */
 async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
-  // Define commands
-  /* app.commands.addCommand('my-extension:new-file', {
-    label: 'New File',
-    execute: () => {
-      console.log('New File command executed');
-    }
-  });
-
-  app.commands.addCommand('my-extension:open-file', {
-    label: 'Open File',
-    execute: () => {
-      console.log('Open File command executed');
-    }
-  });
-
-  app.commands.addCommand('my-extension:copy', {
-    label: 'Copy',
-    execute: () => {
-      console.log('Copy command executed');
-    }
-  });
-
-  app.commands.addCommand('my-extension:paste', {
-    label: 'Paste',
-    execute: () => {
-      console.log('Paste command executed');
-    }
-  }); */
   // Declare a widget variable
   let widget: MainAreaWidget<ZenodoWidget>;
   app.commands.addCommand('zenodo-jupyterlab: search', {
@@ -183,13 +162,17 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
     execute: () => {
       //widget.content.setIsTrue(true);
       console.log('You pressed search!');
+      widget.content.toggleSearch();
     }
-  })
+  });
 
-  /* const content = new ZenodoWidget();
-  widget = new MainAreaWidget({content});
-  app.shell.add(widget, 'left');
-  app.shell.activateById(widget.id); */
+  app.commands.addCommand('zenodo-jupyterlab:login', {
+    label: 'Login Field',
+    execute: () => {
+      console.log('You pressed Login!!');
+      widget.content.toggleLogin();
+    }
+  });
 
   // Add an application command
   const command: string = 'zenodo:open';
@@ -208,10 +191,10 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
         app.shell.add(widget, 'left');
         
       }
-      widget.content.fillContent();
+      //widget.content.fillContent();
 
       // Activate the widget
-      app.shell.activateById(widget.id);
+      //app.shell.activateById(widget.id);
     }
   });
 

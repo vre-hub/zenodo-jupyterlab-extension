@@ -42,14 +42,19 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt
         shell: bash
-      - name: Clear NPM Cache
-        run: python -m pip cache purge
-        shell: bash
 
       - name: Install Extension
         run: |
           set -eux
           python -m pip install .
+        shell: bash
+
+      - name: Install Yarn Dependencies
+        run: jlpm
+        shell: bash
+      
+      - name: Build the Extension
+        run: jlpm run build
         shell: bash
 
   # install_extension:
