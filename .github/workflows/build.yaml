@@ -61,9 +61,9 @@ jobs:
         run: jlpm
         shell: bash
 
-          #      - name: Build the Extension
-          #        run: jlpm run build
-          #        shell: bash
+      - name: Build the Extension
+        run: jlpm run build
+        shell: bash
       
       - name: Install Extension
         run: |
