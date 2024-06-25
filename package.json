@@ -60,7 +60,6 @@
         "@babel/types": "^7.24.7",
         "@jupyterlab/application": "^4.2.2",
         "@popperjs/core": "^2.11.8",
-        "@types/webpack": "^5.28.5",
         "bootstrap": "^5.3.3",
         "dotenv": "^16.4.5",
         "eslint": "8.0.0",
@@ -73,10 +72,6 @@
         "support-color": "^7.1.0",
         "supports-color": "^9.4.0",
         "types": "^0.1.1",
-        "webpack": "^5.92.1",
-        "webpack-bundle-analyzer": "^4.10.2",
-        "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.0.4",
         "yarn": "^1.22.22"
     },
     "devDependencies": {
@@ -119,7 +114,8 @@
     },
     "jupyterlab": {
         "extension": true,
-        "outputDir": "zenodo_jupyterlab/labextension"
+        "outputDir": "zenodo_jupyterlab/labextension",
+        "webpackConfig": "./webpack.config.js"
     },
     "eslintIgnore": [
         "node_modules",
