@@ -1,4 +1,3 @@
-#from eossr.api.zenodo.zenodo import _query as query
 from eossr.api.zenodo.zenodo import _search as query
 
 response = query('records', '', communities='ESCAPE2020')
