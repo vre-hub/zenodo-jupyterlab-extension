@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: main
+    branches: fix_ci
   pull_request:
     branches: '*'
 
@@ -56,6 +56,7 @@ jobs:
           set -eux
           python -m pip install .
         shell: bash
+      
       
   # install_extension:
   #   runs-on: ubuntu-latest
