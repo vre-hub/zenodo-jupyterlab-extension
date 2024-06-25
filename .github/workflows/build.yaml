@@ -18,11 +18,25 @@ jobs:
           node-version: '20'
           # cache: 'yarn'
       
-      - name: Install yarn
-        run: |
+            #      - name: Install yarn
+            #        run: |
           #          npm install -g corepack
           #          corepack enable
-          yarn -v
+          #          yarn -v
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        shell: bash
+
+      - name: Setup yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            yarn-
 
       - name: Install Python
         uses: actions/setup-python@v5
