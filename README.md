@@ -1,9 +1,15 @@
-# zenodo-jupyterlab-extension
+# Zenodo Jupyterlab Extension
 Zenodo JupyterLab plugin
 **This project is currently in development and is subject to change.**
-*This README so far is devoted to building and loading the extension on a local instance of Jupyter Lab.
 
-First, ensure Node.js >= 20.x ([Install instructions](https://nodejs.org/en/download/package-manager)) is installed as well as git ([Install instructions](https://git-scm.com/downloads)). Also ensure Python >= 3.11 is installed ([Install instructions](https://wiki.python.org/moin/BeginnersGuide/Download)).
+This project integrates [Zenodo](https://zenodo.org) into Jupyter Lab extension.
+
+# Requirements
+JupyterLab > 4, < 5
+Notebook < 7
+
+# Install
+You will need NodeJS >= 20 for these steps.
 
 Now, install `yarn`:\
 `npm install -g corepack`
