@@ -62,6 +62,7 @@
         "@popperjs/core": "^2.11.8",
         "@types/webpack": "^5.28.5",
         "bootstrap": "^5.3.3",
+        "dotenv": "^16.4.5",
         "eslint": "8.0.0",
         "node-notifier": "^10.0.1",
         "primereact": "^10.6.6",
