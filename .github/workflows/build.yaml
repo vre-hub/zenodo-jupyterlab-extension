@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: fix_ci
+    branches: main
   pull_request:
     branches: '*'
 
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # cache: 'yarn'
+          cache: 'yarn'
       
             #      - name: Install yarn
             #        run: |
