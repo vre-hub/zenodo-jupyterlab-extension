@@ -1,9 +1,9 @@
 from eossr.api.zenodo.zenodo import _search as search
-from eossr.api.zenodo import ZenodoAPI, search_records
+from eossr.api.zenodo import ZenodoAPI, search_records, Record
 import zipfile
 from remotezip import RemoteZip
 
-file_type = 'json'
+file_type = 'js'
 
 contains_file_type = search_records(file_type=file_type, communities = 'ESCAPE2020')
 returns = search_records(file_type = 'zip', communities = 'ESCAPE2020')
@@ -29,13 +29,11 @@ def check_file_type_in_remote_zip(zip_url, file_type):
         return False
     except Exception as e:
         print(f"Error accessing or processing the remote zip file: {e}")
-        print(record.title)
-        #print(record)
         return False
-    
-def check_files_in_record(record):
+    #file.lower.endswith(f'.{file_type.lower()}') and 
+def check_files_in_record(record: Record):
     for file in record.filelist:
-        if check_file_type_in_remote_zip(file, file_type):
+        if file.lower().endswith(f'.zip/content') and check_file_type_in_remote_zip(file, file_type):
             zipped_records.append(record)
 
 zipped_records = []
