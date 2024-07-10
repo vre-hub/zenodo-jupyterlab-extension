@@ -22,7 +22,6 @@ import z_icon from '/src/icons/z_icon.svg';
 import { createRoot, Root } from 'react-dom/client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Kernel, KernelManager, ServerConnection } from '@jupyterlab/services';
 
 import React from 'react';
 
@@ -49,7 +48,6 @@ class ZenodoWidget extends Widget {
   //private app=JupyterFrontEnd<any,any>;
   //private app = JupyterFrontEnd<ILabShell, "desktop">;
   private app: JupyterFrontEnd;
-  public kernel: Kernel.IKernelConnection | null = null;
   
 
   constructor(app: JupyterFrontEnd) {
@@ -66,14 +64,12 @@ class ZenodoWidget extends Widget {
       svgstr: z_icon,
     });
     this.title.icon = icon.bindprops();
-    this.kernel = null;
   }
   isTrue: boolean;
   showLogin: boolean;
   showSearch: boolean;
 
   async onAfterAttach(msg: any): Promise<void> {
-    this.kernel = await this.activateKernel();
     this.root = createRoot(this.node);
     this.render();
   }
@@ -82,11 +78,6 @@ class ZenodoWidget extends Widget {
     if (this.root) {
       this.root.unmount();
     }
-  }
-
-  async onCloseRequest(msg: any): Promise<void> {
-    await this.shutdownKernel();
-    super.onCloseRequest(msg);
   }
 
   setIsTrue(value: boolean): void {
@@ -118,39 +109,8 @@ class ZenodoWidget extends Widget {
     }
   } */
 
-  async activateKernel(): Promise<Kernel.IKernelConnection | null> {
-    try{
-      const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname.split('/lab')[0]}/`;
-      const wsUrl = baseUrl.replace('http', 'ws');
-
-      const serverSettings = ServerConnection.makeSettings({
-          baseUrl,
-          wsUrl,
-      });
-
-      const kernelManager = new KernelManager({ serverSettings});
-      const kernel = await kernelManager.startNew();
-      return kernel;
-    } catch (error) {
-      console.error("Failed to start new kernel:", error);
-      return null;
-    }
-  };
-
-  async shutdownKernel(): Promise<void> {
-    if (this.kernel) {
-      try {
-        await this.kernel.shutdown();
-        this.kernel.dispose();
-        this.kernel = null;
-      } catch (error) {
-        console.error("Failed to shutdown kernel:", error);
-      }
-    }
-   }
-
   render() {
-    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch} kernel={this.kernel as Kernel.IKernelConnection}/>);
+    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
   }
 /*   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'

@@ -1,5 +1,6 @@
 import React from 'react';
 //import GreetingComponent from '../API/GreetingTest';
+//import { getEnvVariable, setEnvVariable } from '../API/test';
 
 interface Props {
     isTrue: boolean;

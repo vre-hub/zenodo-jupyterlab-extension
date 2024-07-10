@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
-//import GreetingComponent from '../API/GreetingTest';
+import React, { useState, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
-import { Kernel, KernelMessage } from '@jupyterlab/services';
-//import fs from 'fs';
-//const pythoncode = ''
-
-interface LoginProps {
-    kernel: Kernel.IKernelConnection; // Pass the kernel connection object from your JupyterLab extension
-}
+import { getEnvVariable, setEnvVariable } from '../API/test';
 
 const useStyles = createUseStyles({
     root: {
@@ -49,83 +42,31 @@ const useStyles = createUseStyles({
         },
     }
 });
-//action="/login" method="post" in form
-const Login: React.FC<LoginProps> = ({ kernel }) => {
+
+const Login: React.FC = () => {
     const classes = useStyles();
     const [APIKey, setAPIKey] = useState('');
     const[outputData, setOutputData] = useState<string | null>(null);
-
-    const sendDatatoKernel = async (code: string) => {
-        if (!kernel) return;
-
-        try  {
-            const future = kernel.requestExecute({ code });
-
-            future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-                if (msg.header.msg_type === 'execute_result' || msg.header.msg_type === 'stream') {
-                } else if (msg.header.msg_type === 'error') {
-                    console.error('Error in execution:', msg.content);
-                }
-            };
-            future.onReply = (msg: KernelMessage.IShellMessage) => {
-                if ((msg.content as any).status === 'error') {
-                    console.error(`Error executing code: ${(msg.content as any).evalue}`);
-                }
-            };
-            future.onStdin = (msg: KernelMessage.IStdinMessage) => {
-                console.log(`Stdin message: ${msg.content}`);
-            };
-
-            future.done.then(() => {
-                console.log('Execution completed');
-            });
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error in sendDatatoKernel:', error);
-            } else {
-                console.error('Unexpected error:', error);
-            }
-        }
-    }
-
-    const testAPIConnection = () => {
-        //var test_code = fs.readFileSync(pythoncode,'utf8');
+    const handleLogin = useCallback(async () => {
         try {
-        var test_code = `
-from eossr.api.zenodo import ZenodoAPI
-z = ZenodoAPI(access_token = os.environ['TESTVAR'])
-response = z.query_user_deposits()
-print(response)
-        `;
-        const future = kernel.requestExecute({ code: test_code });
-            future.onIOPub = (msg: KernelMessage.IIOPubMessage) => {
-                if (msg.header.msg_type === 'execute_result' || msg.header.msg_type === 'stream') {
-                    const content = msg.content as KernelMessage.IExecuteResultMsg['content'] | KernelMessage.IStreamMsg['content'];
-                    if ('data' in content) {
-                        const data = content.data;
-                        if (data && typeof data === 'string') {
-                            setOutputData(data);
-                        } else if (data && 'text/plain' in data) {
-                            setOutputData(data['text/plain'] as string);
-                        } else if (data && 'application/json' in data) {
-                            setOutputData(JSON.stringify(data['application/json']));
-                        }
-                    } else if ('text' in content) {
-                        setOutputData("Zenodo Token Stored in Kernel Environment");
-                    }
-                } else if (msg.header.msg_type === 'error') {
-                    console.error('Error in execution:', msg.content);
-                    setOutputData(`Invalid Zenodo API Token`);
+            if (APIKey != '') {
+                await setEnvVariable('ZENODO_API_KEY', APIKey);
+                console.log(await getEnvVariable('ZENODO_API_KEY'));
+                setOutputData("Zenodo Token Successfully Stored in Environment.");
+            } else {
+                const storedKey = getEnvVariable('ZENODO_API_KEY');
+                if (storedKey === null) {
+                    setOutputData("No Zenodo Key Stored. Please Enter A Key.")
+                } else {
+                    setOutputData("Zenodo Key still stored.")
                 }
-            };
-        return test_code;
+            }
         } catch (error) {
-            console.error('Invalid Zenodo API Key');
+            console.error(error);
         }
-    }
+    }, [APIKey]);
 
-    const handleLogin = () => {
+/*     const handleLogin = () => {
         try {
             var code = `
 import os
@@ -139,12 +80,10 @@ os.environ['TESTVAR'] = '${APIKey}'
 os.environ['TESTVAR']
             `;
             console.log(code);
-            sendDatatoKernel(code);
-            testAPIConnection();
         } catch (error) {
             alert('Invalid Zenodo API Token');
         }
-    }
+    } */
 
     return (
         <div className={classes.root}>
@@ -170,3 +109,4 @@ os.environ['TESTVAR']
 };
 //<GreetingComponent isTrue={isTrue} />
 export default Login;
+

@@ -6,7 +6,6 @@ import { JupyterFrontEnd } from '@jupyterlab/application';
 import SearchWidget from './SearchPanel';
 import Login from './login';
 import { createUseStyles } from 'react-jss';
-import { Kernel } from '@jupyterlab/services';
   
   //import React from 'react';
   
@@ -42,8 +41,7 @@ import { Kernel } from '@jupyterlab/services';
     app: JupyterFrontEnd;
     isTrue: boolean;
     showLogin: boolean;
-    showSearch: boolean;
-    kernel: Kernel.IKernelConnection;
+    showSearch: boolean
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
@@ -51,8 +49,7 @@ import { Kernel } from '@jupyterlab/services';
       app,
       isTrue,
       showLogin,
-      showSearch,
-      kernel
+      showSearch
      }
   ) => {
     const classes = useStyles();
@@ -83,7 +80,7 @@ import { Kernel } from '@jupyterlab/services';
         </div>
             <NavBar app={app} />
             {showLogin && (
-              <Login kernel = {kernel}/>
+              <Login/>
             )}
             {showSearch && (<SearchWidget isTrue={isTrue} />)}
     </div>
