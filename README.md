@@ -24,4 +24,7 @@ Install Yarn Dependencies:\
 Install and Build the Extension:\
 `python -m pip install .`
 
+Enable the Extension:\
+`jupyter server extension enable zenodo_jupyterlab.server`
+
 Now open a local instance of Jupyter Lab, and it should be present on the sidebar.
