@@ -23,7 +23,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "notebook>=6.0"
+    "notebook<7",
+    "jupyterlab>4,<5",
+    "eossr"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
