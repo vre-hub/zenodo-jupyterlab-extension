@@ -1,17 +1,12 @@
-import React from 'react';
-//import GreetingComponent from '../API/GreetingTest';
+import React, { useState, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
-
-/* interface Props {
-    isTrue: boolean;
-  } */
+import { getEnvVariable, setEnvVariable } from '../API/test';
 
 const useStyles = createUseStyles({
     root: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '60vh',
         backgroundColor: '#fff',
     },
     loginContainer: {
@@ -21,6 +16,7 @@ const useStyles = createUseStyles({
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         width: '300px',
         textAlign: 'center',
+        verticalAlign: 'top'
     },
     formGroup: {
         marginBottom: '20px',
@@ -46,27 +42,71 @@ const useStyles = createUseStyles({
         },
     }
 });
-//action="/login" method="post" in form
+
 const Login: React.FC = () => {
     const classes = useStyles();
+    const [APIKey, setAPIKey] = useState('');
+    const[outputData, setOutputData] = useState<string | null>(null);
+    const handleLogin = useCallback(async () => {
+        try {
+            if (APIKey != '') {
+                await setEnvVariable('ZENODO_API_KEY', APIKey);
+                console.log(await getEnvVariable('ZENODO_API_KEY'));
+                setOutputData("Zenodo Token Successfully Stored in Environment.");
+            } else {
+                const storedKey = getEnvVariable('ZENODO_API_KEY');
+                if (storedKey === null) {
+                    setOutputData("No Zenodo Key Stored. Please Enter A Key.")
+                } else {
+                    setOutputData("Zenodo Key still stored.")
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [APIKey]);
+
+/*     const handleLogin = () => {
+        try {
+            var code = `
+import os
+            `;
+            if (APIKey != '') {
+                code += `
+os.environ['TESTVAR'] = '${APIKey}'
+                `;
+            }
+            code += `
+os.environ['TESTVAR']
+            `;
+            console.log(code);
+        } catch (error) {
+            alert('Invalid Zenodo API Token');
+        }
+    } */
+
     return (
         <div className={classes.root}>
             <div className={classes.loginContainer}>
             <h2>Login</h2>
-            <form>
             <div className={classes.formGroup}>
-                    <input className={classes.input} type="text" id="username" name="username" placeholder="Email" required />
+                    <input className={classes.input} type="text" id="APIKey" name="APIKey" placeholder="API Key" value={APIKey} onChange={(e) => setAPIKey(e.target.value)} required />
         </div>
         <div className={classes.formGroup}>
-            <input className={classes.input} type="password" id="password" name="password" placeholder="Password" required />
+            <button className={classes.button} type="submit" onClick={handleLogin}>Login</button>
+            {outputData ? (
+                <div>
+                    <h2>Processed Output:</h2>
+                    <p>{outputData}</p>
+                </div>
+                ) : (
+                <p>No data processed yet</p>
+            )}
         </div>
-        <div className={classes.formGroup}>
-            <button className={classes.button} type="submit">Login</button>
-        </div>
-    </form>
     </div>
 </div>
     );
 };
 //<GreetingComponent isTrue={isTrue} />
 export default Login;
+

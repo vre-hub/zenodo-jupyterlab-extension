@@ -18,13 +18,13 @@ Now, install `yarn`:\
 Install the Python dependencies from within the main project directory:\
 `python -m pip install -r requirements.txt`
 
-Install the Extension:\
+Install Yarn Dependencies:\
+`jlpm`
+
+Install and Build the Extension:\
 `python -m pip install .`
 
-Install Yarn Dependencies:\
-`yarn install`
-
-Build the Extension:\
-`yarn run build`
+Enable the Extension:\
+`jupyter server extension enable zenodo_jupyterlab.server`
 
 Now open a local instance of Jupyter Lab, and it should be present on the sidebar.

@@ -15,7 +15,6 @@ import {
   Widget 
  } from '@lumino/widgets';
 
- //import {Search} from './pages/search';
 
 import { LabIcon } from '@jupyterlab/ui-components';
 import z_icon from '/src/icons/z_icon.svg';
@@ -24,18 +23,9 @@ import { createRoot, Root } from 'react-dom/client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-//import dotenv from 'dotenv';
-
-// //import ReactDOM from 'react-dom';
 import React from 'react';
 
 import SideBarPanel from './components/SideBarPanel';
-
-import { ACCESS_TOKEN } from './config';
-
-//import React from 'react';
-
-//import { MenuBar } from '../components'
 
 /* interface APODResponse {
   copyright: string;
@@ -52,13 +42,13 @@ import { ACCESS_TOKEN } from './config';
   );
 } */
 
-console.log(ACCESS_TOKEN);
 
 class ZenodoWidget extends Widget {
   private root: Root | null = null;
   //private app=JupyterFrontEnd<any,any>;
   //private app = JupyterFrontEnd<ILabShell, "desktop">;
   private app: JupyterFrontEnd;
+  
 
   constructor(app: JupyterFrontEnd) {
     super();
@@ -79,9 +69,9 @@ class ZenodoWidget extends Widget {
   showLogin: boolean;
   showSearch: boolean;
 
-  onAfterAttach(msg: any): void {
+  async onAfterAttach(msg: any): Promise<void> {
     this.root = createRoot(this.node);
-    this.root.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
+    this.render();
   }
 
   onBeforeDetach(msg: any): void {
@@ -105,6 +95,19 @@ class ZenodoWidget extends Widget {
     this.showLogin = false;
     this.render();
   }
+
+  /* async getActiveKernel(): Promise<void> {
+    try {
+      await this.sessionContext.initialize();
+      if (this.sessionContext.session?.kernel) {
+        this.kernel = this.sessionContext.session.kernel;
+      } else {
+        console.error('No active kernel found.');
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  } */
 
   render() {
     this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
@@ -154,14 +157,10 @@ class ZenodoWidget extends Widget {
 * Activate the APOD widget extension.
 */
 async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
-  console.log('JupyterLab extension jupyterlab_apod is activated!');
-  // Declare a widget variable
   let widget: MainAreaWidget<ZenodoWidget>;
   app.commands.addCommand('zenodo-jupyterlab: search', {
     label: 'Search Field',
     execute: () => {
-      //widget.content.setIsTrue(true);
-      console.log('You pressed search!');
       widget.content.toggleSearch();
     }
   });
@@ -169,7 +168,6 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
   app.commands.addCommand('zenodo-jupyterlab:login', {
     label: 'Login Field',
     execute: () => {
-      console.log('You pressed Login!!');
       widget.content.toggleLogin();
     }
   });

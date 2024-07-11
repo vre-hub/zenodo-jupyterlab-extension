@@ -41,7 +41,7 @@ import { createUseStyles } from 'react-jss';
     app: JupyterFrontEnd;
     isTrue: boolean;
     showLogin: boolean;
-    showSearch: boolean;
+    showSearch: boolean
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
@@ -80,7 +80,7 @@ import { createUseStyles } from 'react-jss';
         </div>
             <NavBar app={app} />
             {showLogin && (
-              <Login />
+              <Login/>
             )}
             {showSearch && (<SearchWidget isTrue={isTrue} />)}
     </div>

@@ -70,6 +70,12 @@ jobs:
           set -eux
           python -m pip install .
         shell: bash
+
+      - name: Enable Server Extension
+        run: |
+          set -eux
+          jupyter server extension enable zenodo_jupyterlab.server
+        shell: bash
       
       
   # install_extension:
