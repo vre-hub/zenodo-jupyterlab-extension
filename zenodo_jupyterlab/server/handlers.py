@@ -5,6 +5,7 @@ from jupyter_server.utils import url_path_join
 import os
 from .testConnection import testZenodoConnection
 
+
 class EnvHandler(APIHandler):
     async def get(self):
         env_var = self.get_argument('env_var')

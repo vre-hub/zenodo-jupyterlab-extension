@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
 import { getEnvVariable, setEnvVariable, testZenodoConnection } from '../API/test';
 
+
 const useStyles = createUseStyles({
     root: {
         display: 'flex',
@@ -49,6 +50,7 @@ const Login: React.FC = () => {
     const[outputData, setOutputData] = useState<string | null>(null);
     const [connectionStatus, setConnectionStatus] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
     const handleLogin = useCallback(async () => {
         try {
             if (APIKey != '') {
