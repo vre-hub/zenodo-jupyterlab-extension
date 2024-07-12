@@ -3,6 +3,7 @@
 from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
+from .testConnection import testZenodoConnection
 
 class EnvHandler(APIHandler):
     async def get(self):
@@ -20,6 +21,11 @@ class CodeHandler(APIHandler):
         exec(data['code'], globals())
         self.finish({'status': 'success'})
 
+class ZenodoTestHandler(APIHandler):
+    async def get(self):
+        response = await testZenodoConnection()
+        self.finish({'status': response})
+
 class XSRFTokenHandler(JupyterHandler):
     async def get(self):
         xsrf_token = self.xsrf_token
@@ -32,7 +38,8 @@ def setup_handlers(web_app):
     handlers = [
         (url_path_join(base_path, 'env'), EnvHandler),
         (url_path_join(base_path, 'code'), CodeHandler),
-        (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler)
+        (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
+        (url_path_join(base_path, 'test-connection'), ZenodoTestHandler)
     ]
 
     web_app.add_handlers(".*$", handlers)

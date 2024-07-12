@@ -13,13 +13,25 @@ export async function getEnvVariable(varName: string) {
 
 export async function setEnvVariable(key: string, value: string) {
     try {
-        const data = await requestAPI('zenodo-jupyterlab/env', {
+        await requestAPI('zenodo-jupyterlab/env', {
             method: 'POST',
             body: JSON.stringify({ key, value })
         });
-        console.log(data);
+        //console.log(data);
     } catch (error) {
         console.error(`Error setting ${key}:`, error);
+    }
+}
+
+export async function testZenodoConnection() {
+    try {
+        const data = await requestAPI('zenodo-jupyterlab/test-connection', {
+            method: 'GET'
+        });
+        //console.log(data);
+        return data;
+    } catch (error) {
+        console.error(`Error testing connection:`, error);
     }
 }
 
