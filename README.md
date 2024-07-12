@@ -1,4 +1,6 @@
 # Zenodo Jupyterlab Extension
+[![Build and install extension](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml/badge.svg)](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml)
+
 Zenodo JupyterLab plugin
 **This project is currently in development and is subject to change.**
 
