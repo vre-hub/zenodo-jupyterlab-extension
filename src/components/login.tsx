@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
-import { getEnvVariable, setEnvVariable } from '../API/test';
+import { getEnvVariable, setEnvVariable, testZenodoConnection } from '../API/test';
+
 
 const useStyles = createUseStyles({
     root: {
@@ -47,24 +48,46 @@ const Login: React.FC = () => {
     const classes = useStyles();
     const [APIKey, setAPIKey] = useState('');
     const[outputData, setOutputData] = useState<string | null>(null);
+    const [connectionStatus, setConnectionStatus] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleLogin = useCallback(async () => {
         try {
             if (APIKey != '') {
                 await setEnvVariable('ZENODO_API_KEY', APIKey);
-                console.log(await getEnvVariable('ZENODO_API_KEY'));
+                //console.log(await getEnvVariable('ZENODO_API_KEY'));
                 setOutputData("Zenodo Token Successfully Stored in Environment.");
+                testAPIConnection();
             } else {
                 const storedKey = getEnvVariable('ZENODO_API_KEY');
                 if (storedKey === null) {
-                    setOutputData("No Zenodo Key Stored. Please Enter A Key.")
+                    setOutputData("No Zenodo Key Stored. Please Enter A Key.");
                 } else {
-                    setOutputData("Zenodo Key still stored.")
+                    setOutputData("Zenodo Key still stored.");
+                    testAPIConnection();
                 }
             }
         } catch (error) {
             console.error(error);
         }
     }, [APIKey]);
+
+    const testAPIConnection = async () => {
+        setIsLoading(true);
+        try {
+            var response = await testZenodoConnection();
+            //console.log(response['status']);
+            if (Number(response['status']) == 200) {
+                setConnectionStatus("API Connection Successful")
+            } else {
+                setConnectionStatus("Invalid Zenodo API Key")
+            }
+        } catch(error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
 /*     const handleLogin = () => {
         try {
@@ -102,11 +125,19 @@ os.environ['TESTVAR']
                 ) : (
                 <p>No data processed yet</p>
             )}
+            {isLoading ? (
+                        <p>Loading...</p>
+                    ) : connectionStatus ? (
+                        <div>
+                            <h2>Zenodo Connection Status:</h2>
+                            <p>{connectionStatus}</p>
+                        </div>
+                    ) : null}
         </div>
     </div>
 </div>
     );
 };
-//<GreetingComponent isTrue={isTrue} />
+
 export default Login;
 
