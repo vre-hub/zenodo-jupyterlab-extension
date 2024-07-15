@@ -35,7 +35,18 @@ export async function testZenodoConnection() {
     }
 }
 
-export async function runPythonCode(code: string) {
+export async function searchRecords(search_field: string) {
+    try {
+        const data = await requestAPI(`zenodo-jupyterlab/search-records?search_field=${encodeURIComponent(search_field)}`, {
+            method: 'GET'
+        });
+        return data;
+    } catch (error) {
+        console.error('Error searching records: ', error);
+    }
+}
+
+/* export async function runPythonCode(code: string) {
     try {
         const data = await requestAPI('zenodo-jupyterlab/code', {
             method: 'POST',
@@ -45,4 +56,4 @@ export async function runPythonCode(code: string) {
     } catch (error) {
         console.error('Error running code:', error);
     }
-}
+} */

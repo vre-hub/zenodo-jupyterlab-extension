@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
-import { getEnvVariable, setEnvVariable, testZenodoConnection } from '../API/test';
+import { getEnvVariable, setEnvVariable, testZenodoConnection } from '../API/API_functions';
 
 
 const useStyles = createUseStyles({
