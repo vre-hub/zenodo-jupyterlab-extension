@@ -10,6 +10,12 @@ import { createUseStyles } from 'react-jss';
 //title, version, type, date
 
 const useStyles = createUseStyles({
+    searchWidget: {
+        width: '100%',
+        maxWidth: '1000px', // Optional: set a max-width for the widget
+        overflowX: 'auto', // Enable horizontal scrolling
+        margin: '0 auto', // Center the widget if maxWidth is set
+    },
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -34,7 +40,13 @@ const useStyles = createUseStyles({
             backgroundColor: '#0056b3',
         },
     },
+    tableContainer: {
+        width: '100%',
+        overflowX: 'auto',
+        marginTop: '20px',
+    },
     table: {
+        minWidth: '400px',
         width: '100%',
         borderCollapse: 'collapse',
         marginTop: '20px',
@@ -77,7 +89,7 @@ const SearchWidget: React.FC = () => {
         }
     }
     return (
-        <div className='searchWidget'>
+        <div className={classes.searchWidget}>
             <div className={classes.container}>
                 <input
                     type="text"
@@ -93,24 +105,26 @@ const SearchWidget: React.FC = () => {
             )} */}
             {isLoading && <p>Loading Search Results...</p>}
             {results.length > 0 && (
-                <table className={classes.table}>
-                    <thead>
-                        <tr className={classes.headerRow}>
-                            <th className={classes.headerCell}>Title</th>
-                            <th className={classes.headerCell}>Resource Type</th>
-                            <th className={classes.headerCell}>Date Published</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {results.map((result, index) => (
-                            <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
-                                <td className={classes.cell}>{result.title}</td>
-                                <td className={classes.cell}>{result.date}</td>
-                                <td className={classes.cell}>{result.resource_type}</td>
+                <div className={classes.tableContainer}>
+                    <table className={classes.table}>
+                        <thead>
+                            <tr className={classes.headerRow}>
+                                <th className={classes.headerCell}>Title</th>
+                                <th className={classes.headerCell}>Resource Type</th>
+                                <th className={classes.headerCell}>Date Published</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {results.map((result, index) => (
+                                <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
+                                    <td className={classes.cell}>{result.title}</td>
+                                    <td className={classes.cell}>{result.date}</td>
+                                    <td className={classes.cell}>{result.resource_type}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
             
         </div>
