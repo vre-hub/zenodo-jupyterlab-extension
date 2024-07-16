@@ -82,7 +82,7 @@ import { createUseStyles } from 'react-jss';
             {showLogin && (
               <Login/>
             )}
-            {showSearch && (<SearchWidget isTrue={isTrue} />)}
+            {showSearch && (<SearchWidget/>)}
     </div>
   }
 
