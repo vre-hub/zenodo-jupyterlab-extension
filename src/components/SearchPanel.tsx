@@ -155,8 +155,8 @@ const SearchWidget: React.FC = () => {
                             <thead>
                                 <tr className={classes.headerRow}>
                                     <th className={classes.headerCell}>Title</th>
-                                    <th className={classes.headerCell}>Resource Type</th>
                                     <th className={classes.headerCell}>Date Published</th>
+                                    <th className={classes.headerCell}>Resource Type</th>
                                 </tr>
                             </thead>
                             <tbody>
