@@ -46,9 +46,9 @@ export async function searchRecords(search_field: string, page: number) {
     }
 }
 
-export async function searchCommunities(search_field: string) {
+export async function searchCommunities(search_field: string, page:number) {
     try{
-        const data = await requestAPI(`zenodo-jupyterlab/search-communities?search_field=${encodeURIComponent(search_field)}`, {
+        const data = await requestAPI(`zenodo-jupyterlab/search-communities?search_field=${encodeURIComponent(search_field)}&page=${encodeURIComponent(page)}`, {
             method: 'GET'    
         });
         return data;

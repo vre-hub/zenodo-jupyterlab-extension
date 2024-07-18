@@ -41,10 +41,14 @@ const useStyles = createUseStyles({
         marginTop: '20px',
     },
     table: {
-        minWidth: '400px',
         width: '100%',
         borderCollapse: 'collapse',
         marginTop: '20px',
+    },
+    tableBody: {
+        borderLeft: '2px solid black',
+        borderRight: '2px solid black',
+        borderBottom: '2px solid black',
     },
     headerRow: {
         backgroundColor: '#007bff',
@@ -88,6 +92,15 @@ const useStyles = createUseStyles({
     },
     checkboxInput: {
         marginRight: '5px',
+    },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '5px',
+    },
+    spacer: {
+        flexGrow: '1',
     }
 });
 
@@ -102,19 +115,19 @@ const SearchWidget: React.FC = () => {
     const [selectedRecordID, setSelectedRecordID] = useState<number | null>(null);
     const [recordInfo, setRecordInfo] = useState<any>({});
     const [recordLoading, setRecordLoading] = useState(false);
+    const [resultsPage, setResultsPage] = useState(1);
 
-    const handleSearch = async () => {
+    const handleSearch = async (page: number) => {
         setIsLoading(true);
         setHasSearched(true);
         try {
             //const response = await searchRecords(searchTerm);
             const response = selectedType === 'records'
-            ? await searchRecords(searchTerm, 1)
-            : await searchCommunities(searchTerm);
+            ? await searchRecords(searchTerm, page)
+            : await searchCommunities(searchTerm, page);
             //const data: SearchResult[] = await response;
             setResults(response[selectedType]);
             setSelectedRecordID(null);
-            //console.log(response['records']);
         } catch (error) {
             console.error('Error during search: ', error);
         } finally {
@@ -144,6 +157,23 @@ const SearchWidget: React.FC = () => {
                 setRecordLoading(false);
             }
         }
+    }
+
+    const handleNextPageClick = () => {
+        const nextPage = resultsPage + 1;
+        setResultsPage(nextPage);
+        handleSearch(nextPage);
+    }
+
+    const handleLastPageClick = () => {
+        const prevPage = resultsPage - 1;
+        setResultsPage(prevPage);
+        handleSearch(prevPage);
+    }
+
+    const handleSearchClick = () => {
+        setResultsPage(1);
+        handleSearch(1);
     }
 
     return (
@@ -176,7 +206,7 @@ const SearchWidget: React.FC = () => {
                         Communities
                     </label>
                 </div>
-                <button onClick={handleSearch} className={classes.button}>Search</button>
+                <button onClick={handleSearchClick} className={classes.button}>Search</button>
             </div>
             {isLoading && <p>Loading Search Results...</p>}
             {hasSearched && !isLoading && (
@@ -191,7 +221,7 @@ const SearchWidget: React.FC = () => {
                                     <th className={classes.headerCell}>Date Published</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
                                     <React.Fragment key={result.id}>
                                     <tr className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleRowClick(result.id)}>
@@ -232,6 +262,14 @@ const SearchWidget: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
+                        <br></br>
+                        <div className={classes.buttonContainer}>
+                            {resultsPage > 1 && (
+                                <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                            )}
+                            <div className={classes.spacer}></div>
+                            <button className={classes.button} onClick={handleNextPageClick}>Next Page</button>
+                        </div>
                     </div>
                     ) : (
                         <div className={classes.tableContainer}>
@@ -242,7 +280,7 @@ const SearchWidget: React.FC = () => {
                                     <th className={classes.headerCell}>Date Published</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
                                     <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
                                         <td className={classes.cell}>{result.title}</td>
@@ -251,6 +289,13 @@ const SearchWidget: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
+                        <div className={classes.buttonContainer}>
+                            {resultsPage > 1 && (
+                                <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                            )}
+                            <div className={classes.spacer}></div>
+                            <button className={classes.button} onClick={handleNextPageClick}>Next Page</button>
+                        </div>
                     </div>
                     )
                 ) : (

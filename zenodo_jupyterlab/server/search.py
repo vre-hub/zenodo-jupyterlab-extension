@@ -10,9 +10,9 @@ async def searchRecords(search_field, page):
     except:
         return ["failed"]
 
-async def searchCommunities(search_field):
+async def searchCommunities(search_field, page):
     try:
-        communities = search_communities(search=search_field, size= 25)
+        communities = search_communities(search=search_field, size= 25, page=page)
         response = []
         for community in communities:
             response.append({'id': community['id'], 'title': community['metadata']['title'], 'date': community['created'].split('T')[0]})
