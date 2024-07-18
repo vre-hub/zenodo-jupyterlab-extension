@@ -56,7 +56,7 @@ class ZenodoWidget extends Widget {
     this.isTrue = true;
     this.showLogin = false;
     this.showSearch = true;
-    this.addClass('my-apodWidget');
+    this.addClass('zenodo-widget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
     const icon = new LabIcon ({

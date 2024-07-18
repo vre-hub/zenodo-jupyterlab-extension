@@ -4,7 +4,7 @@ from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
 from .testConnection import testZenodoConnection
-from .search import searchRecords
+from .search import searchRecords, searchCommunities
 
 
 class EnvHandler(APIHandler):
@@ -36,8 +36,15 @@ class XSRFTokenHandler(JupyterHandler):
 class SearchRecordHandler(APIHandler):
     async def get(self):
         search_field = self.get_query_argument('search_field', default="")
-        response = await searchRecords(search_field=search_field)
+        page = self.get_query_argument('page', default=1)
+        response = await searchRecords(search_field=search_field, page=page)
         self.finish({'records': response})
+
+class SearchCommunityHandler(APIHandler):
+    async def get(self):
+        search_field = self.get_query_argument('search_field', default="")
+        response = await searchCommunities(search_field=search_field)
+        self.finish({'communities': response})
 
 
 def setup_handlers(web_app):
@@ -49,7 +56,8 @@ def setup_handlers(web_app):
         (url_path_join(base_path, 'code'), CodeHandler),
         (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
         (url_path_join(base_path, 'test-connection'), ZenodoTestHandler),
-        (url_path_join(base_path, 'search-records'), SearchRecordHandler)
+        (url_path_join(base_path, 'search-records'), SearchRecordHandler),
+        (url_path_join(base_path, 'search-communities'), SearchCommunityHandler)
     ]
 
     web_app.add_handlers(".*$", handlers)

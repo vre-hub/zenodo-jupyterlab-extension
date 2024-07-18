@@ -35,14 +35,25 @@ export async function testZenodoConnection() {
     }
 }
 
-export async function searchRecords(search_field: string) {
+export async function searchRecords(search_field: string, page: number) {
     try {
-        const data = await requestAPI(`zenodo-jupyterlab/search-records?search_field=${encodeURIComponent(search_field)}`, {
+        const data = await requestAPI(`zenodo-jupyterlab/search-records?search_field=${encodeURIComponent(search_field)}&page=${encodeURIComponent(page)}`, {
             method: 'GET'
         });
         return data;
     } catch (error) {
         console.error('Error searching records: ', error);
+    }
+}
+
+export async function searchCommunities(search_field: string) {
+    try{
+        const data = await requestAPI(`zenodo-jupyterlab/search-communities?search_field=${encodeURIComponent(search_field)}`, {
+            method: 'GET'    
+        });
+        return data;
+    } catch (error) {
+        console.error('Error searching communities: ', error);
     }
 }
 
