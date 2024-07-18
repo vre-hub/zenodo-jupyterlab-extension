@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { searchRecords, searchCommunities, recordInformation } from '../API/API_functions';
 import { createUseStyles } from 'react-jss';
-
-// interface SearchResult {
-//     id: number;
-//     title: string;
-//     date: string;
-// }
-//title, version, type, date
+import clsx from 'clsx';
 
 const useStyles = createUseStyles({
     searchWidget: {
@@ -63,6 +57,19 @@ const useStyles = createUseStyles({
     },
     row: {
         borderBottom: '1px solid #ccc',
+        cursor: 'pointer',
+        backgroundColor: '#e6f7ff',
+        '&:hover': {
+            backgroundColor: '#b3e0ff',
+        },
+    },
+    alternateRow: {
+        borderBottom: '1px solid #ccc',
+        cursor: 'pointer',
+        backgroundColor: '#cceeff',
+        '&:hover': {
+            backgroundColor: '#99d6ff',
+        },
     },
     cell: {
         padding: '10px',
@@ -106,6 +113,7 @@ const SearchWidget: React.FC = () => {
             : await searchCommunities(searchTerm);
             //const data: SearchResult[] = await response;
             setResults(response[selectedType]);
+            setSelectedRecordID(null);
             //console.log(response['records']);
         } catch (error) {
             console.error('Error during search: ', error);
@@ -186,7 +194,7 @@ const SearchWidget: React.FC = () => {
                             <tbody>
                                 {results.map((result, index) => (
                                     <React.Fragment key={result.id}>
-                                    <tr className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }} onClick={() => handleRowClick(result.id)}>
+                                    <tr className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleRowClick(result.id)}>
                                         <td className={classes.cell}>{result.title}</td>
                                         <td className={classes.cell}>{result.resource_type}</td>
                                         <td className={classes.cell}>{result.date}</td>
