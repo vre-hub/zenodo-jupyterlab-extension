@@ -155,16 +155,16 @@ const SearchWidget: React.FC = () => {
                             <thead>
                                 <tr className={classes.headerRow}>
                                     <th className={classes.headerCell}>Title</th>
-                                    <th className={classes.headerCell}>Date Published</th>
                                     <th className={classes.headerCell}>Resource Type</th>
+                                    <th className={classes.headerCell}>Date Published</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {results.map((result, index) => (
                                     <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
                                         <td className={classes.cell}>{result.title}</td>
-                                        <td className={classes.cell}>{result.date}</td>
                                         <td className={classes.cell}>{result.resource_type}</td>
+                                        <td className={classes.cell}>{result.date}</td>
                                     </tr>
                                 ))}
                             </tbody>
