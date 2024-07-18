@@ -1,4 +1,4 @@
-from eossr.api.zenodo import search_records, search_communities
+from eossr.api.zenodo import search_records, search_communities, get_record
 
 async def searchRecords(search_field, page):
     try:
@@ -19,3 +19,11 @@ async def searchCommunities(search_field):
         return response
     except:
         return ["failed"]
+
+async def recordInformation(recordID):
+    try:
+        response = get_record(recordID)
+        record = {'authors': response.metadata['creators'], 'filelist': response.filelist}
+        return record
+    except:
+        return {'status': 'failed'}

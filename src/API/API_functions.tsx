@@ -57,6 +57,17 @@ export async function searchCommunities(search_field: string) {
     }
 }
 
+export async function recordInformation(recordID: number) {
+    try{
+        const data = await requestAPI(`zenodo-jupyterlab/record-info?record-id=${encodeURIComponent(recordID)}`, {
+            method: 'GET'    
+        });
+        return data;
+    } catch (error) {
+        console.error('Error retriving record information: ', error);
+    }
+}
+
 /* export async function runPythonCode(code: string) {
     try {
         const data = await requestAPI('zenodo-jupyterlab/code', {

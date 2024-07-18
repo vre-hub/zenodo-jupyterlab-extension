@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { searchRecords, searchCommunities } from '../API/API_functions';
+import { searchRecords, searchCommunities, recordInformation } from '../API/API_functions';
 import { createUseStyles } from 'react-jss';
 
 // interface SearchResult {
@@ -92,6 +92,9 @@ const SearchWidget: React.FC = () => {
     const [selectedType, setSelectedType] = useState('records');
     const [lastSearchType, setLastSearchType] = useState('records');
     const [hasSearched, setHasSearched] = useState(false);
+    const [selectedRecordID, setSelectedRecordID] = useState<number | null>(null);
+    const [recordInfo, setRecordInfo] = useState<any>({});
+    const [recordLoading, setRecordLoading] = useState(false);
 
     const handleSearch = async () => {
         setIsLoading(true);
@@ -114,6 +117,27 @@ const SearchWidget: React.FC = () => {
     const handleCheckboxChange = (type: string) => {
         setSelectedType(type);
     };
+
+    const handleRowClick = async (recordID: number) => {
+        if (selectedRecordID === recordID) {
+            setSelectedRecordID(null);
+            setRecordInfo({});
+            setRecordLoading(false);
+        } else {
+            setSelectedRecordID(recordID);
+            setRecordLoading(true);
+            try {
+                var response = await recordInformation(recordID);
+                setRecordInfo(response['data']);
+                //console.log(recordInfo);
+            } catch (error) {
+                console.error('Error fetching record information: ', error);
+            } finally {
+                setRecordLoading(false);
+            }
+        }
+    }
+
     return (
         <div className={classes.searchWidget}>
             <div className={classes.container}>
@@ -161,11 +185,42 @@ const SearchWidget: React.FC = () => {
                             </thead>
                             <tbody>
                                 {results.map((result, index) => (
-                                    <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
+                                    <React.Fragment key={result.id}>
+                                    <tr className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }} onClick={() => handleRowClick(result.id)}>
                                         <td className={classes.cell}>{result.title}</td>
                                         <td className={classes.cell}>{result.resource_type}</td>
                                         <td className={classes.cell}>{result.date}</td>
                                     </tr>
+                                    {selectedRecordID === result.id && !recordLoading &&(
+                                                <tr>
+                                                    <td colSpan={3} className={classes.cell}>
+                                                        <div>
+                                                            <p><strong>Additional information for {result.title}:</strong></p>
+                                                            {recordInfo.authors && (
+                                                                <div>
+                                                                    <p><strong>Authors:</strong></p>
+                                                                    <ul>
+                                                                        {recordInfo.authors.map((author: {'name': string, 'affiliation': string}, index: number) => (
+                                                                            <li key={index}>{author.name}, Affiliation: {author.affiliation}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                            {recordInfo.filelist && (
+                                                                <div>
+                                                                    <p><strong>Files:</strong></p>
+                                                                    <ul>
+                                                                        {recordInfo.filelist.map((file: string, index: number) => (
+                                                                            <li key={index}>{file}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                    </React.Fragment>
                                 ))}
                             </tbody>
                         </table>
