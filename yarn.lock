@@ -11232,7 +11232,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^6.21.0
     "@typescript-eslint/parser": ^6.21.0
     bootstrap: ^5.3.3
-    clsx: "npm:^2.1.1"
+    clsx: ^2.1.1
     css-loader: ^7.1.2
     dotenv: ^16.4.5
     eslint: 8.0.0
