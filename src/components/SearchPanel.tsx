@@ -116,6 +116,7 @@ const SearchWidget: React.FC = () => {
     const [recordInfo, setRecordInfo] = useState<any>({});
     const [recordLoading, setRecordLoading] = useState(false);
     const [resultsPage, setResultsPage] = useState(1);
+    const [endPage, setEndPage] = useState(false);
 
     const handleSearch = async (page: number) => {
         setIsLoading(true);
@@ -163,15 +164,20 @@ const SearchWidget: React.FC = () => {
         const nextPage = resultsPage + 1;
         setResultsPage(nextPage);
         handleSearch(nextPage);
+        if (results.length !> 0) {
+            setEndPage(true);
+        }
     }
 
     const handleLastPageClick = () => {
+        setEndPage(false);
         const prevPage = resultsPage - 1;
         setResultsPage(prevPage);
         handleSearch(prevPage);
     }
 
     const handleSearchClick = () => {
+        setEndPage(false);
         setResultsPage(1);
         handleSearch(1);
     }
@@ -299,7 +305,14 @@ const SearchWidget: React.FC = () => {
                     </div>
                     )
                 ) : (
-                    <p>No results found.</p>
+                    !endPage ? (
+                        <p>No results found.</p>
+                    ) : (
+                        <div>
+                            <p>No further results found. Please return to the previous page.</p>
+                            <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                        </div>
+                    )
                 )
             )}
             
