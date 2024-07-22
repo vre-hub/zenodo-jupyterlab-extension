@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: main
+    branches: unit_testing
   pull_request:
     branches: '*'
 
@@ -76,6 +76,8 @@ jobs:
           set -eux
           jupyter server extension enable zenodo_jupyterlab.server
         shell: bash
+      
+      - uses: ../actions/test
       
       
   # install_extension:
