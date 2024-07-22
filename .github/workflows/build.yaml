@@ -2,7 +2,7 @@ name: Build and install extension
 
 on:
   push:
-    branches: unit_testing
+    branches: main
   pull_request:
     branches: '*'
 
