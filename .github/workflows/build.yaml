@@ -77,7 +77,7 @@ jobs:
           jupyter server extension enable zenodo_jupyterlab.server
         shell: bash
       
-      - uses: ../actions/test
+      - uses: ./.github/actions/test
       
       
   # install_extension:
