@@ -4545,6 +4545,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  languageName: node
+  linkType: hard
+
 "co@npm:^4.6.0":
   version: 4.6.0
   resolution: "co@npm:4.6.0"
@@ -11226,6 +11232,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^6.21.0
     "@typescript-eslint/parser": ^6.21.0
     bootstrap: ^5.3.3
+    clsx: ^2.1.1
     css-loader: ^7.1.2
     dotenv: ^16.4.5
     eslint: 8.0.0

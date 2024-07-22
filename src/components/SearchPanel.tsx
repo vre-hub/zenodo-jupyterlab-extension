@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import { searchRecords, searchCommunities } from '../API/API_functions';
+import { searchRecords, searchCommunities, recordInformation } from '../API/API_functions';
 import { createUseStyles } from 'react-jss';
-
-// interface SearchResult {
-//     id: number;
-//     title: string;
-//     date: string;
-// }
-//title, version, type, date
+import clsx from 'clsx';
 
 const useStyles = createUseStyles({
     searchWidget: {
@@ -47,10 +41,14 @@ const useStyles = createUseStyles({
         marginTop: '20px',
     },
     table: {
-        minWidth: '400px',
         width: '100%',
         borderCollapse: 'collapse',
         marginTop: '20px',
+    },
+    tableBody: {
+        borderLeft: '2px solid black',
+        borderRight: '2px solid black',
+        borderBottom: '2px solid black',
     },
     headerRow: {
         backgroundColor: '#007bff',
@@ -63,6 +61,19 @@ const useStyles = createUseStyles({
     },
     row: {
         borderBottom: '1px solid #ccc',
+        cursor: 'pointer',
+        backgroundColor: '#e6f7ff',
+        '&:hover': {
+            backgroundColor: '#b3e0ff',
+        },
+    },
+    alternateRow: {
+        borderBottom: '1px solid #ccc',
+        cursor: 'pointer',
+        backgroundColor: '#cceeff',
+        '&:hover': {
+            backgroundColor: '#99d6ff',
+        },
     },
     cell: {
         padding: '10px',
@@ -81,6 +92,15 @@ const useStyles = createUseStyles({
     },
     checkboxInput: {
         marginRight: '5px',
+    },
+    buttonContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '5px',
+    },
+    spacer: {
+        flexGrow: '1',
     }
 });
 
@@ -92,18 +112,23 @@ const SearchWidget: React.FC = () => {
     const [selectedType, setSelectedType] = useState('records');
     const [lastSearchType, setLastSearchType] = useState('records');
     const [hasSearched, setHasSearched] = useState(false);
+    const [selectedRecordID, setSelectedRecordID] = useState<number | null>(null);
+    const [recordInfo, setRecordInfo] = useState<any>({});
+    const [recordLoading, setRecordLoading] = useState(false);
+    const [resultsPage, setResultsPage] = useState(1);
+    const [endPage, setEndPage] = useState(false);
 
-    const handleSearch = async () => {
+    const handleSearch = async (page: number) => {
         setIsLoading(true);
         setHasSearched(true);
         try {
             //const response = await searchRecords(searchTerm);
             const response = selectedType === 'records'
-            ? await searchRecords(searchTerm, 1)
-            : await searchCommunities(searchTerm);
+            ? await searchRecords(searchTerm, page)
+            : await searchCommunities(searchTerm, page);
             //const data: SearchResult[] = await response;
             setResults(response[selectedType]);
-            //console.log(response['records']);
+            setSelectedRecordID(null);
         } catch (error) {
             console.error('Error during search: ', error);
         } finally {
@@ -114,6 +139,49 @@ const SearchWidget: React.FC = () => {
     const handleCheckboxChange = (type: string) => {
         setSelectedType(type);
     };
+
+    const handleRowClick = async (recordID: number) => {
+        if (selectedRecordID === recordID) {
+            setSelectedRecordID(null);
+            setRecordInfo({});
+            setRecordLoading(false);
+        } else {
+            setSelectedRecordID(recordID);
+            setRecordLoading(true);
+            try {
+                var response = await recordInformation(recordID);
+                setRecordInfo(response['data']);
+                //console.log(recordInfo);
+            } catch (error) {
+                console.error('Error fetching record information: ', error);
+            } finally {
+                setRecordLoading(false);
+            }
+        }
+    }
+
+    const handleNextPageClick = () => {
+        const nextPage = resultsPage + 1;
+        setResultsPage(nextPage);
+        handleSearch(nextPage);
+        if (results.length !> 0) {
+            setEndPage(true);
+        }
+    }
+
+    const handleLastPageClick = () => {
+        setEndPage(false);
+        const prevPage = resultsPage - 1;
+        setResultsPage(prevPage);
+        handleSearch(prevPage);
+    }
+
+    const handleSearchClick = () => {
+        setEndPage(false);
+        setResultsPage(1);
+        handleSearch(1);
+    }
+
     return (
         <div className={classes.searchWidget}>
             <div className={classes.container}>
@@ -144,7 +212,7 @@ const SearchWidget: React.FC = () => {
                         Communities
                     </label>
                 </div>
-                <button onClick={handleSearch} className={classes.button}>Search</button>
+                <button onClick={handleSearchClick} className={classes.button}>Search</button>
             </div>
             {isLoading && <p>Loading Search Results...</p>}
             {hasSearched && !isLoading && (
@@ -159,16 +227,55 @@ const SearchWidget: React.FC = () => {
                                     <th className={classes.headerCell}>Date Published</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
-                                    <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
+                                    <React.Fragment key={result.id}>
+                                    <tr className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleRowClick(result.id)}>
                                         <td className={classes.cell}>{result.title}</td>
                                         <td className={classes.cell}>{result.resource_type}</td>
                                         <td className={classes.cell}>{result.date}</td>
                                     </tr>
+                                    {selectedRecordID === result.id && !recordLoading &&(
+                                                <tr>
+                                                    <td colSpan={3} className={classes.cell}>
+                                                        <div>
+                                                            <p><strong>Additional information for {result.title}:</strong></p>
+                                                            {recordInfo.authors && (
+                                                                <div>
+                                                                    <p><strong>Authors:</strong></p>
+                                                                    <ul>
+                                                                        {recordInfo.authors.map((author: {'name': string, 'affiliation': string}, index: number) => (
+                                                                            <li key={index}>{author.name}, Affiliation: {author.affiliation}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                            {recordInfo.filelist && (
+                                                                <div>
+                                                                    <p><strong>Files:</strong></p>
+                                                                    <ul>
+                                                                        {recordInfo.filelist.map((file: string, index: number) => (
+                                                                            <li key={index}>{file}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                    </React.Fragment>
                                 ))}
                             </tbody>
                         </table>
+                        <br></br>
+                        <div className={classes.buttonContainer}>
+                            {resultsPage > 1 && (
+                                <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                            )}
+                            <div className={classes.spacer}></div>
+                            <button className={classes.button} onClick={handleNextPageClick}>Next Page</button>
+                        </div>
                     </div>
                     ) : (
                         <div className={classes.tableContainer}>
@@ -179,7 +286,7 @@ const SearchWidget: React.FC = () => {
                                     <th className={classes.headerCell}>Date Published</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
                                     <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
                                         <td className={classes.cell}>{result.title}</td>
@@ -188,10 +295,24 @@ const SearchWidget: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
+                        <div className={classes.buttonContainer}>
+                            {resultsPage > 1 && (
+                                <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                            )}
+                            <div className={classes.spacer}></div>
+                            <button className={classes.button} onClick={handleNextPageClick}>Next Page</button>
+                        </div>
                     </div>
                     )
                 ) : (
-                    <p>No results found.</p>
+                    !endPage ? (
+                        <p>No results found.</p>
+                    ) : (
+                        <div>
+                            <p>No further results found. Please return to the previous page.</p>
+                            <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
+                        </div>
+                    )
                 )
             )}
             

@@ -46,14 +46,25 @@ export async function searchRecords(search_field: string, page: number) {
     }
 }
 
-export async function searchCommunities(search_field: string) {
+export async function searchCommunities(search_field: string, page:number) {
     try{
-        const data = await requestAPI(`zenodo-jupyterlab/search-communities?search_field=${encodeURIComponent(search_field)}`, {
+        const data = await requestAPI(`zenodo-jupyterlab/search-communities?search_field=${encodeURIComponent(search_field)}&page=${encodeURIComponent(page)}`, {
             method: 'GET'    
         });
         return data;
     } catch (error) {
         console.error('Error searching communities: ', error);
+    }
+}
+
+export async function recordInformation(recordID: number) {
+    try{
+        const data = await requestAPI(`zenodo-jupyterlab/record-info?record-id=${encodeURIComponent(recordID)}`, {
+            method: 'GET'    
+        });
+        return data;
+    } catch (error) {
+        console.error('Error retriving record information: ', error);
     }
 }
 
