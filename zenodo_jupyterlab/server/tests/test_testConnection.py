@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import patch, AsyncMock
+from unittest.mock import patch, Mock
 from eossr.api.zenodo import ZenodoAPI
 import os
 from zenodo_jupyterlab.server.testConnection import checkZenodoConnection
@@ -9,7 +9,7 @@ from zenodo_jupyterlab.server.testConnection import checkZenodoConnection
 async def test_zenodo_connection_success(MockZenodoAPI):
     # Mock the ZenodoAPI instance and its method
     mock_instance = MockZenodoAPI.return_value
-    mock_instance.query_user_deposits = AsyncMock()
+    mock_instance.query_user_deposits = Mock()
     mock_instance.query_user_deposits.return_value.status_code = 200
 
         # Mock the environment variable
@@ -27,7 +27,7 @@ async def test_zenodo_connection_success(MockZenodoAPI):
 async def test_zenodo_connection_failure(MockZenodoAPI):
     # Mock the ZenodoAPI instance to raise an exception
     mock_instance = MockZenodoAPI.return_value
-    mock_instance.query_user_deposits = AsyncMock()
+    mock_instance.query_user_deposits = Mock()
     mock_instance.query_user_deposits.side_effect = Exception('Failed')
 
     # Mock the environment variable
