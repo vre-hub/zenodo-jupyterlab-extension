@@ -3,7 +3,7 @@
 from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
-from .testConnection import testZenodoConnection
+from .testConnection import checkZenodoConnection
 from .search import searchRecords, searchCommunities, recordInformation
 
 
@@ -25,7 +25,7 @@ class CodeHandler(APIHandler):
 
 class ZenodoTestHandler(APIHandler):
     async def get(self):
-        response = await testZenodoConnection()
+        response = await checkZenodoConnection(sandbox = False)
         self.finish({'status': response})
 
 class XSRFTokenHandler(JupyterHandler):
