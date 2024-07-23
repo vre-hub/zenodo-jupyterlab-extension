@@ -13,7 +13,7 @@ async def test_zenodo_connection_success(MockZenodoAPI):
     mock_instance.query_user_deposits.return_value.status_code = 200
 
         # Mock the environment variable
-    with patch.dict(os.environ, {'ZENODO_API_KEY': os.getenv('CI_ZENODO_API_KEY')}):
+    with patch.dict(os.environ, {'ZENODO_API_KEY': os.environ['CI_ZENODO_API_KEY']}):
             # Call the function to test
             status_code = await checkZenodoConnection()
 
