@@ -77,7 +77,11 @@ jobs:
           jupyter server extension enable zenodo_jupyterlab.server
         shell: bash
       
-      - uses: ./.github/actions/test
+      - name: Run Pytest
+        env:
+          CI_ZENODO_API_KEY: ${{ secrets.CI_ZENODO_API_KEY }}
+        run: pytest zenodo_jupyterlab/server/tests
+        shell: bash
       
       
   # install_extension:
