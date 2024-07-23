@@ -1,0 +1,10 @@
+name: "Test"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Pytest
+      env:
+        CI_ZENODO_API_KEY: ${{ secrets.CI_ZENODO_API_KEY }}
+      run: pytest zenodo_jupyterlab/server/tests
+      shell: bash
