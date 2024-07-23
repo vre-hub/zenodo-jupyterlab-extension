@@ -5,12 +5,11 @@ import os
 from zenodo_jupyterlab.server.testConnection import checkZenodoConnection
 
 @pytest.mark.asyncio
-@patch('zenodo_jupyterlab.server.testConnection.ZenodoAPI')
-async def test_zenodo_connection_success(MockZenodoAPI):
+async def test_zenodo_connection_success():
     # Mock the ZenodoAPI instance and its method
-    mock_instance = MockZenodoAPI.return_value
+    """ mock_instance = MockZenodoAPI.return_value
     mock_instance.query_user_deposits = Mock()
-    mock_instance.query_user_deposits.return_value.status_code = 200
+    mock_instance.query_user_deposits.return_value.status_code = 200 """
 
         # Mock the environment variable
     with patch.dict(os.environ, {'ZENODO_API_KEY': os.environ['CI_ZENODO_API_KEY']}):
@@ -23,12 +22,11 @@ async def test_zenodo_connection_success(MockZenodoAPI):
             assert status_code == 200
 
 @pytest.mark.asyncio
-@patch('zenodo_jupyterlab.server.testConnection.ZenodoAPI')
-async def test_zenodo_connection_failure(MockZenodoAPI):
+async def test_zenodo_connection_failure():
     # Mock the ZenodoAPI instance to raise an exception
-    mock_instance = MockZenodoAPI.return_value
+    """ mock_instance = MockZenodoAPI.return_value
     mock_instance.query_user_deposits = Mock()
-    mock_instance.query_user_deposits.side_effect = Exception('Failed')
+    mock_instance.query_user_deposits.side_effect = Exception('Failed') """
 
     # Mock the environment variable
     with patch.dict('os.environ', {'ZENODO_API_KEY': 'fake_false_api_key'}):
