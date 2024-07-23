@@ -77,6 +77,7 @@ const useStyles = createUseStyles({
     cell: {
         padding: '10px',
         textAlign: 'left',
+        wordWrap: 'break-word',
     },
     checkboxContainer: {
         display: 'flex',
