@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { searchRecords, searchCommunities, recordInformation } from '../API/API_functions';
 import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
@@ -43,7 +43,6 @@ const useStyles = createUseStyles({
     table: {
         width: '100%',
         borderCollapse: 'collapse',
-        marginTop: '20px',
     },
     tableBody: {
         borderLeft: '2px solid black',
@@ -101,7 +100,30 @@ const useStyles = createUseStyles({
     },
     spacer: {
         flexGrow: '1',
-    }
+    },
+    communityTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f0f0f0', // Light gray background
+        border: '1px solid #ccc',   // Gray border
+        padding: '10px',            // Padding around the text
+        borderRadius: '4px',        // Rounded corners
+        marginBottom: '0',          // No margin below
+        textAlign: 'center',        // Center align text
+        width: '100%',              // Full width of container
+        boxSizing: 'border-box',    // Include padding and border in element's total width and height
+        position: 'relative',       // Ensure positioning context for the close button
+    },
+    closeButton: {
+        position: 'absolute',       // Position relative to communityTitle
+        right: '10px',              // Position close button on the right
+        cursor: 'pointer',
+        fontSize: '16px',
+        backgroundColor: 'transparent',
+        border: 'none',
+        fontWeight: 'bold',
+    },
 });
 
 const SearchWidget: React.FC = () => {
@@ -117,17 +139,27 @@ const SearchWidget: React.FC = () => {
     const [recordLoading, setRecordLoading] = useState(false);
     const [resultsPage, setResultsPage] = useState(1);
     const [endPage, setEndPage] = useState(false);
+    const [selectedCommunityTitle, setSelectedCommunityTitle] = useState<string | null>(null);
+    const [selectedCommunityID, setSelectedCommunityID] = useState<string | null>(null);
+    const [triggerSearch, setTriggerSearch] = useState(false);
 
-    const handleSearch = async (page: number) => {
+    useEffect(() => {
+        if (triggerSearch) {
+            handleSearch(resultsPage, selectedType, {'communities': selectedCommunityID});
+        }
+        setTriggerSearch(false);
+    }, [triggerSearch, selectedCommunityID]);
+
+    const handleSearch = async (page: number, type: string, kwargs: Record<string, any> = {}) => {
         setIsLoading(true);
         setHasSearched(true);
         try {
             //const response = await searchRecords(searchTerm);
-            const response = selectedType === 'records'
-            ? await searchRecords(searchTerm, page)
+            const response = type === 'records'
+            ? await searchRecords(searchTerm, page, kwargs)
             : await searchCommunities(searchTerm, page);
             //const data: SearchResult[] = await response;
-            setResults(response[selectedType]);
+            setResults(response[type]);
             setSelectedRecordID(null);
         } catch (error) {
             console.error('Error during search: ', error);
@@ -140,7 +172,7 @@ const SearchWidget: React.FC = () => {
         setSelectedType(type);
     };
 
-    const handleRowClick = async (recordID: number) => {
+    const handleRecordRowClick = async (recordID: number) => {
         if (selectedRecordID === recordID) {
             setSelectedRecordID(null);
             setRecordInfo({});
@@ -160,10 +192,28 @@ const SearchWidget: React.FC = () => {
         }
     }
 
+    const handleCommunityRowClick = async (communityID: string, communityTitle: string) => {
+        /* if (selectedCommunityID === communityID) {
+            setSelectedCommunityID(null);
+            setSelectedCommunityTitle(null);
+        } */
+        setSelectedCommunityTitle(communityTitle);
+        setSelectedCommunityID(communityID);
+        setSelectedType('records');
+        setResultsPage(1);
+        setSearchTerm("");
+        //console.log(selectedCommunityID, resultsPage, selectedType);
+        //handleSearch(1, 'records', {'communities': communityID});
+        //console.log(selectedCommunityID, selectedCommunityTitle);
+        setTriggerSearch(true);
+        
+    }
+
     const handleNextPageClick = () => {
         const nextPage = resultsPage + 1;
         setResultsPage(nextPage);
-        handleSearch(nextPage);
+        //handleSearch(nextPage, selectedType);
+        setTriggerSearch(true);
         if (results.length !> 0) {
             setEndPage(true);
         }
@@ -173,13 +223,22 @@ const SearchWidget: React.FC = () => {
         setEndPage(false);
         const prevPage = resultsPage - 1;
         setResultsPage(prevPage);
-        handleSearch(prevPage);
+        //handleSearch(prevPage, selectedType);
+        setTriggerSearch(true);
     }
 
     const handleSearchClick = () => {
         setEndPage(false);
         setResultsPage(1);
-        handleSearch(1);
+        //setSelectedCommunityTitle(null);
+        setTriggerSearch(true);
+    }
+
+    const handleClearCommunity = () => {
+        setSelectedCommunityID(null);
+        setSelectedCommunityTitle(null);
+        setResultsPage(1);
+        setTriggerSearch(true);
     }
 
     return (
@@ -219,6 +278,12 @@ const SearchWidget: React.FC = () => {
                 results.length > 0 ? (
                     lastSearchType === 'records' ? (
                     <div className={classes.tableContainer}>
+                        {selectedCommunityTitle && (
+                                <div className={classes.communityTitle}>
+                                    <p>Showing Results from "{selectedCommunityTitle}"</p>
+                                    <button className={classes.closeButton} onClick={handleClearCommunity}>✖</button>
+                                </div>
+                            )}
                         <table className={classes.table}>
                             <thead>
                                 <tr className={classes.headerRow}>
@@ -230,7 +295,7 @@ const SearchWidget: React.FC = () => {
                             <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
                                     <React.Fragment key={result.id}>
-                                    <tr className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleRowClick(result.id)}>
+                                    <tr className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleRecordRowClick(result.id)}>
                                         <td className={classes.cell}>{result.title}</td>
                                         <td className={classes.cell}>{result.resource_type}</td>
                                         <td className={classes.cell}>{result.date}</td>
@@ -288,7 +353,7 @@ const SearchWidget: React.FC = () => {
                             </thead>
                             <tbody className={classes.tableBody}>
                                 {results.map((result, index) => (
-                                    <tr key={result.id} className={classes.row} style={{ backgroundColor: index % 2 === 0 ? '#e6f7ff' : '#cceeff' }}>
+                                    <tr key={result.id} className={clsx(classes.row, { [classes.alternateRow]: index % 2 !== 0 })} onClick={() => handleCommunityRowClick(result.id, result.title)}>
                                         <td className={classes.cell}>{result.title}</td>
                                         <td className={classes.cell}>{result.date}</td>
                                     </tr>
@@ -306,9 +371,23 @@ const SearchWidget: React.FC = () => {
                     )
                 ) : (
                     !endPage ? (
+                        <div>
+                        {selectedCommunityTitle && (
+                            <div className={classes.communityTitle}>
+                                <p>Showing Results from "{selectedCommunityTitle}"</p>
+                                <button className={classes.closeButton} onClick={handleClearCommunity}>✖</button>
+                            </div>
+                        )}
                         <p>No results found.</p>
+                        </div>
                     ) : (
                         <div>
+                            {selectedCommunityTitle && (
+                            <div className={classes.communityTitle}>
+                                <p>Showing Results from "{selectedCommunityTitle}"</p>
+                                <button className={classes.closeButton} onClick={handleClearCommunity}>✖</button>
+                            </div>
+                            )}
                             <p>No further results found. Please return to the previous page.</p>
                             <button className={classes.button} onClick={handleLastPageClick}>Last Page</button>
                         </div>

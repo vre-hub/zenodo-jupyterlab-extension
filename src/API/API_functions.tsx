@@ -35,9 +35,14 @@ export async function testZenodoConnection() {
     }
 }
 
-export async function searchRecords(search_field: string, page: number) {
+export async function searchRecords(search_field: string, page: number, kwargs: Record<string, any> = {}) {
     try {
-        const data = await requestAPI(`zenodo-jupyterlab/search-records?search_field=${encodeURIComponent(search_field)}&page=${encodeURIComponent(page)}`, {
+        let url = `zenodo-jupyterlab/search-records?search_field=${encodeURIComponent(search_field)}&page=${encodeURIComponent(page)}`;
+
+        for (const [key, value] of Object.entries(kwargs)) {
+            url += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+        const data = await requestAPI(url, {
             method: 'GET'
         });
         return data;
