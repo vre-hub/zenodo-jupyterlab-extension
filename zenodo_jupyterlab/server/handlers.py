@@ -25,7 +25,7 @@ class CodeHandler(APIHandler):
 
 class ZenodoTestHandler(APIHandler):
     async def get(self):
-        response = await checkZenodoConnection()
+        response = await checkZenodoConnection(sandbox = False)
         self.finish({'status': response})
 
 class XSRFTokenHandler(JupyterHandler):

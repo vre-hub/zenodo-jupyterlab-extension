@@ -3,9 +3,9 @@ import os
 
 #ZenodoHTTPStatus
 
-async def checkZenodoConnection():
+async def checkZenodoConnection(sandbox: bool):
     access_token = os.environ['ZENODO_API_KEY']
-    z = ZenodoAPI(access_token=access_token)
+    z = ZenodoAPI(access_token=access_token, sandbox = sandbox)
     try:
         response = z.query_user_deposits()
         return response.status_code

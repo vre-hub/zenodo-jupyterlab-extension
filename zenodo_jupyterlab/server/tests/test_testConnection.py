@@ -14,7 +14,7 @@ async def test_zenodo_connection_success():
         # Mock the environment variable
     with patch.dict(os.environ, {'ZENODO_API_KEY': os.environ['CI_ZENODO_API_KEY']}):
             # Call the function to test
-            status_code = await checkZenodoConnection()
+            status_code = await checkZenodoConnection(sandbox = True)
 
             print(f"Returned status code: {status_code}")
 
@@ -31,7 +31,7 @@ async def test_zenodo_connection_failure():
     # Mock the environment variable
     with patch.dict('os.environ', {'ZENODO_API_KEY': 'fake_false_api_key'}):
         # Call the function to test
-        status_code = await checkZenodoConnection()
+        status_code = await checkZenodoConnection(sandbox = True)
 
         # Assert the expected status code
         assert status_code == 0
