@@ -313,6 +313,13 @@ const SearchWidget: React.FC = () => {
         return fileName;
     }
 
+    function cleanUrl(url: string): string {
+        // Remove "/api" and "/content" from the URL
+        return url
+            .replace('/api', '') // Remove "/api"
+            .replace('/content', ''); // Remove "/content"
+    }
+
     return (
         <div className={classes.searchWidget}>
             <div className={classes.container}>
@@ -400,7 +407,7 @@ const SearchWidget: React.FC = () => {
                                                                     <p><strong>Files:</strong></p>
                                                                     <ul>
                                                                         {recordInfo.filelist.map((file: string, index: number) => (
-                                                                            <li key={index}>{getFileNameFromUrl(file)}</li>
+                                                                            <li key={index}><a href={cleanUrl(file)} target='_blank' rel='noopener noreferrer'>{getFileNameFromUrl(file)}</a></li>
                                                                         ))}
                                                                     </ul>
                                                                 </div>
