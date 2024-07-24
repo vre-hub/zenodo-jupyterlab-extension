@@ -294,6 +294,25 @@ const SearchWidget: React.FC = () => {
         setTriggerSearch(true);
     }
 
+    function getFileNameFromUrl(url: string): string {
+        // Parse the URL using the URL constructor
+        const parsedUrl = new URL(url);
+        
+        // Get the pathname from the URL
+        let pathname = parsedUrl.pathname;
+        
+        // Remove the '/content' part if it exists
+        if (pathname.endsWith('/content')) {
+            pathname = pathname.slice(0, -'/content'.length);
+        }
+        
+        // Extract the file name from the pathname
+        const pathSegments = pathname.split('/');
+        const fileName = pathSegments[pathSegments.length - 1];
+        
+        return fileName;
+    }
+
     return (
         <div className={classes.searchWidget}>
             <div className={classes.container}>
@@ -357,7 +376,7 @@ const SearchWidget: React.FC = () => {
                                                 <tr>
                                                     <td colSpan={3} className={classes.cell}>
                                                         <div>
-                                                            <p><strong>Title: {result.title}</strong></p>
+                                                            <p><strong>Title: <a href={`https://zenodo.org/records/${result.id}`} target='_blank' rel='noopener noreferrer'>{result.title}</a></strong></p>
                                                             {recordInfo.authors && (
                                                                 <div>
                                                                     <p><strong>Authors:</strong></p>
@@ -376,12 +395,12 @@ const SearchWidget: React.FC = () => {
                                                                     </ul>
                                                                 </div>
                                                             )}
-                                                            {recordInfo.filelist && (
+                                                            {recordInfo.filelist.length > 0 && (
                                                                 <div>
                                                                     <p><strong>Files:</strong></p>
                                                                     <ul>
                                                                         {recordInfo.filelist.map((file: string, index: number) => (
-                                                                            <li key={index}>{file}</li>
+                                                                            <li key={index}>{getFileNameFromUrl(file)}</li>
                                                                         ))}
                                                                     </ul>
                                                                 </div>
