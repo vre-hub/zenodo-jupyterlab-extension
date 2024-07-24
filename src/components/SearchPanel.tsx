@@ -43,6 +43,7 @@ const useStyles = createUseStyles({
     table: {
         width: '100%',
         borderCollapse: 'collapse',
+        tableLayout: 'fixed',
     },
     tableBody: {
         borderLeft: '2px solid black',
@@ -124,6 +125,57 @@ const useStyles = createUseStyles({
         backgroundColor: 'transparent',
         border: 'none',
         fontWeight: 'bold',
+    },
+    authorList: {
+        color: '#666', // Light gray color for authors
+        margin: '10px 0',
+        '& li': {
+            listStyleType: 'none',
+            display: 'inline-block',
+            marginRight: '10px',
+            position: 'relative',
+            cursor: 'pointer',
+        },
+        '& li::after': {
+            content: "';'",
+            marginLeft: '5px',
+        },
+        '& li:last-child::after': {
+            content: "''",
+        }
+    },
+    tooltip: {
+        visibility: 'hidden',
+        backgroundColor: '#fff',
+        color: '#666',
+        textAlign: 'center',
+        borderRadius: '6px',
+        padding: '5px',
+        position: 'absolute',
+        zIndex: 1,
+        bottom: '100%', // Adjusted to prevent overlap with the name
+        left: '50%',
+        transform: 'translateX(-50%)',
+        whiteSpace: 'nowrap',
+        boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
+        opacity: 0,
+        transition: 'opacity 0.3s, visibility 0.3s',
+    },
+    tooltipArrow: {
+        position: 'absolute',
+        top: '100%', // Adjusted to point downwards from the tooltip
+        left: '50%',
+        marginLeft: '-5px',
+        borderWidth: '5px',
+        borderStyle: 'solid',
+        borderColor: '#fff transparent transparent transparent',
+    },
+    authorListItem: {
+        position: 'relative',
+        '&:hover $tooltip': {
+            visibility: 'visible',
+            opacity: 1,
+        }
     },
 });
 
@@ -305,13 +357,21 @@ const SearchWidget: React.FC = () => {
                                                 <tr>
                                                     <td colSpan={3} className={classes.cell}>
                                                         <div>
-                                                            <p><strong>Additional information for {result.title}:</strong></p>
+                                                            <p><strong>Title: {result.title}</strong></p>
                                                             {recordInfo.authors && (
                                                                 <div>
                                                                     <p><strong>Authors:</strong></p>
-                                                                    <ul>
+                                                                    <ul className={classes.authorList}>
                                                                         {recordInfo.authors.map((author: {'name': string, 'affiliation': string}, index: number) => (
-                                                                            <li key={index}>{author.name}, Affiliation: {author.affiliation}</li>
+                                                                            <li key={index} className={classes.authorListItem}>
+                                                                                {author.name}
+                                                                                {author.affiliation && (
+                                                                                    <span className={classes.tooltip}>
+                                                                                        {author.affiliation}
+                                                                                        <span className={classes.tooltipArrow}></span>
+                                                                                    </span>
+                                                                                )}
+                                                                            </li>
                                                                         ))}
                                                                     </ul>
                                                                 </div>
