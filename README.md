@@ -34,7 +34,7 @@ Now open a local instance of Jupyter Lab, and it should be present on the sideba
 #Docker
 Rather than manually cloning the repository, it is possible to run the extension in a Docker container. To do this, use the following commands:
 `docker pull ghcr.io/vre-hub/zenodo-jupyterlab-extension:<version>\
-docker run -d -p 8888:8888 ghcr.io/vre-hub/zenodo-jupyterlab-extension`
+docker run -d -p 8888:8888 ghcr.io/vre-hub/zenodo-jupyterlab-extension<version>`
 
 All available versions can be found [here](https://github.com/vre-hub/zenodo-jupyterlab-extension/pkgs/container/zenodo-jupyterlab-extension)
 
