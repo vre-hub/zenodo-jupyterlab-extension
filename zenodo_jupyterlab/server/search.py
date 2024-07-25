@@ -1,8 +1,8 @@
 from eossr.api.zenodo import search_records, search_communities, get_record
 
-async def searchRecords(search_field, page):
+async def searchRecords(search_field, page, **kwargs):
     try:
-        records = search_records(search=search_field, size= 25, page = page)
+        records = search_records(search=search_field, size= 25, page = page, **kwargs)
         response = []
         for record in records:
             response.append({'id': record.id, 'title': record.title, 'date': record.metadata['publication_date'], 'resource_type': record.metadata['resource_type']['title']})

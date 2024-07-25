@@ -37,7 +37,8 @@ class SearchRecordHandler(APIHandler):
     async def get(self):
         search_field = self.get_query_argument('search_field', default="")
         page = self.get_query_argument('page', default=1)
-        response = await searchRecords(search_field=search_field, page=page)
+        communities = self.get_query_argument('communities', default="")
+        response = await searchRecords(search_field=search_field, page=page, communities=communities)
         self.finish({'records': response})
 
 class SearchCommunityHandler(APIHandler):
