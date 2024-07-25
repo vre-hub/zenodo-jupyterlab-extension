@@ -56,6 +56,7 @@ class ZenodoWidget extends Widget {
     this.isTrue = true;
     this.showLogin = false;
     this.showSearch = true;
+    this.showUpload = false;
     this.addClass('zenodo-widget');
     this.id = 'zenodo-jupyterlab-extension';
     this.title.closable = true;
@@ -68,6 +69,7 @@ class ZenodoWidget extends Widget {
   isTrue: boolean;
   showLogin: boolean;
   showSearch: boolean;
+  showUpload: boolean;
 
   async onAfterAttach(msg: any): Promise<void> {
     this.root = createRoot(this.node);
@@ -87,12 +89,21 @@ class ZenodoWidget extends Widget {
   toggleLogin(): void {
     this.showLogin = true;
     this.showSearch = false;
+    this.showUpload = false;
     this.render();
   }
 
   toggleSearch(): void {
     this.showSearch = true;
     this.showLogin = false;
+    this.showUpload = false;
+    this.render();
+  }
+
+  toggleUpload(): void {
+    this.showUpload = true;
+    this.showLogin = false;
+    this.showSearch = false;
     this.render();
   }
 
@@ -110,7 +121,7 @@ class ZenodoWidget extends Widget {
   } */
 
   render() {
-    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch}/>);
+    this.root?.render(<SideBarPanel app={this.app} isTrue={this.isTrue} showLogin={this.showLogin} showSearch={this.showSearch} showUpload={this.showUpload}/>);
   }
 /*   async fillContent(): Promise<void> {
     // this.img1.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Zenodo-gradient-square.svg/1200px-Zenodo-gradient-square.svg.png'
@@ -171,6 +182,13 @@ async function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer
       widget.content.toggleLogin();
     }
   });
+
+  app.commands.addCommand('zenodo-jupyterlab:upload', {
+    label: 'Upload Field',
+    execute: () => {
+      widget.content.toggleUpload();
+    }
+  })
 
   // Add an application command
   const command: string = 'zenodo:open';

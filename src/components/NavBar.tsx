@@ -50,12 +50,17 @@ const NavBar: React.FC<NavBarProps> = (
     const handleLoginClick = () => {
       app.commands.execute('zenodo-jupyterlab:login');
     };
+
+    const handleUploadClick = () => {
+      app.commands.execute('zenodo-jupyterlab:upload');
+    }
   
     return (
       <nav className={classes.navbar}>
         <ul className={classes.navbarLinks}>
           <li><button className={classes.navButton} onClick={handleSearchClick}>Search</button></li>
           <li><button className={classes.navButton} onClick = {handleLoginClick}>Login</button></li>
+          <li><button className={classes.navButton} onClick = {handleUploadClick}>Upload</button></li>
         </ul>
       </nav>
     );
