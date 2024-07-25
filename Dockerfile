@@ -4,6 +4,13 @@ LABEL maintainer="mrzengel"
 SHELL ["/bin/bash", "-c"]
 
 COPY . /zenodo_jupyterlab_extension
+
+# Change ownership to the default user 'jovyan'
+USER root
+RUN chown -R jovyan:users /zenodo_jupyterlab_extension
+
+# Set the working directory and switch back to non-root user
+USER jovyan
 WORKDIR /zenodo_jupyterlab_extension
 
 # Install Python requirements
