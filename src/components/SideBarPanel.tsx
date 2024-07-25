@@ -6,6 +6,7 @@ import { JupyterFrontEnd } from '@jupyterlab/application';
 import SearchWidget from './SearchPanel';
 import Login from './login';
 import { createUseStyles } from 'react-jss';
+import Upload from './upload';
   
   //import React from 'react';
   
@@ -41,7 +42,8 @@ import { createUseStyles } from 'react-jss';
     app: JupyterFrontEnd;
     isTrue: boolean;
     showLogin: boolean;
-    showSearch: boolean
+    showSearch: boolean;
+    showUpload: boolean
   }
   
   const SideBarPanel: React.FC<SideBarProps> = (
@@ -49,7 +51,8 @@ import { createUseStyles } from 'react-jss';
       app,
       isTrue,
       showLogin,
-      showSearch
+      showSearch,
+      showUpload
      }
   ) => {
     const classes = useStyles();
@@ -83,6 +86,7 @@ import { createUseStyles } from 'react-jss';
               <Login/>
             )}
             {showSearch && (<SearchWidget/>)}
+            {showUpload && (<Upload />)}
     </div>
   }
 
