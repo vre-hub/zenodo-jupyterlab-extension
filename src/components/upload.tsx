@@ -3,12 +3,13 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
     container: {
-        maxWidth: '800px',
-        margin: '0 auto',
+        backgroundColor: '#fff',
         padding: '20px',
-        backgroundColor: '#f9f9f9',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        maxWidth: '800px',
+        textAlign: 'center',
+        verticalAlign: 'top'
     },
     heading: {
         textAlign: 'center',
@@ -73,20 +74,94 @@ const useStyles = createUseStyles({
             backgroundColor: '#218838',
         },
     },
+    fileList: {
+        marginTop: '10px',
+        textAlign: 'left',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        maxWidth: '100%', // Ensure it doesn't exceed the container width
+        overflow: 'hidden', // Allow horizontal scrolling if needed
+    },
+    fileItem: {
+        display: 'flex',
+        //justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '5px 0',
+        borderBottom: '1px solid #ddd',
+        width: '100%', // Ensure file item uses full width of fileDetails
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+    },
+    removeButton: {
+        backgroundColor: '#dc3545',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '5px 10px',
+        width: '75px',
+        //marginLeft: '10px',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#c82333',
+        },
+    },
+    fileSummary: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10px',
+        width: '100%',
+    },
+    
+    fileDetails: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%', // Ensure the details section uses the full width of the container
+        overflow: 'hidden',
+    },
+    
+    toggleButton: {
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '5px 10px',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#0056b3',
+        },
+    },
+    fileName: {
+        flex: 1, // Allow the file name to take up available space
+        maxWidth: 'calc(100% - 85px)', // Adjust this value based on the width needed for the remove button
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
 });
 
 const Upload: React.FC = () => {
     const classes = useStyles();
-    const [files, setFiles] = useState<FileList | null>(null);
     const [title, setTitle] = useState('');
     const [resourceType, setResourceType] = useState('');
     const [publicationDate, setPublicationDate] = useState('');
     const [creators, setCreators] = useState(['']);
     const [doi, setDoi] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFiles(event.target.files);
+        const fileList = event.target.files;
+        if (fileList) {
+            setSelectedFiles(prevFiles => [...prevFiles, ...Array.from(fileList)]);
+        }
     };
+
+    const handleFileRemove = (fileToRemove: File) => {
+        setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+    };
+    
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
@@ -116,16 +191,19 @@ const Upload: React.FC = () => {
 
     const handleSubmit = () => {
         const formData = new FormData();
-        if (files) {
-            Array.from(files).forEach(file => formData.append('files', file));
-        }
+        selectedFiles.forEach(file => formData.append('files', file));
         formData.append('title', title);
         formData.append('resourceType', resourceType);
         formData.append('publicationDate', publicationDate);
         formData.append('creators', JSON.stringify(creators));
         formData.append('doi', doi);
+    
+        // Example: logging form data
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
 
-        // Make an API call here, e.g., using fetch
+        /* // Make an API call here, e.g., using fetch
         fetch('your-api-endpoint', {
             method: 'POST',
             body: formData,
@@ -136,7 +214,7 @@ const Upload: React.FC = () => {
         })
         .catch((error) => {
             console.error('Error:', error);
-        });
+        }); */
     };
 
     return (
@@ -145,6 +223,28 @@ const Upload: React.FC = () => {
             <div className={classes.inputContainer}>
                 <label htmlFor="file-upload" className={classes.inputLabel}>Drag and drop files</label>
                 <input type="file" id="file-upload" multiple onChange={handleFileChange} className={classes.input} />
+                <div className={classes.fileList}>
+                    {selectedFiles.length > 0 && (
+                        <>
+                            <div className={classes.fileSummary}>
+                                <span>{selectedFiles.length} file{selectedFiles.length > 1 ? 's' : ''}</span>
+                                <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={classes.toggleButton}>
+                                    {isExpanded ? 'Collapse' : 'Expand'}
+                                </button>
+                            </div>
+                            {isExpanded && (
+                                <div className={classes.fileDetails}>
+                                    {selectedFiles.map((file, index) => (
+                                        <div key={index} className={classes.fileItem}>
+                                            <span className={classes.fileName}>{file.name}</span>
+                                            <button type="button" onClick={() => handleFileRemove(file)} className={classes.removeButton}>Remove</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
             <div className={classes.inputContainer}>
                 <label htmlFor="doi" className={classes.inputLabel}>Digital Object Identifier</label>
