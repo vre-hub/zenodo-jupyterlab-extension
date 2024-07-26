@@ -30,3 +30,11 @@ Enable the Extension:\
 `jupyter server extension enable zenodo_jupyterlab.server`
 
 Now open a local instance of Jupyter Lab, and it should be present on the sidebar.
+
+# Docker
+Rather than manually cloning the repository, it is possible to run the extension in a Docker container. To do this, use the following command:\
+`docker run -d -p 8888:8888 ghcr.io/vre-hub/zenodo-jupyterlab-extension:<version>`
+
+All available versions can be found [here](https://github.com/vre-hub/zenodo-jupyterlab-extension/pkgs/container/zenodo-jupyterlab-extension)
+
+Now the instance of Jupyter Lab with the extension installed and enabled should be avilable on localhost:8888
