@@ -10,7 +10,8 @@ USER root
 RUN chown -R jovyan:users /zenodo_jupyterlab_extension
 
 #install correct version of Node
-RUN apt-get install -y software-properties-common npm
+RUN apt-get update && apt-get install -y curl
+RUN apt-get install -y nodejs npm
 RUN npm install npm@latest -g && npm install n -g && n 20.15.1
 
 # Set the working directory and switch back to non-root user
