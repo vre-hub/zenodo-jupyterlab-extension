@@ -9,14 +9,12 @@ COPY . /zenodo_jupyterlab_extension
 USER root
 RUN chown -R jovyan:users /zenodo_jupyterlab_extension
 
-#install correct version of Node
-RUN apt-get update && apt-get install -y curl
-RUN apt-get install -y nodejs npm
-RUN npm install npm@latest -g && npm install n -g && n 20.15.1
-
 # Set the working directory and switch back to non-root user
 USER jovyan
 WORKDIR /zenodo_jupyterlab_extension
+
+#install correct version of Node
+RUN conda upgrade -c conda-forge nodejs
 
 # Install Python requirements
 RUN python3 -m pip install --upgrade pip
