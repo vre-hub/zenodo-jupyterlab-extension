@@ -60,12 +60,16 @@ const useStyles = createUseStyles({
     creatorList: {
         marginBottom: '20px',
     },
+    creatorItem: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '10px',
+    },
     creatorInput: {
-        width: 'calc(100% - 110px)',
+        flex: 1,
         padding: '8px',
         border: '1px solid #ccc',
         borderRadius: '4px',
-        marginBottom: '10px',
     },
     addButton: {
         padding: '8px 15px',
@@ -157,17 +161,30 @@ const useStyles = createUseStyles({
     checkboxInput: {
         marginRight: '5px',
     },
+    errorBox: {
+        backgroundColor: '#f8d7da',
+        color: '#721c24',
+        padding: '10px',
+        borderRadius: '4px',
+        border: '1px solid #f5c6cb',
+        marginBottom: '20px',
+        textAlign: 'left',
+        boxSizing: 'border-box',
+        width: '100%',
+        overflow: 'hidden',
+        wordWrap: 'break-word'
+    },
 });
 
 const Upload: React.FC = () => {
     const classes = useStyles();
     const [title, setTitle] = useState('');
     const [resourceType, setResourceType] = useState('');
-    const [publicationDate, setPublicationDate] = useState('');
     const [creators, setCreators] = useState([{ name: '', affiliation: '' }]);
     const [doi, setDoi] = useState('');
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
@@ -189,10 +206,6 @@ const Upload: React.FC = () => {
         setResourceType(event.target.value);
     };
 
-    const handlePublicationDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPublicationDate(event.target.value);
-    };
-
     const handleDoiChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDoi(event.target.value);
     };
@@ -209,11 +222,15 @@ const Upload: React.FC = () => {
     };
 
     const handleSubmit = () => {
+        setErrorMessage('');
+        if (!title || !resourceType || selectedFiles.length === 0 || creators.some(creator => !creator.name)) {
+            setErrorMessage('Please fill out all required fields: Title, at least one file, resource type, and at least one creator name.');
+            return;
+        }
         const formData = new FormData();
         selectedFiles.forEach(file => formData.append('files', file));
         formData.append('title', title);
         formData.append('resourceType', resourceType);
-        formData.append('publicationDate', publicationDate);
         formData.append('creators', JSON.stringify(creators));
         formData.append('doi', doi);
     
@@ -239,6 +256,11 @@ const Upload: React.FC = () => {
     return (
         <div className={classes.container}>
             <h1 className={classes.heading}>Upload</h1>
+            {errorMessage && (
+                <div className={classes.errorBox}>
+                    {errorMessage}
+                </div>
+            )}
             <div className={classes.checkboxContainer}>
                     <label className={classes.checkboxLabel}>
                         <input 
@@ -251,7 +273,7 @@ const Upload: React.FC = () => {
                     </label>
                 </div>
             <div className={classes.inputContainer}>
-                <label htmlFor="file-upload" className={classes.inputLabel}>Drag and drop files</label>
+                <label htmlFor="file-upload" className={classes.inputLabel}>Drag and drop files<span className={classes.requiredAsterisk}>*</span></label>
                 <input type="file" id="file-upload" multiple onChange={handleFileChange} className={classes.input} />
                 <div className={classes.fileList}>
                     {selectedFiles.length > 0 && (
@@ -281,7 +303,7 @@ const Upload: React.FC = () => {
                 <input type="text" id="doi" value={doi} onChange={handleDoiChange} className={classes.input} />
             </div>
             <div className={classes.inputContainer}>
-                <label htmlFor="resource-type" className={classes.inputLabel}>Resource type</label>
+                <label htmlFor="resource-type" className={classes.inputLabel}>Resource type<span className={classes.requiredAsterisk}>*</span></label>
                 <select id="resource-type" value={resourceType} onChange={handleResourceTypeChange} className={classes.select}>
                     <option value="">Select type</option>
                     <option value="article">Article</option>
@@ -295,14 +317,10 @@ const Upload: React.FC = () => {
                 <input type="text" id="title" value={title} onChange={handleTitleChange} className={classes.input} />
             </div>
             <div className={classes.inputContainer}>
-                <label htmlFor="publication-date" className={classes.inputLabel}>Publication date</label>
-                <input type="date" id="publication-date" value={publicationDate} onChange={handlePublicationDateChange} className={classes.input} />
-            </div>
-            <div className={classes.inputContainer}>
-                <label className={classes.inputLabel}>Creators</label>
+                <label className={classes.inputLabel}>Creators<span className={classes.requiredAsterisk}>*</span></label>
                 <div className={classes.creatorList}>
                 {creators.map((creator, index) => (
-                    <div key={index} className={classes.inputContainer}>
+                    <div key={index} className={classes.creatorItem}>
                         <input
                             type="text"
                             value={creator.name}
@@ -334,12 +352,11 @@ export default Upload;
 /*
 
 List of Required Information for Publishable Record:
-DOI: yes or no (can check if data in field, then go from there checking yes or no) [actually if none given it defaults to no]
-File Upload (at least one)
-Reource Type
-Title
-Publication date (automatic)
-Creator (with optional affiliation)
+DOI: yes or no (can check if data in field, then go from there checking yes or no) [actually if none given it defaults to no] V
+File Upload (at least one) V
+Reource Type V
+Title V
+Creator (with optional affiliation) V
 
 Additional Info:
 to be added
