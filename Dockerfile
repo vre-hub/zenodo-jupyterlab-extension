@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook
+FROM quay.io/jupyter/scipy-notebook:python-3.11.9
 LABEL maintainer="mrzengel"
 
 SHELL ["/bin/bash", "-c"]
