@@ -25,6 +25,10 @@ const useStyles = createUseStyles({
         fontWeight: 'bold',
         color: '#333',
     },
+    requiredAsterisk: {
+        color: 'red',
+        marginLeft: '5px', // Adjust as necessary for spacing
+    },
     input: {
         width: '100%',
         padding: '8px',
@@ -139,6 +143,20 @@ const useStyles = createUseStyles({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
+    checkboxContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '10px',
+        flexDirection: 'row',
+    },
+    checkboxLabel: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    checkboxInput: {
+        marginRight: '5px',
+    },
 });
 
 const Upload: React.FC = () => {
@@ -146,7 +164,7 @@ const Upload: React.FC = () => {
     const [title, setTitle] = useState('');
     const [resourceType, setResourceType] = useState('');
     const [publicationDate, setPublicationDate] = useState('');
-    const [creators, setCreators] = useState(['']);
+    const [creators, setCreators] = useState([{ name: '', affiliation: '' }]);
     const [doi, setDoi] = useState('');
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -179,14 +197,15 @@ const Upload: React.FC = () => {
         setDoi(event.target.value);
     };
 
-    const handleCreatorChange = (index: number, value: string) => {
+    const handleCreatorChange = (index: number, key: 'name' | 'affiliation', value: string) => {
         const newCreators = [...creators];
-        newCreators[index] = value;
+        newCreators[index][key] = value;
         setCreators(newCreators);
     };
 
+
     const addCreator = () => {
-        setCreators([...creators, '']);
+        setCreators([...creators, { name: '', affiliation: '' }]);
     };
 
     const handleSubmit = () => {
@@ -220,6 +239,17 @@ const Upload: React.FC = () => {
     return (
         <div className={classes.container}>
             <h1 className={classes.heading}>Upload</h1>
+            <div className={classes.checkboxContainer}>
+                    <label className={classes.checkboxLabel}>
+                        <input 
+                        type="checkbox"
+                        //checked={selectedType === 'communities'}
+                        //onChange={() => handleCheckboxChange('communities')}
+                        className={classes.checkboxInput}
+                        />
+                        Sandbox
+                    </label>
+                </div>
             <div className={classes.inputContainer}>
                 <label htmlFor="file-upload" className={classes.inputLabel}>Drag and drop files</label>
                 <input type="file" id="file-upload" multiple onChange={handleFileChange} className={classes.input} />
@@ -261,7 +291,7 @@ const Upload: React.FC = () => {
                 </select>
             </div>
             <div className={classes.inputContainer}>
-                <label htmlFor="title" className={classes.inputLabel}>Title</label>
+                <label htmlFor="title" className={classes.inputLabel}>Title<span className={classes.requiredAsterisk}>*</span></label>
                 <input type="text" id="title" value={title} onChange={handleTitleChange} className={classes.input} />
             </div>
             <div className={classes.inputContainer}>
@@ -271,17 +301,24 @@ const Upload: React.FC = () => {
             <div className={classes.inputContainer}>
                 <label className={classes.inputLabel}>Creators</label>
                 <div className={classes.creatorList}>
-                    {creators.map((creator, index) => (
-                        <div key={index} className={classes.inputContainer}>
-                            <input
-                                type="text"
-                                value={creator}
-                                onChange={(e) => handleCreatorChange(index, e.target.value)}
-                                placeholder="Creator name"
-                                className={classes.creatorInput}
-                            />
-                        </div>
-                    ))}
+                {creators.map((creator, index) => (
+                    <div key={index} className={classes.inputContainer}>
+                        <input
+                            type="text"
+                            value={creator.name}
+                            onChange={(e) => handleCreatorChange(index, 'name', e.target.value)}
+                            placeholder="Creator name"
+                            className={classes.creatorInput}
+                        />
+                        <input
+                            type="text"
+                            value={creator.affiliation}
+                            onChange={(e) => handleCreatorChange(index, 'affiliation', e.target.value)}
+                            placeholder="Affiliation"
+                            className={classes.creatorInput}
+                        />
+                    </div>
+                ))}
                     <button type="button" onClick={addCreator} className={classes.addButton}>Add creator</button>
                 </div>
             </div>
@@ -293,3 +330,17 @@ const Upload: React.FC = () => {
 };
 
 export default Upload;
+
+/*
+
+List of Required Information for Publishable Record:
+DOI: yes or no (can check if data in field, then go from there checking yes or no) [actually if none given it defaults to no]
+File Upload (at least one)
+Reource Type
+Title
+Publication date (automatic)
+Creator (with optional affiliation)
+
+Additional Info:
+to be added
+*/
