@@ -11218,6 +11218,9 @@ __metadata:
   dependencies:
     "@babel/core": ^7.24.7
     "@babel/types": ^7.24.7
+    "@fortawesome/fontawesome-svg-core": ^6.6.0
+    "@fortawesome/free-solid-svg-icons": ^6.6.0
+    "@fortawesome/react-fontawesome": ^0.2.2
     "@jupyterlab/application": ^4.2.2
     "@jupyterlab/builder": ^4.2.2
     "@jupyterlab/testutils": ^4.2.2
