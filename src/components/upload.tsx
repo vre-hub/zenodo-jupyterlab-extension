@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import FileBrowser from './FileBrowser';
+import Confirmation from './confirmation';
 
 const useStyles = createUseStyles({
     container: {
@@ -182,24 +184,41 @@ const Upload: React.FC = () => {
     const [resourceType, setResourceType] = useState('');
     const [creators, setCreators] = useState([{ name: '', affiliation: '' }]);
     const [doi, setDoi] = useState('');
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    //const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isExpanded, setIsExpanded] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedFilePaths, setSelectedFilePaths] = useState<string[]>([]);
+    const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+    const [isSandbox, setIsSandbox] = useState(false);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   /*  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
         if (fileList) {
-            setSelectedFiles(prevFiles => [...prevFiles, ...Array.from(fileList)]);
+            const newPaths = Array.from(fileList).map(file => file.name);
+            setSelectedFilePaths(prevPaths => [
+                ...new Set([...prevPaths, ...newPaths]) // Add new paths, avoiding duplicates
+            ]);
         }
+    }; */
+
+    const handleFileRemove = (filePath: string) => {
+        setSelectedFilePaths(prevPaths => prevPaths.filter(path => path !== filePath));
     };
 
-    const handleFileRemove = (fileToRemove: File) => {
-        setSelectedFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+    const handleFileSelect = (filePath: string) => {
+        setSelectedFilePaths(prevPaths => [
+            ...new Set([...prevPaths, filePath]) // Add new paths, avoiding duplicates
+        ]);
     };
+
     
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
+    };
+
+    const handleSandboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsSandbox(event.target.checked);
     };
 
     const handleResourceTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -223,12 +242,13 @@ const Upload: React.FC = () => {
 
     const handleSubmit = () => {
         setErrorMessage('');
-        if (!title || !resourceType || selectedFiles.length === 0 || creators.some(creator => !creator.name)) {
+        if (!title || !resourceType || selectedFilePaths.length === 0 || creators.some(creator => !creator.name)) {
             setErrorMessage('Please fill out all required fields: Title, at least one file, resource type, and at least one creator name.');
             return;
         }
-        const formData = new FormData();
-        selectedFiles.forEach(file => formData.append('files', file));
+        setIsConfirmationVisible(true);
+        /* const formData = new FormData();
+        selectedFilePaths.forEach(filePath => formData.append('filePaths', filePath));
         formData.append('title', title);
         formData.append('resourceType', resourceType);
         formData.append('creators', JSON.stringify(creators));
@@ -237,7 +257,7 @@ const Upload: React.FC = () => {
         // Example: logging form data
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
-        }
+        } */
 
         /* // Make an API call here, e.g., using fetch
         fetch('your-api-endpoint', {
@@ -253,96 +273,123 @@ const Upload: React.FC = () => {
         }); */
     };
 
+    const handleEdit = () => {
+        setIsConfirmationVisible(false);
+    };
+
+    const handleConfirm = () => {
+        // Make an API call or handle form submission here
+        console.log('Form submitted with:', { title, resourceType, creators, doi, selectedFilePaths });
+        // Reset the form or navigate as needed
+    };
+
     return (
         <div className={classes.container}>
-            <h1 className={classes.heading}>Upload</h1>
-            {errorMessage && (
-                <div className={classes.errorBox}>
-                    {errorMessage}
-                </div>
-            )}
-            <div className={classes.checkboxContainer}>
-                    <label className={classes.checkboxLabel}>
-                        <input 
-                        type="checkbox"
-                        //checked={selectedType === 'communities'}
-                        //onChange={() => handleCheckboxChange('communities')}
-                        className={classes.checkboxInput}
-                        />
-                        Sandbox
-                    </label>
-                </div>
-            <div className={classes.inputContainer}>
-                <label htmlFor="file-upload" className={classes.inputLabel}>Drag and drop files<span className={classes.requiredAsterisk}>*</span></label>
-                <input type="file" id="file-upload" multiple onChange={handleFileChange} className={classes.input} />
-                <div className={classes.fileList}>
-                    {selectedFiles.length > 0 && (
-                        <>
-                            <div className={classes.fileSummary}>
-                                <span>{selectedFiles.length} file{selectedFiles.length > 1 ? 's' : ''}</span>
-                                <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={classes.toggleButton}>
-                                    {isExpanded ? 'Collapse' : 'Expand'}
-                                </button>
-                            </div>
-                            {isExpanded && (
-                                <div className={classes.fileDetails}>
-                                    {selectedFiles.map((file, index) => (
-                                        <div key={index} className={classes.fileItem}>
-                                            <span className={classes.fileName}>{file.name}</span>
-                                            <button type="button" onClick={() => handleFileRemove(file)} className={classes.removeButton}>Remove</button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </>
+            {isConfirmationVisible ? (
+                <Confirmation 
+                    title={title} 
+                    resourceType={resourceType} 
+                    creators={creators} 
+                    doi={doi} 
+                    filePaths={selectedFilePaths} 
+                    isSandbox = {isSandbox}
+                    onEdit={handleEdit} 
+                    onConfirm={handleConfirm} 
+                />
+            ) : (
+                <>
+                    <h1 className={classes.heading}>Upload</h1>
+                    {errorMessage && (
+                        <div className={classes.errorBox}>
+                            {errorMessage}
+                        </div>
                     )}
-                </div>
-            </div>
-            <div className={classes.inputContainer}>
-                <label htmlFor="doi" className={classes.inputLabel}>Digital Object Identifier</label>
-                <input type="text" id="doi" value={doi} onChange={handleDoiChange} className={classes.input} />
-            </div>
-            <div className={classes.inputContainer}>
-                <label htmlFor="resource-type" className={classes.inputLabel}>Resource type<span className={classes.requiredAsterisk}>*</span></label>
-                <select id="resource-type" value={resourceType} onChange={handleResourceTypeChange} className={classes.select}>
-                    <option value="">Select type</option>
-                    <option value="article">Article</option>
-                    <option value="dataset">Dataset</option>
-                    <option value="image">Image</option>
-                    {/* Add more options as needed */}
-                </select>
-            </div>
-            <div className={classes.inputContainer}>
-                <label htmlFor="title" className={classes.inputLabel}>Title<span className={classes.requiredAsterisk}>*</span></label>
-                <input type="text" id="title" value={title} onChange={handleTitleChange} className={classes.input} />
-            </div>
-            <div className={classes.inputContainer}>
-                <label className={classes.inputLabel}>Creators<span className={classes.requiredAsterisk}>*</span></label>
-                <div className={classes.creatorList}>
-                {creators.map((creator, index) => (
-                    <div key={index} className={classes.creatorItem}>
-                        <input
-                            type="text"
-                            value={creator.name}
-                            onChange={(e) => handleCreatorChange(index, 'name', e.target.value)}
-                            placeholder="Creator name"
-                            className={classes.creatorInput}
-                        />
-                        <input
-                            type="text"
-                            value={creator.affiliation}
-                            onChange={(e) => handleCreatorChange(index, 'affiliation', e.target.value)}
-                            placeholder="Affiliation"
-                            className={classes.creatorInput}
-                        />
+                    <div className={classes.checkboxContainer}>
+                        <label className={classes.checkboxLabel}>
+                            <input 
+                            type="checkbox"
+                            //checked={selectedType === 'communities'}
+                            //onChange={() => handleCheckboxChange('communities')}
+                            className={classes.checkboxInput}
+                            checked={isSandbox}
+                            onChange={handleSandboxChange}
+                            />
+                            Sandbox
+                        </label>
                     </div>
-                ))}
-                    <button type="button" onClick={addCreator} className={classes.addButton}>Add creator</button>
-                </div>
-            </div>
-            <div className={classes.buttonContainer}>
-                <button type="button" onClick={handleSubmit} className={classes.button}>Submit</button>
-            </div>
+                    <div className={classes.inputContainer}>
+                        <label htmlFor="file-upload" className={classes.inputLabel}>Select Files to Upload<span className={classes.requiredAsterisk}>*</span></label>
+                        <FileBrowser onSelectFile={handleFileSelect}/>
+                        <div className={classes.fileList}>
+                            {selectedFilePaths.length > 0 && (
+                                <>
+                                    <div className={classes.fileSummary}>
+                                        <span>{selectedFilePaths.length} file{selectedFilePaths.length > 1 ? 's' : ''}</span>
+                                        <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={classes.toggleButton}>
+                                            {isExpanded ? 'Collapse' : 'Expand'}
+                                        </button>
+                                    </div>
+                                    {isExpanded && (
+                                        <div className={classes.fileDetails}>
+                                            {selectedFilePaths.map((filePath, index) => (
+                                                <div key={index} className={classes.fileItem}>
+                                                    <span className={classes.fileName}>{filePath}</span>
+                                                    <button type="button" onClick={() => handleFileRemove(filePath)} className={classes.removeButton}>Remove</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <label htmlFor="doi" className={classes.inputLabel}>Digital Object Identifier</label>
+                        <input type="text" id="doi" value={doi} onChange={handleDoiChange} className={classes.input} />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <label htmlFor="resource-type" className={classes.inputLabel}>Resource type<span className={classes.requiredAsterisk}>*</span></label>
+                        <select id="resource-type" value={resourceType} onChange={handleResourceTypeChange} className={classes.select}>
+                            <option value="">Select type</option>
+                            <option value="article">Article</option>
+                            <option value="dataset">Dataset</option>
+                            <option value="image">Image</option>
+                            {/* Add more options as needed */}
+                        </select>
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <label htmlFor="title" className={classes.inputLabel}>Title<span className={classes.requiredAsterisk}>*</span></label>
+                        <input type="text" id="title" value={title} onChange={handleTitleChange} className={classes.input} />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <label className={classes.inputLabel}>Creators<span className={classes.requiredAsterisk}>*</span></label>
+                        <div className={classes.creatorList}>
+                        {creators.map((creator, index) => (
+                            <div key={index} className={classes.creatorItem}>
+                                <input
+                                    type="text"
+                                    value={creator.name}
+                                    onChange={(e) => handleCreatorChange(index, 'name', e.target.value)}
+                                    placeholder="Creator name"
+                                    className={classes.creatorInput}
+                                />
+                                <input
+                                    type="text"
+                                    value={creator.affiliation}
+                                    onChange={(e) => handleCreatorChange(index, 'affiliation', e.target.value)}
+                                    placeholder="Affiliation"
+                                    className={classes.creatorInput}
+                                />
+                            </div>
+                        ))}
+                            <button type="button" onClick={addCreator} className={classes.addButton}>Add creator</button>
+                        </div>
+                    </div>
+                    <div className={classes.buttonContainer}>
+                        <button type="button" onClick={handleSubmit} className={classes.button}>Submit</button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
