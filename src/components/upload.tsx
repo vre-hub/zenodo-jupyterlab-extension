@@ -386,7 +386,7 @@ const Upload: React.FC = () => {
                         </div>
                     </div>
                     <div className={classes.buttonContainer}>
-                        <button type="button" onClick={handleSubmit} className={classes.button}>Submit</button>
+                        <button type="button" onClick={handleSubmit} className={classes.button}>Next</button>
                     </div>
                 </>
             )}
