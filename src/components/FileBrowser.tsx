@@ -233,6 +233,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
                         {breadcrumbs}
                     </>
                 )}
+            </div>
                  <div>
                         <input
                             type="checkbox"
@@ -243,9 +244,8 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
                                 setSelectedEntries(newSelectAll ? new Set(entries.map(entry => entry.path)) : new Set());
                             }}
                         />
-                        <label>Select All</label>
+                        <label style={{'marginLeft': '10px'}}>Select All</label>
                     </div>
-            </div>
             {loading && <p>Loading...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {entries.length === 0 && !loading && !error && <p>No items to display.</p>}

@@ -61,7 +61,7 @@ class RecordInfoHandler(APIHandler):
 class FileBrowserHandler(APIHandler):
     async def get(self):
         # Use the home directory as the root directory
-        root_dir = os.path.expanduser("~")
+        root_dir = os.getenv("HOME")
         relative_path = self.get_query_argument('path', '')
         full_path = os.path.join(root_dir, relative_path)
 
@@ -87,7 +87,7 @@ class FileBrowserHandler(APIHandler):
 
 class ServerInfoHandler(APIHandler):
     async def get(self):
-        home_dir = os.path.expanduser("~")
+        home_dir = os.getenv("HOME")
         # Respond with the $HOME directory
         self.finish({'root_dir': home_dir})
 
