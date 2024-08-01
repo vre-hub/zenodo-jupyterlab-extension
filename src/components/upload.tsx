@@ -91,17 +91,23 @@ const useStyles = createUseStyles({
         flexDirection: 'column',
         alignItems: 'stretch',
         maxWidth: '100%', // Ensure it doesn't exceed the container width
-        overflow: 'hidden', // Allow horizontal scrolling if needed
+        overflow: 'visible', // Allow horizontal scrolling if needed
     },
     fileItem: {
         display: 'flex',
         //justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
         padding: '5px 0',
         borderBottom: '1px solid #ddd',
         width: '100%', // Ensure file item uses full width of fileDetails
         boxSizing: 'border-box',
         overflow: 'hidden',
+        position: 'relative',
+        transition: 'background-color 0.3s', // Add transition for smooth effect
+        '&:hover': {
+            backgroundColor: '#f0f0f0', // Background color on hover
+        },
     },
     removeButton: {
         backgroundColor: '#dc3545',
@@ -148,6 +154,8 @@ const useStyles = createUseStyles({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        cursor: 'pointer', // Indicate that it's interactive
+        position: 'relative',
     },
     checkboxContainer: {
         display: 'flex',
@@ -185,6 +193,31 @@ const useStyles = createUseStyles({
         resize: 'vertical', // Allows vertical resizing
         minHeight: '100px' // Optional, for a minimum height
     },
+    filePathItem: {
+        display: 'block',
+        alignItems: 'flex-start',
+        padding: '5px 0',
+        borderBottom: '1px solid #ddd',
+        width: '100%',
+        boxSizing: 'border-box',
+        backgroundColor: '#f9f9f9',
+        marginTop: '2px',
+        overflow: 'auto'
+    },
+    
+    filePathText: {
+        flex: 1,
+        whiteSpace: 'nowrap',
+        overflow: 'auto', // Change to auto for overflow handling
+        textOverflow: 'ellipsis',
+        padding: '5px',
+    },
+    fileHeader: {
+        display: 'flex',
+        alignItems: 'center', // Align items vertically centered
+        width: '100%', // Ensure it takes full width
+        marginBottom: '5px', // Space between file name and path
+    },
 });
 
 const Upload: React.FC = () => {
@@ -200,6 +233,7 @@ const Upload: React.FC = () => {
     const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
     const [isSandbox, setIsSandbox] = useState(false);
     const [description, setDescription] = useState('');
+    const [expandedFile, setExpandedFile] = useState<string | null>(null);
 
    /*  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
@@ -210,6 +244,10 @@ const Upload: React.FC = () => {
             ]);
         }
     }; */
+
+    const handleFileClick = (filePath: string) => {
+        setExpandedFile(prev => (prev === filePath ? null : filePath));
+    };
 
     const handleFileRemove = (filePath: string) => {
         setSelectedFilePaths(prevPaths => prevPaths.filter(path => path !== filePath));
@@ -294,6 +332,12 @@ const Upload: React.FC = () => {
         // Reset the form or navigate as needed
     };
 
+    const fileName = (filePath: string) => {
+        console.log(filePath);
+        const segments = filePath.split('/');
+        return segments.pop();
+    }
+
     return (
         <div className={classes.container}>
             {isConfirmationVisible ? (
@@ -345,8 +389,21 @@ const Upload: React.FC = () => {
                                         <div className={classes.fileDetails}>
                                             {selectedFilePaths.map((filePath, index) => (
                                                 <div key={index} className={classes.fileItem}>
-                                                    <span className={classes.fileName}>{filePath}</span>
+                                                    <div className={classes.fileHeader}>
+                                                    <span className={classes.fileName} onClick={() => handleFileClick(filePath)}>
+                                                        {fileName(filePath)}
+                                                     </span>
                                                     <button type="button" onClick={() => handleFileRemove(filePath)} className={classes.removeButton}>Remove</button>
+                                                    </div>
+                                                    {expandedFile === filePath && (
+                                                        <>
+                                                        <div className={classes.filePathItem}>
+                                                            <span className={classes.filePathText}>
+                                                                {filePath}
+                                                            </span>
+                                                        </div>
+                                                        </>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>

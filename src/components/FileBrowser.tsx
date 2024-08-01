@@ -54,6 +54,7 @@ const useStyles = createUseStyles({
         marginBottom: '10px',
         display: 'flex',
         alignItems: 'center',
+        maxWidth: '100%'
     },
     breadcrumbItem: {
         marginRight: '5px',
@@ -61,6 +62,26 @@ const useStyles = createUseStyles({
         '&:hover': {
             textDecoration: 'underline',
         },
+        overflow: 'auto', // Change to auto for overflow handling
+        textOverflow: 'ellipsis',
+    },
+    checkbox: {
+        marginRight: '10px',
+    },
+    selectButton: {
+        padding: '10px 20px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#0056b3',
+        },
+    },
+    buttonContainer: {
+        marginTop: '10px',
+        textAlign: 'center',
     },
 });
 
@@ -75,6 +96,8 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
     const [rootPath, setRootPath] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [selectedEntries, setSelectedEntries] = useState<Set<string>>(new Set());
+    const [selectAll, setSelectAll] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchRootPath = async () => {
@@ -127,8 +150,6 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
     const handleClick = (entry: FileEntry) => {
         if (entry.type === 'directory') {
             setCurrentPath(entry.path);
-        } else if (entry.type === 'file') {
-            onSelectFile(entry.path);
         }
     };
 
@@ -178,7 +199,26 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
         return breadcrumbItems;
     }, [currentPath, rootPath, classes.breadcrumbItem]);
 
+    const handleSelectChange = (path: string, isChecked: boolean) => {
+        setSelectedEntries(prev => {
+            const newEntries = new Set(prev);
+            if (isChecked) {
+                newEntries.add(path);
+            } else {
+                newEntries.delete(path);
+            }
+            setSelectAll(newEntries.size === entries.length)
+            return newEntries;
+        });
+    };
+
+    const handleSelectFiles = () => {
+        selectedEntries.forEach(path => onSelectFile(rootPath + '/'+ path));
+        setSelectedEntries(new Set()); // Clear selection
+    };
+
     return (
+        <div>
         <div className={classes.container}>
             <div className={classes.breadcrumb}>
                 {rootPath && (
@@ -193,24 +233,49 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
                         {breadcrumbs}
                     </>
                 )}
+                 <div>
+                        <input
+                            type="checkbox"
+                            checked={selectAll}
+                            onChange={() => {
+                                const newSelectAll = !selectAll;
+                                setSelectAll(newSelectAll);
+                                setSelectedEntries(newSelectAll ? new Set(entries.map(entry => entry.path)) : new Set());
+                            }}
+                        />
+                        <label>Select All</label>
+                    </div>
             </div>
             {loading && <p>Loading...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {entries.length === 0 && !loading && !error && <p>No items to display.</p>}
             {entries.map((entry) => (
-                <div key={entry.path} className={classes.item} onClick={() => handleClick(entry)}>
-                    <FontAwesomeIcon
-                        icon={entry.type === 'directory' ? faFolder : faFile}
-                        className={entry.type === 'directory' ? classes.folderIcon : classes.fileIcon}
-                    />
-                    <span className={classes.fileName}>{entry.name}</span>
-                    <span className={classes.fileInfo}>
-                        {entry.modified && new Date(entry.modified).toLocaleDateString()}<br />
-                        {entry.size && `${entry.size} B`}
-                    </span>
+                <div>
+                    <div key={entry.path} className={classes.item}>
+                        <input
+                            type="checkbox"
+                            checked={selectAll || selectedEntries.has(entry.path)}
+                            onChange={(e) => handleSelectChange(entry.path, e.target.checked)}
+                            className={classes.checkbox}
+                        />
+                        <FontAwesomeIcon
+                            icon={entry.type === 'directory' ? faFolder : faFile}
+                            className={entry.type === 'directory' ? classes.folderIcon : classes.fileIcon}
+                            onClick={() => handleClick(entry)}
+                        />
+                        <span className={classes.fileName}  onClick={() => handleClick(entry)}>{entry.name}</span>
+                        <span className={classes.fileInfo}  onClick={() => handleClick(entry)}>
+                            {entry.modified && new Date(entry.modified).toLocaleDateString()}<br />
+                            {entry.size && `${entry.size} B`}
+                        </span>
+                    </div>
+                    </div>
+                ))}
+            </div>
+            <div className={classes.buttonContainer}>
+                    <button type="button" onClick={handleSelectFiles} className={classes.selectButton}>Select</button>
                 </div>
-            ))}
-        </div>
+            </div>
     );
 };
 
