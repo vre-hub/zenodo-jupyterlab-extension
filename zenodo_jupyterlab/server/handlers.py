@@ -60,10 +60,12 @@ class RecordInfoHandler(APIHandler):
 
 class FileBrowserHandler(APIHandler):
     async def get(self):
-        root_dir = os.getenv('JUPYTER_SERVER_ROOT', '')
+        # Use the home directory as the root directory
+        root_dir = os.path.expanduser("~")
         relative_path = self.get_query_argument('path', '')
         full_path = os.path.join(root_dir, relative_path)
 
+        # Check if the directory exists
         if not os.path.isdir(full_path):
             self.set_status(404)
             self.finish({"error": "Directory not found"})
@@ -76,7 +78,7 @@ class FileBrowserHandler(APIHandler):
             entries.append({
                 "name": entry,
                 "type": "directory" if os.path.isdir(entry_path) else "file",
-                "path": os.path.relpath(entry_path, root_dir),
+                "path": os.path.relpath(entry_path, root_dir).replace('\\', '/'),  # Use relative path from home directory
                 "modified": datetime.fromtimestamp(entry_stat.st_mtime, tz=timezone.utc).isoformat(),
                 "size": entry_stat.st_size
             })
@@ -85,8 +87,9 @@ class FileBrowserHandler(APIHandler):
 
 class ServerInfoHandler(APIHandler):
     async def get(self):
-        root_dir = self.settings.get('ServerApp', {}).get('root_dir', os.getcwd())
-        self.finish({'root_dir': root_dir})
+        home_dir = os.path.expanduser("~")
+        # Respond with the $HOME directory
+        self.finish({'root_dir': home_dir})
 
 
 def setup_handlers(web_app):

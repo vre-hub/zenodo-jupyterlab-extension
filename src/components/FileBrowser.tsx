@@ -187,7 +187,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
                             className={classes.breadcrumbItem}
                             onClick={() => setCurrentPath(rootPath)}
                         >
-                            Root
+                            $HOME
                         </span>
                         {currentPath !== rootPath && ' / '}
                         {breadcrumbs}
