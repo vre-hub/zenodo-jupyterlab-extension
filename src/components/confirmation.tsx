@@ -66,9 +66,10 @@ const Confirmation: React.FC<{
     doi: string;
     filePaths: string[];
     isSandbox: boolean; // New prop for sandbox status
+    description: string;
     onEdit: () => void;
     onConfirm: () => void;
-}> = ({ title, resourceType, creators, doi, filePaths, isSandbox, onEdit, onConfirm }) => {
+}> = ({ title, resourceType, creators, doi, filePaths, isSandbox, description, onEdit, onConfirm }) => {
     const classes = useStyles();
 
     return (
@@ -78,6 +79,7 @@ const Confirmation: React.FC<{
                 <li className={classes.detailItem}><strong>Title:</strong> {title}</li>
                 <li className={classes.detailItem}><strong>Resource Type:</strong> {resourceType}</li>
                 <li className={classes.detailItem}><strong>DOI:</strong> {doi || '(automatic)'}</li>
+                <li className={classes.detailItem}><strong>Description:</strong> { description || 'None given.'}</li>
                 <li className={classes.detailItem}>
                     <strong>Creators:</strong>
                     <ul>

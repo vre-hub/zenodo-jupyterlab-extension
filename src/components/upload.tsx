@@ -176,6 +176,15 @@ const useStyles = createUseStyles({
         overflow: 'hidden',
         wordWrap: 'break-word'
     },
+    description: {
+        width: '100%',
+        padding: '8px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        boxSizing: 'border-box',
+        resize: 'vertical', // Allows vertical resizing
+        minHeight: '100px' // Optional, for a minimum height
+    },
 });
 
 const Upload: React.FC = () => {
@@ -190,6 +199,7 @@ const Upload: React.FC = () => {
     const [selectedFilePaths, setSelectedFilePaths] = useState<string[]>([]);
     const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
     const [isSandbox, setIsSandbox] = useState(false);
+    const [description, setDescription] = useState('');
 
    /*  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
@@ -247,17 +257,18 @@ const Upload: React.FC = () => {
             return;
         }
         setIsConfirmationVisible(true);
-        /* const formData = new FormData();
+        const formData = new FormData();
         selectedFilePaths.forEach(filePath => formData.append('filePaths', filePath));
         formData.append('title', title);
         formData.append('resourceType', resourceType);
         formData.append('creators', JSON.stringify(creators));
         formData.append('doi', doi);
+        formData.append('description', description);
     
         // Example: logging form data
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
-        } */
+        }
 
         /* // Make an API call here, e.g., using fetch
         fetch('your-api-endpoint', {
@@ -293,8 +304,9 @@ const Upload: React.FC = () => {
                     doi={doi} 
                     filePaths={selectedFilePaths} 
                     isSandbox = {isSandbox}
+                    description={description}
                     onEdit={handleEdit} 
-                    onConfirm={handleConfirm} 
+                    onConfirm={handleConfirm}
                 />
             ) : (
                 <>
@@ -354,12 +366,25 @@ const Upload: React.FC = () => {
                             <option value="article">Article</option>
                             <option value="dataset">Dataset</option>
                             <option value="image">Image</option>
+                            <option value="software">Software</option>
+                            <option value="journal">Journal</option>
+                            <option value="other">Other</option>
+                            <option value="publication">Publication</option>
                             {/* Add more options as needed */}
                         </select>
                     </div>
                     <div className={classes.inputContainer}>
                         <label htmlFor="title" className={classes.inputLabel}>Title<span className={classes.requiredAsterisk}>*</span></label>
                         <input type="text" id="title" value={title} onChange={handleTitleChange} className={classes.input} />
+                    </div>
+                    <div className={classes.inputContainer}>
+                        <label htmlFor="description" className={classes.inputLabel}>Description</label>
+                        <textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className={classes.description}
+                        />
                     </div>
                     <div className={classes.inputContainer}>
                         <label className={classes.inputLabel}>Creators<span className={classes.requiredAsterisk}>*</span></label>
