@@ -27,6 +27,11 @@ const useStyles = createUseStyles({
             backgroundColor: '#f0f0f0',
         },
     },
+    fileDetails: {
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',  // Ensure text overflow is handled properly
+    },
     fileName: {
         marginLeft: '10px',
         overflow: 'hidden',
@@ -252,6 +257,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
             {entries.map((entry) => (
                 <div>
                     <div key={entry.path} className={classes.item}>
+                    <div className={classes.fileDetails}>
                         <input
                             type="checkbox"
                             checked={selectAll || selectedEntries.has(entry.path)}
@@ -264,6 +270,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
                             onClick={() => handleClick(entry)}
                         />
                         <span className={classes.fileName}  onClick={() => handleClick(entry)}>{entry.name}</span>
+                        </div>
                         <span className={classes.fileInfo}  onClick={() => handleClick(entry)}>
                             {entry.modified && new Date(entry.modified).toLocaleDateString()}<br />
                             {entry.size && `${entry.size} B`}
