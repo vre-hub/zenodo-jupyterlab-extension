@@ -73,6 +73,8 @@ class FileBrowserHandler(APIHandler):
 
         entries = []
         for entry in os.listdir(full_path):
+            if entry.startswith('.'):
+                continue
             entry_path = os.path.join(full_path, entry)
             entry_stat = os.stat(entry_path)
             entries.append({
