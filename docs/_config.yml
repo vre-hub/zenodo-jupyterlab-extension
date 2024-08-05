@@ -9,20 +9,20 @@ nav:
     nav_order: 1
 
   - title: "For End-Users"
-    url: /For\ End-Users/
+    url: /for-end-users/
     nav_order: 2
     children:
       - title: "Installation"
-        url: /For\ End-Users/Installation/
+        url: /for-end-users/Installation/
         nav_order: 1
       - title: "Usage"
-        url: /For\ End-Users/Usage/
+        url: /for-end-users/Usage/
         nav_order: 2
 
   - title: "For Developpers"
-    url: /For\ Developpers/
+    url: /for-developpers/
     nav_order: 3
     children:
       - title: "Installation + Setting Up Environment"
-        url: /For\ Developpers/Installation/
+        url: /for-developpers/Installation/
         nav_order: 1
