@@ -1,1 +1,28 @@
+title: "Zenodo Jupyter Lab Extension"
+description: "Documentation for VRE Hub Zenodo Jupyter Lab Extension"
 remote_theme: pmarsceill/just-the-docs
+
+# Table of contents
+nav:
+  - title: "Home"
+    url: /
+    nav_order: 1
+
+  - title: "For End-Users"
+    url: /For\ End-Users/
+    nav_order: 2
+    children:
+      - title: "Installation"
+        url: /For\ End-Users/Installation/
+        nav_order: 1
+      - title: "Usage"
+        url: /For\ End-Users/Usage/
+        nav_order: 2
+
+  - title: "For Developpers"
+    url: /For\ Developpers/
+    nav_order: 3
+    children:
+      - title: "Installation + Setting Up Environment"
+        url: /For\ Developpers/Installation/
+        nav_order: 1
