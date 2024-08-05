@@ -38,3 +38,5 @@ Rather than manually cloning the repository, it is possible to run the extension
 All available versions can be found [here](https://github.com/vre-hub/zenodo-jupyterlab-extension/pkgs/container/zenodo-jupyterlab-extension)
 
 Now the instance of Jupyter Lab with the extension installed and enabled should be avilable on localhost:8888
+
+Link Test: [Page 1](<./page1.md>)
