@@ -1,3 +1,12 @@
+---
+title: Home
+nav_order: 1
+---
+
+# Welcome to My Documentation
+
+This is the home page.
+
 # Zenodo Jupyterlab Extension
 [![Build and install extension](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml/badge.svg)](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml)
 
