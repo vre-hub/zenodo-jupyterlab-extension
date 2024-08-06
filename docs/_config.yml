@@ -20,10 +20,6 @@ nav:
         url: /install/#developers
         nav_order: 2
 
-  - title: "For Developpers"
-    url: /for-developpers/
+  - title: "Frontend Usage"
+    url: /usage/
     nav_order: 3
-    children:
-      - title: "Installation + Setting Up Environment"
-        url: /for-developpers/Installation/
-        nav_order: 1
