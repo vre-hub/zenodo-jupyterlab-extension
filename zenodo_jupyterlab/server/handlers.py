@@ -1,10 +1,14 @@
 # handlers.py
 from datetime import timezone, datetime
+import json
 from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
+
+from .upload import upload
 from .testConnection import checkZenodoConnection
 from .search import searchRecords, searchCommunities, recordInformation
+#from eossr.api.zenodo import ZenodoAPI
 
 
 class EnvHandler(APIHandler):
@@ -27,10 +31,10 @@ class CodeHandler(APIHandler):
         exec(data['code'], globals())
         self.finish({'status': 'success'})
 
-class ZenodoTestHandler(APIHandler):
+""" class ZenodoTestHandler(APIHandler):
     async def get(self):
-        response = await checkZenodoConnection(sandbox = False)
-        self.finish({'status': response})
+        response = await checkZenodoConnection()
+        self.finish({'status': response}) """
 
 class XSRFTokenHandler(JupyterHandler):
     async def get(self):
@@ -86,6 +90,41 @@ class FileBrowserHandler(APIHandler):
             })
 
         self.finish({"entries": entries})
+        
+class ZenodoAPIHandler(APIHandler):
+        zAPI = None
+
+        async def post(self):
+            #data = self.get_json_body()
+            #action = data.get('action')
+            try:
+                form_data = json.loads(self.request.body)
+            except json.JSONDecodeError:
+                self.set_status(400)
+                self.finish(json.dumps({'status': 'Invalid JSON'}))
+                return
+            
+            action = form_data.get('action')
+
+            if action == 'check-connection':
+                response, zAPI = await checkZenodoConnection()
+                if zAPI is not None:
+                    ZenodoAPIHandler.zAPI = zAPI 
+                self.finish({'status': response})
+            elif action == 'upload':
+                if ZenodoAPIHandler.zAPI == None:
+                    self.finish({'status': 'Please Log In before trying to '})
+                else:
+                    response = await upload(ZenodoAPIHandler.zAPI, form_data)
+                    self.finish({'status': response})
+                    """ if response == None:
+                        self.finish({'status': '0'})
+                    else:
+                        self.finish({'status': 'Completed!!!'}) """
+            else:
+                self.finish(json.dumps('null'))
+
+
 
 class ServerInfoHandler(APIHandler):
     async def get(self):
@@ -102,12 +141,13 @@ def setup_handlers(web_app):
         (url_path_join(base_path, 'env'), EnvHandler),
         (url_path_join(base_path, 'code'), CodeHandler),
         (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
-        (url_path_join(base_path, 'test-connection'), ZenodoTestHandler),
+        #(url_path_join(base_path, 'test-connection'), ZenodoTestHandler),
         (url_path_join(base_path, 'search-records'), SearchRecordHandler),
         (url_path_join(base_path, 'search-communities'), SearchCommunityHandler),
         (url_path_join(base_path, 'record-info'), RecordInfoHandler),
         (url_path_join(base_path, 'files'), FileBrowserHandler),
-        (url_path_join(base_path, 'server-info'), ServerInfoHandler)
+        (url_path_join(base_path, 'server-info'), ServerInfoHandler),
+        (url_path_join(base_path, 'zenodo-api'), ZenodoAPIHandler)
     ]
 
     web_app.add_handlers(".*$", handlers)

@@ -159,9 +159,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
     };
 
     const handleBreadcrumbClick = (path: string) => {
-        console.log('Breadcrumb clicked, path:', path);
         if (path !== currentPath) {
-            //console.log('Updating currentPath from', currentPath, 'to', path);
             setCurrentPath(path);
         }
     };

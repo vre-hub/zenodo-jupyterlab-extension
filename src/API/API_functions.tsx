@@ -1,4 +1,5 @@
 import { requestAPI } from './handler';
+import { UploadPayload } from '../components/type';
 
 export async function getEnvVariable(varName: string) {
     try {
@@ -17,7 +18,6 @@ export async function setEnvVariable(key: string, value: string) {
             method: 'POST',
             body: JSON.stringify({ key, value })
         });
-        //console.log(data);
     } catch (error) {
         console.error(`Error setting ${key}:`, error);
     }
@@ -25,13 +25,28 @@ export async function setEnvVariable(key: string, value: string) {
 
 export async function testZenodoConnection() {
     try {
-        const data = await requestAPI('zenodo-jupyterlab/test-connection', {
+/*         const data = await requestAPI('zenodo-jupyterlab/test-connection', {
             method: 'GET'
-        });
-        //console.log(data);
+        }); */
+        const data = await requestAPI('zenodo-jupyterlab/zenodo-api', {
+            method: 'POST',
+            body: JSON.stringify({action: 'check-connection'}),
+        })
         return data;
     } catch (error) {
         console.error(`Error testing connection:`, error);
+    }
+}
+
+export async function depositUpload(payload: UploadPayload) {
+    try {
+        const data = await requestAPI('zenodo-jupyterlab/zenodo-api', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+        return data;
+    } catch (error) {
+        console.error('Error uploading info:', error);
     }
 }
 
@@ -84,14 +99,18 @@ export async function getServerRootDir() {
     }
 }
 
-/* export async function runPythonCode(code: string) {
+export async function fetchSandboxStatus() {
     try {
-        const data = await requestAPI('zenodo-jupyterlab/code', {
-            method: 'POST',
-            body: JSON.stringify({ code: code })
-        });
-        console.log(data);
+        let response = await fetch('zenodo-jupyterlab/env?env_var=ZENODO_SANDBOX');
+        if (response.ok) {
+            let data = await response.json();
+            return data.ZENODO_SANDBOX;
+        } else {
+            console.error('Failed to fetch sandbox status');
+            return null;
+        }
     } catch (error) {
-        console.error('Error running code:', error);
+        console.error('Error fetching sandbox status:', error);
+        return null;
     }
-} */
+}
