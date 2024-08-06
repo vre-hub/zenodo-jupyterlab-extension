@@ -1,5 +1,5 @@
 ---
-title: Frontend Usage
+title: "Frontend Usage"
 nav-order: 3
 has_children: true
 ---
