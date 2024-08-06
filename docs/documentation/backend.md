@@ -9,13 +9,21 @@ nav_order: 2
 ## General Framework
 The backend for this extension is built as a Jupyter Server Extension. The project entry points are specified with the `pyproject.toml` file in the root directory. These point to the `zenodo_jupyterlab.server` module, which contains the `extenion.py` and `__init__.py` files which run the function that sets up the API handlers defined within other files in that directory. This guide will go through each section, with explanation of functionality.
 
-## `extension.py`
+## Files in `zenodo_jupyterlab/server'
+* ['extension.py`](#extension)
+* ['__init__.py`](#init)
+* ['handlers.py`](#handlers)
+* ['search.py`](#search)
+* [`testConnection.py`](#testConnection)
+* [`upload.py`](#upload)
+
+## `extension.py` {#extension}
 `_load_jupyter_server_extenion` is a basic function that calls on `setup_handlers` which is defined in `handlers.py` and passes the `server_app.web_app` object. This is automatically passed via the server extension points.
 
-## `__init__.py`
+## `__init__.py` {#init}
 Defines the `_jupyter_server_extension_points` function that signals to the primary extension in `pyproject.toml` how to access the server extension and to build when it built.
 
-## `handlers.py`
+## `handlers.py` {#handlers}
 This file generates the API endpoints for use by the frontend components. All handlers inherit from `jupyter_server.base.handlers.APIHandler` (except the XSRFTokenHandler inherits from JupyterHandler). For simplicity, parameters are placed within the function definitions here, though they are accessed via the `APIHandler.get_argument()` function because they are URI encoded in the API calls. In addition, return statements are defined plainly here, though they are actually returned via the `APIHandler.finish()` function.
 
 ### `class EnvHandler`
@@ -43,14 +51,14 @@ Awaits response from `searchRecords` after passing all of the arguments and retu
 > **Returns:** {'records': *response*}
 
 ### `class SearchCommunityHandler`
-Handler designed to interact with `searchCommunities` function defined in [`search.py`](/backend/#searchpy-search).
+Handler designed to interact with `searchCommunities` function defined in [`search.py`](#search).
 
 #### `get(search_field: string, page: int)`
 Awaits response from `searchCommunities` after passing all of the arguments and returns the list of corresponding communities (max size: 25).
 > **Returns:** {'communities': *response*}
 
 ### `class RecordInfoHandler`
-Handler designed to interact with `recordInformation` function defined in [`search.py`](/backend/#searchpy-search).
+Handler designed to interact with `recordInformation` function defined in [`search.py`](#search).
 
 #### `get(record-id: string)`
 Awaits response from `recordInformation` after passing the `record-id` and returns the desired data.
@@ -138,14 +146,14 @@ record= {
 Note: The existing information such as title and id are still held on the frontend in the tabular display, so no need to repass that information. Secondary note: if this call fails, this function returns {"status": "failed"}
 > **Returns:** *record*
 
-## `testConnection.py`
+## `testConnection.py` {#testConnection}
 File devoted to validating Zenodo access tokens.
 
 ### `checkZenodoConnection`
 Extracts the access token and sandbox boolean from the environmental variables `ZENODO_API_KEY` and `ZENODO_SANDBOX`, respectively. Parses the string value of the sandbox boolean into a Python boolean (stored as a string due to the mismatch is syntax between Typescript and Python booleans). Creates a `eossr.api.zenodo.ZenodoAPI` object with those extracted variables as arguments and stores it in `zAPI`. Then, uses the `eossr.api.zenodo.ZenodoAPI.query_user_deposits` function and extracts the status from this response, which indicates whether or not the access token is valid or if a connection can be made to the Zenodo REST API. If either stage fails, `zAPI` is initialized to `None` and the query status is set to 0.
 > **Returns:** status code of the query, `zAPI`
 
-## `upload.py`
+## `upload.py` {#upload}
 Devoted to generating and populating new Zenodo record deposits.
 
 ### `createDeposit(zAPI: eossr.api.zenodo.ZenodoAPI)`
