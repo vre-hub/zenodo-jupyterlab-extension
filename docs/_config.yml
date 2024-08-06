@@ -25,3 +25,10 @@ nav:
   - title: "Full Documentation"
     url: /documentation/
     nav_order: 4
+    children:
+      - title: "Frontend Documentation"
+        url: /documentation/frontend/
+        nav_order: 1
+      - title: "Backend Documentation"
+        url: /documentation/backend/
+        nav_order: 2
