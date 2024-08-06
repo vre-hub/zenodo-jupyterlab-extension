@@ -18,4 +18,4 @@ This file creates the entire frontend extension as a widget and adds it to the r
 This houses the entire extension. Given the nature of `@lumino/widgets/Widget`, this component is defined without `React`, though the `SideBarPanel` which is a sub-component that contains the all of the content of the widget is developed with `React` as are all futher sub-components.
 
 #### `constructor(app: @jupyterlab/application/JupyterFrontEnd)`
-Extends the super type's constructor, as well as defines the app associated with the widget as the passed app (notably, the one that is active). Three properties are also defined and initialized that dei
+Extends the super type's constructor, as well as defines the app associated with the widget as the passed app (notably, the one that is active). Three properties are also defined and initialized that describe which section (Login, Search, or Upload) are showing when the extension is initially loaded.
