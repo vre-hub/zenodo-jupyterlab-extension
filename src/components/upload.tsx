@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import FileBrowser from './FileBrowser';
 import Confirmation from './confirmation';
+import { depositUpload } from '../API/API_functions';
+import { UploadPayload } from './type';
 
 const useStyles = createUseStyles({
     container: {
@@ -235,15 +237,19 @@ const Upload: React.FC = () => {
     const [description, setDescription] = useState('');
     const [expandedFile, setExpandedFile] = useState<string | null>(null);
 
-   /*  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fileList = event.target.files;
-        if (fileList) {
-            const newPaths = Array.from(fileList).map(file => file.name);
-            setSelectedFilePaths(prevPaths => [
-                ...new Set([...prevPaths, ...newPaths]) // Add new paths, avoiding duplicates
-            ]);
+    useEffect(() => {
+        async function fetchSandboxStatus() {
+            try {
+                const response = await fetch('zenodo-jupyterlab/env?env_var=ZENODO_SANDBOX');
+                const data = await response.json();
+                setIsSandbox(data.ZENODO_SANDBOX === 'true');
+            } catch (error) {
+                console.error('Error fetching sandbox status:', error);
+            }
         }
-    }; */
+
+        fetchSandboxStatus();
+    }, []);
 
     const handleFileClick = (filePath: string) => {
         setExpandedFile(prev => (prev === filePath ? null : filePath));
@@ -259,14 +265,8 @@ const Upload: React.FC = () => {
         ]);
     };
 
-    
-
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
-    };
-
-    const handleSandboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsSandbox(event.target.checked);
     };
 
     const handleResourceTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -295,6 +295,13 @@ const Upload: React.FC = () => {
             return;
         }
         setIsConfirmationVisible(true);
+    };
+
+    const handleEdit = () => {
+        setIsConfirmationVisible(false);
+    };
+
+    const handleConfirm = async () => {
         const formData = new FormData();
         selectedFilePaths.forEach(filePath => formData.append('filePaths', filePath));
         formData.append('title', title);
@@ -302,38 +309,28 @@ const Upload: React.FC = () => {
         formData.append('creators', JSON.stringify(creators));
         formData.append('doi', doi);
         formData.append('description', description);
+        formData.append('action', 'upload');
+
+        const payload: UploadPayload = {
+            title,
+            resourceType,
+            creators,
+            doi,
+            description,
+            filePaths: selectedFilePaths,
+            isSandbox,
+            action: 'upload'
+        };
     
-        // Example: logging form data
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
-
-        /* // Make an API call here, e.g., using fetch
-        fetch('your-api-endpoint', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        }); */
-    };
-
-    const handleEdit = () => {
-        setIsConfirmationVisible(false);
-    };
-
-    const handleConfirm = () => {
-        // Make an API call or handle form submission here
-        console.log('Form submitted with:', { title, resourceType, creators, doi, selectedFilePaths });
-        // Reset the form or navigate as needed
+        console.log(JSON.stringify(payload));
+        const response = await depositUpload(payload);
+        console.log(response['status']);
     };
 
     const fileName = (filePath: string) => {
-        console.log(filePath);
         const segments = filePath.split('/');
         return segments.pop();
     }
@@ -368,7 +365,7 @@ const Upload: React.FC = () => {
                             //onChange={() => handleCheckboxChange('communities')}
                             className={classes.checkboxInput}
                             checked={isSandbox}
-                            onChange={handleSandboxChange}
+                            readOnly
                             />
                             Sandbox
                         </label>
