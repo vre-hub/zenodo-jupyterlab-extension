@@ -6,7 +6,7 @@ has children: true
 
 # Install
 
-## For End-Users
+## For End-Users (#users)
 
 The most simple way to download and install the extension is via Docker:\
 `docker run -d -p 8888:8888 ghcr.io/vre-hub/zenodo-jupyterlab-extension:<version>`\
@@ -14,7 +14,7 @@ All available versions can be found at this [link](https://github.com/vre-hub/ze
 
 Now, the instance of Jupyter Lab with the extension installed and enabled should be available on localhost:8888.
 
-## For Developers
+## For Developers (#developers)
 
 The following steps require NodeJS >= 20.
 
