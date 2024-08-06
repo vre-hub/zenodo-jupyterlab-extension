@@ -3,10 +3,6 @@ title: Home
 nav_order: 1
 ---
 
-# Welcome to My Documentation
-
-This is the home page.
-
 # Zenodo Jupyterlab Extension
 [![Build and install extension](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml/badge.svg)](https://github.com/vre-hub/zenodo-jupyterlab-extension/actions/workflows/build.yaml)
 
@@ -18,6 +14,7 @@ This project integrates [Zenodo](https://zenodo.org) into Jupyter Lab extension.
 # Requirements
 JupyterLab > 4, < 5
 Notebook < 7
+eOSSR
 
 # Install
 You will need NodeJS >= 20 for these steps.

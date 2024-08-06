@@ -8,15 +8,15 @@ nav:
     url: /
     nav_order: 1
 
-  - title: "For End-Users"
-    url: /for-end-users/
+  - title: "Install"
+    url: /install/
     nav_order: 2
     children:
-      - title: "Installation"
-        url: /for-end-users/Installation/
+      - title: "For Users"
+        url: /install/#users/
         nav_order: 1
-      - title: "Usage"
-        url: /for-end-users/Usage/
+      - title: "For Developpers"
+        url: /install/#developers/
         nav_order: 2
 
   - title: "For Developpers"
