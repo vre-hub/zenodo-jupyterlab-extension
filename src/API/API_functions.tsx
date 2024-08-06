@@ -2,7 +2,7 @@ import { requestAPI } from './handler';
 
 export async function getEnvVariable(varName: string) {
     try {
-        const data = await requestAPI('zenodo-jupyterlab/env?env_var=${encodeURIComponent(varName)}', {
+        const data = await requestAPI(`zenodo-jupyterlab/env?env_var=${encodeURIComponent(varName)}`, {
             method: 'GET'
         });
         return(data);
@@ -70,6 +70,17 @@ export async function recordInformation(recordID: number) {
         return data;
     } catch (error) {
         console.error('Error retriving record information: ', error);
+    }
+}
+
+export async function getServerRootDir() {
+    try {
+        const response = await requestAPI('zenodo-jupyterlab/server-info', {
+            method: 'GET'
+        });
+        return response.root_dir;
+    } catch (error) {
+        console.error('Error fetching server root directory:', error);
     }
 }
 

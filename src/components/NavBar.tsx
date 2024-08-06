@@ -50,55 +50,20 @@ const NavBar: React.FC<NavBarProps> = (
     const handleLoginClick = () => {
       app.commands.execute('zenodo-jupyterlab:login');
     };
+
+    const handleUploadClick = () => {
+      app.commands.execute('zenodo-jupyterlab:upload');
+    }
   
     return (
       <nav className={classes.navbar}>
         <ul className={classes.navbarLinks}>
-          <li><button className={classes.navButton} onClick={handleSearchClick}>Search</button></li>
           <li><button className={classes.navButton} onClick = {handleLoginClick}>Login</button></li>
+          <li><button className={classes.navButton} onClick={handleSearchClick}>Search</button></li>
+          <li><button className={classes.navButton} onClick = {handleUploadClick}>Upload</button></li>
         </ul>
       </nav>
     );
 }
 
 export default NavBar;
-
-/* interface IMenuBarProps {
-    value?: any;
-    onChange: { (value: any): void };
-    menus: IMenu[];
-  }
-  
-  export interface IMenu {
-    title: any;
-    value: any;
-    right?: boolean;
-    disabled?: boolean;
-  }
-
-export const NavBar: React.FunctionComponent = () => {
-    //const classes = useStyles();
-  
-    return (
-      <div>
-        <ul>
-          {menus.map(menu => {
-            const activeClass = menu.value === value ? 'active' : '';
-            const disabledClass = menu.disabled ? 'disabled' : '';
-            //const tabClass = menu.right ? classes.tabItemRight : classes.tabItem;
-            //${tabClass}
-            return (
-              <li
-                onClick={!menu.disabled ? () => onChange(menu.value) : undefined}
-                key={menu.value}
-                className={` ${activeClass} ${disabledClass}`}
-              >
-                {menu.title}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  }; */
-
