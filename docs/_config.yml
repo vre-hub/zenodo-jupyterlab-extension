@@ -13,10 +13,10 @@ nav:
     nav_order: 2
     children:
       - title: "For Users"
-        url: /install/#users/
+        url: /install/#users
         nav_order: 1
       - title: "For Developpers"
-        url: /install/#developers/
+        url: /install/#developers
         nav_order: 2
 
   - title: "For Developpers"

@@ -1,7 +1,7 @@
 ---
 title: Install
 nav-order: 2
-has children: true
+has_children: true
 ---
 
 # Install
