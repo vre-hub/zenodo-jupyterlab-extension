@@ -15,7 +15,7 @@ zenodo-jupyterlab-extension/
 ├── pyproject.toml
 ├── requirements.txt
 ├── setup.py
-├── src/     #frontend
+├── src/                     #frontend
 │   ├── API/
 │   │   ├── API_functions.tsx
 │   │   ├── handler.tsx
