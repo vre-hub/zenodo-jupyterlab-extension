@@ -31,10 +31,25 @@ Upon searching for a community, when clicked, the user will be able to search fo
 Depending on the usefulness of the feature in terms of the scope of this extension, advanced search settings might be added in future updates. These would mimic those on <zenodo.org>: restrict file type, resource type, access level, ...
 
 
-## ZenodoAPI interactions
+## ZenodoAPI interactions {#zenodoAPI}
 This section involves all actions that interact with the `eossr.api.zenodo.ZenodoAPI` module, which creates a connection to Zenodo with an API access token for continued use.
 
 ### Logging in
 The user is able to either log in to the main [Zenodo](zenodo.org) software or the [Sandbox Zenodo](sandbox.zenodo.org) software (for testing) using their Personl Access Token. This token is created in the Zenodo User Settings > Applications > Personal Access Tokens. When the user logs in, the validity of their token in the chosen software is determined via a query of that user's deposits. If the token is invalid, this is displayed clearly below the access token field.
 
-The entered access token and choice of whether or not to work within the main or sandbox software are saved as environmental variables within the Jupyter Session: `ZENODO_API_KEY` and `SANDBOX_ZENODO`, respectively.
+The entered access token and choice of whether or not to work within the main or sandbox software are saved as environmental variables within the Jupyter Session: `ZENODO_API_KEY` and `SANDBOX_ZENODO`, respectively. These variables will be accessible across the Jupyter Session, however they will not be reflected in any open terminals; new terminals/notebooks must be opened to reflect the change.
+
+### Uploading A Record
+The sandbox checkbox at the top of the Upload page is readonly and indicates whether of not the user logged in to the main software or the sandbox version. This is to inform the user of in which software their deposit will be made.
+
+In order to continue, the user had to fill in the necessary information:
+* Select at least one file to upload (the file browser initially shows the contents of the `$Home` directory in the Jupyter Session)
+* Title
+* Select a Resource Type
+* Include at least one Creator's name
+* Optional Information:
+** DOI (otherwise generated automatically)
+** Multiple Creators and include affiliations
+
+Once the "Next" button is selected, a confirmation page is shown with all of the entered information. When "Confirm" is pressed, a deposit is made and the appropriate metadata is assigned.
+*Note*: As is currently stands, only the title is able to be set via this mechanism, and the file upload has yet to be implemented.

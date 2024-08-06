@@ -21,3 +21,7 @@ nav:
   - title: "Frontend Usage"
     url: /usage/
     nav_order: 3
+  
+  - title: "Full Documentation"
+    url: /documentation/
+    nav_order: 4
