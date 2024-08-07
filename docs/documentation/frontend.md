@@ -11,7 +11,7 @@ The building of the of the frontend JupyterLab extension is handled entirely wit
 
 ## Files in `src/` {#files-in-src}
 * [`index.tsx`](#index)
-* `API`
+* `API/`
 > * [`API_functions`](#api_functions)
 > * [`handlers.tsx`](#handler)
 * `components/`

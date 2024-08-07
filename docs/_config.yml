@@ -14,9 +14,9 @@ nav:
     nav_order: 2
     children:
       - title: "For End-Users"
-        url: /install/#users
+        url: /install/#for-end-users-users
       - title: "For Developers"
-        url: /install/#developers
+        url: /install/##for-developers-developers
 
   - title: "Frontend Usage"
     url: /usage/
