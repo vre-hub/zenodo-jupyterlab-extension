@@ -29,6 +29,31 @@ nav:
       - title: "Frontend Documentation"
         url: /documentation/frontend/
         nav_order: 1
+        children:
+        - title: "General Framework"
+          url: /documentation/frontend/#general-framework
+        - title: "Files in `src/`"
+          url: /documentation/frontend/#files-in-src
+        - title: "`index.tsx`"
+          url: /documentation/frontend/#index
+        - title: "`API/API_functions.tsx`"
+          url: /documentation/frontend/#api_functions
+        - title: "`API/handlers.tsx`"
+          url: /documentation/frontend/#handler
+        - title: "`components/FileBrowser.tsx`"
+          url: /documentation/frontend/#filebrowser
+        - title: "`components/NavBar.tsx`"
+          url: /documentation/frontend/#navbar
+        - title: "`components/SearchPanel.tsx`"
+          url: /documentation/frontend/#searchpanel
+        - title: "`components/SideBarPanel.tsx`"
+          url: /documentation/frontend/#sidebar
+        - title: "`components/confirmation.tsx`"
+          url: /documentation/frontend/#confirmation
+        - title: "`components/login.tsx`"
+          url: /documentation/frontend/#login
+        - title: "`components/upload.tsx`"
+          url: /documentation/frontend/#upload
       - title: "Backend Documentation"
         url: /documentation/backend/
         nav_order: 2
