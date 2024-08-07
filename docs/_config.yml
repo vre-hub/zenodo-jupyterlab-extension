@@ -32,3 +32,10 @@ nav:
       - title: "Backend Documentation"
         url: /documentation/backend/
         nav_order: 2
+
+sass:
+  load_paths:
+    - _sass
+
+plugins:
+  - jekyll-sass-converter
