@@ -7,7 +7,7 @@ nav_order: 1
 # Frontend Documentation
 
 ## General Framework {#general-framework}
-The building of the of the frontend JupyterLab extension is handled entirely within `pyproject.toml` in the root directory. The details of that file are discussed [NEED A PLACE TO LINK HERE WHEN I MAKE IT]. All of the frontend components were originally generated with `copier` template of a JupyterLab extension: [template](https://github.com/jupyterlab/extension-template). This extension is built with NodeJS >= 20 with node dependencies contained within `yarn.lock`.
+The building of the of the frontend JupyterLab extension is handled entirely within `pyproject.toml` in the root directory, which was originally generated from the `copier` template. All of the frontend components were originally generated with `copier` template of a JupyterLab extension: [template](https://github.com/jupyterlab/extension-template). This extension is built with NodeJS >= 20 with node dependencies contained within `yarn.lock`.
 
 ## Files in `src/` {#files-in-src}
 * [`index.tsx`](#index)

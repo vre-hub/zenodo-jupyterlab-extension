@@ -9,11 +9,11 @@ nav_order: 2
 ## General Framework
 The backend for this extension is built as a Jupyter Server Extension. The project entry points are specified with the `pyproject.toml` file in the root directory. These point to the `zenodo_jupyterlab.server` module, which contains the `extenion.py` and `__init__.py` files which run the function that sets up the API handlers defined within other files in that directory. This guide will go through each section, with explanation of functionality.
 
-## Files in `zenodo_jupyterlab/server'
-* ['extension.py`](#extension)
-* ['__init__.py`](#init)
-* ['handlers.py`](#handlers)
-* ['search.py`](#search)
+## Files in `zenodo_jupyterlab/server/`
+* [`extension.py`](#extension)
+* [`__init__.py`](#init)
+* [`handlers.py`](#handlers)
+* [`search.py`](#search)
 * [`testConnection.py`](#testConnection)
 * [`upload.py`](#upload)
 
@@ -161,7 +161,7 @@ Uses `eossr.api.zenodo.ZenodoAPI.create_new_deposit` to create an empty deposit.
 > **Returns:** ID of the newly created record
 
 ### `createMetadata(zAPI: eossr.api.zenodo.ZenodoAPI, recordID: int, form_data: FormData object)`
-*Work in Progress*
+*Work in Progress*\
 Extracts title from form_data and creates a JSON dict as follows:
 ```
 json_metadata = {

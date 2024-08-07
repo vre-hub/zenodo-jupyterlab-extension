@@ -19,7 +19,7 @@ The following steps require NodeJS >= 20.
 
 Install `yarn`:\
 `npm install -g corepack`\
-`corepack enable`\
+`corepack enable`
 
 Install Python dependecies:\
 `python3 -m pip install -r requirements.txt`
