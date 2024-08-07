@@ -1,7 +1,6 @@
 ---
 title: "Frontend Usage"
-nav-order: 3
-has_children: true
+nav_order: 3
 ---
 
 # Frontend Usage Guide
