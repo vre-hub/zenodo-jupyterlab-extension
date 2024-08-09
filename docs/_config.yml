@@ -1,0 +1,11 @@
+title: "Zenodo Jupyter Lab Extension"
+description: "Documentation for VRE Hub Zenodo Jupyter Lab Extension"
+remote_theme: pmarsceill/just-the-docs
+color_scheme: dark
+
+sass:
+  load_paths:
+    - _sass
+
+plugins:
+  - jekyll-sass-converter
