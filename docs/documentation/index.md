@@ -31,14 +31,14 @@ zenodo-jupyterlab-extension/
 │   │   └── zenodo-blue.svg
 │   ├── index.tsx
 │   └── svg.d.tsx
-├── zenodo_jupyterlab/       #backend
+├── zenodo_jupyterlab/ 
 │   ├── __init__.py
 │   ├── _version.py
 │   ├── labextension/
 │   │   ├── build_log.json
 │   │   ├── package.json
 │   │   └── static/
-│   └── server/
+│   └── server/         #backend
 │       ├── __init__.py
 │       ├── extension.py
 │       ├── handlers.py
