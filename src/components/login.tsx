@@ -41,7 +41,21 @@ const useStyles = createUseStyles({
         '&:hover': {
             backgroundColor: '#45a049',
         },
-    }
+    },
+    checkboxContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: '10px',
+        flexDirection: 'row',
+    },
+    checkboxLabel: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    checkboxInput: {
+        marginRight: '5px',
+    },
 });
 
 const Login: React.FC = () => {
@@ -50,12 +64,13 @@ const Login: React.FC = () => {
     const[outputData, setOutputData] = useState<string | null>(null);
     const [connectionStatus, setConnectionStatus] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSandbox, setIsSandbox] = useState(false);
 
     const handleLogin = useCallback(async () => {
         try {
+            await setEnvVariable('ZENODO_SANDBOX', String(isSandbox));
             if (APIKey != '') {
                 await setEnvVariable('ZENODO_API_KEY', APIKey);
-                //console.log(await getEnvVariable('ZENODO_API_KEY'));
                 setOutputData("Zenodo Token Successfully Stored in Environment.");
                 testAPIConnection();
             } else {
@@ -70,13 +85,16 @@ const Login: React.FC = () => {
         } catch (error) {
             console.error(error);
         }
-    }, [APIKey]);
+    }, [APIKey, isSandbox]);
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsSandbox(event.target.checked);
+    };
 
     const testAPIConnection = async () => {
         setIsLoading(true);
         try {
             var response = await testZenodoConnection();
-            //console.log(response['status']);
             if (Number(response['status']) == 200) {
                 setConnectionStatus("API Connection Successful")
             } else {
@@ -89,25 +107,6 @@ const Login: React.FC = () => {
         }
     }
 
-/*     const handleLogin = () => {
-        try {
-            var code = `
-import os
-            `;
-            if (APIKey != '') {
-                code += `
-os.environ['TESTVAR'] = '${APIKey}'
-                `;
-            }
-            code += `
-os.environ['TESTVAR']
-            `;
-            console.log(code);
-        } catch (error) {
-            alert('Invalid Zenodo API Token');
-        }
-    } */
-
     return (
         <div className={classes.root}>
             <div className={classes.loginContainer}>
@@ -116,6 +115,17 @@ os.environ['TESTVAR']
                     <input className={classes.input} type="text" id="APIKey" name="APIKey" placeholder="API Key" value={APIKey} onChange={(e) => setAPIKey(e.target.value)} required />
         </div>
         <div className={classes.formGroup}>
+            <div className={classes.checkboxContainer}>
+                <label className={classes.checkboxLabel}>
+                    <input
+                        type="checkbox"
+                        checked={isSandbox}
+                        onChange={handleCheckboxChange}
+                        className={classes.checkboxInput}
+                    />
+                    Use Sandbox
+                </label>
+            </div>
             <button className={classes.button} type="submit" onClick={handleLogin}>Login</button>
             {outputData ? (
                 <div>

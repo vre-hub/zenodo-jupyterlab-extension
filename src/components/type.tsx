@@ -9,3 +9,19 @@ export interface FileEntry {
 }
 
 export type OnSelectFile = (filePath: string) => void;
+
+export interface Creator {
+    name: string;
+    affiliation?: string;
+}
+
+export interface UploadPayload {
+    title: string;
+    resourceType: string;
+    creators: Creator[];
+    doi: string;
+    description: string;
+    filePaths: string[];
+    isSandbox: boolean;
+    action: string;
+}

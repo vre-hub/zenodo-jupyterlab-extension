@@ -13,13 +13,15 @@ async def test_zenodo_connection_success():
 
         # Mock the environment variable
     with patch.dict(os.environ, {'ZENODO_API_KEY': os.environ['CI_ZENODO_API_KEY']}):
-            # Call the function to test
-            status_code = await checkZenodoConnection(sandbox = True)
+            with patch.dict(os.environ, {'ZENODO_SANDBOX': "true"}):
+                # Call the function to test
+                status_code, zAPI = await checkZenodoConnection()
 
-            print(f"Returned status code: {status_code}")
+                print(f"Returned status code: {status_code}")
 
-            # Assert the expected status code
-            assert status_code == 200
+                # Assert the expected status code
+                assert status_code == 200
+                assert type(zAPI) == ZenodoAPI
 
 @pytest.mark.asyncio
 async def test_zenodo_connection_failure():
@@ -29,9 +31,11 @@ async def test_zenodo_connection_failure():
     mock_instance.query_user_deposits.side_effect = Exception('Failed') """
 
     # Mock the environment variable
-    with patch.dict('os.environ', {'ZENODO_API_KEY': 'fake_false_api_key'}):
-        # Call the function to test
-        status_code = await checkZenodoConnection(sandbox = True)
+    with patch.dict(os.environ, {'ZENODO_API_KEY': 'fake_false_api_key'}):
+        with patch.dict(os.environ, {"ZENODO_SANDBOX": 'true'}):
+            # Call the function to test
+            status_code, zAPI = await checkZenodoConnection()
 
-        # Assert the expected status code
-        assert status_code == 0
+            # Assert the expected status code
+            assert status_code == 0
+            assert zAPI == None
