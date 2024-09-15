@@ -7,9 +7,9 @@ Zenodo JupyterLab plugin
 This project integrates [Zenodo](https://zenodo.org) into Jupyter Lab extension.
 
 # Requirements
-JupyterLab > 4, < 5
-Notebook < 7
-eOSSR
+* JupyterLab > 4, < 5
+* Notebook < 7
+* [eOSSR](https://gitlab.com/escape-ossr/eossr)
 
 # Install
 You will need NodeJS >= 20 for these steps.
