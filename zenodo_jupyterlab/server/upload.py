@@ -30,9 +30,9 @@ async def upload(zAPI, form_data):
         recordID = await createDeposit(zAPI)
         response = await createMetadata(zAPI, str(recordID), form_data)
         if response != None:
-            return "Success"
+            return "200"
         else:
-            return "Adding the metadata returned a None response."
+            return None
     except:
         return None
 

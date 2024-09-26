@@ -236,6 +236,8 @@ const Upload: React.FC = () => {
     const [isSandbox, setIsSandbox] = useState(false);
     const [description, setDescription] = useState('');
     const [expandedFile, setExpandedFile] = useState<string | null>(null);
+    const [submissionSuccess, setSubmissionSuccess] = useState(false);
+    const [submissionFailure, setSubmissionFailure] = useState(false);
 
     useEffect(() => {
         async function fetchSandboxStatus() {
@@ -326,8 +328,22 @@ const Upload: React.FC = () => {
             console.log(`${key}: ${value}`);
         }
         console.log(JSON.stringify(payload));
-        const response = await depositUpload(payload);
-        console.log(response['status']);
+        try {
+            const response = await depositUpload(payload);
+            console.log(response['status']);
+            
+            if (response['status'] == "200") {
+                setSubmissionSuccess(true); // Mark submission as successful
+                setIsConfirmationVisible(false); // Hide the confirmation section
+                setSubmissionFailure(false);
+            } else {
+                setSubmissionFailure(true);
+                setIsConfirmationVisible(false);
+                setSubmissionSuccess(false);
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
     };
 
     const fileName = (filePath: string) => {
@@ -349,6 +365,16 @@ const Upload: React.FC = () => {
                     onEdit={handleEdit} 
                     onConfirm={handleConfirm}
                 />
+            ) : submissionSuccess ? (
+                <div>
+                    <h2>Submission Successful!</h2>
+                    <p>Your information has been successfully submitted.</p>
+                </div>
+            ) : submissionFailure ? (
+                <div>
+                    <h2>Submission Failure!</h2>
+                    <p>Your information has NOT been successfully submitted.</p>
+                </div>
             ) : (
                 <>
                     <h1 className={classes.heading}>Upload</h1>
