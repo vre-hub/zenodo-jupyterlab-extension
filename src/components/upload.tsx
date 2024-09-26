@@ -238,6 +238,7 @@ const Upload: React.FC = () => {
     const [expandedFile, setExpandedFile] = useState<string | null>(null);
     const [submissionSuccess, setSubmissionSuccess] = useState(false);
     const [submissionFailure, setSubmissionFailure] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function fetchSandboxStatus() {
@@ -304,6 +305,7 @@ const Upload: React.FC = () => {
     };
 
     const handleConfirm = async () => {
+        setIsLoading(true);
         const formData = new FormData();
         selectedFilePaths.forEach(filePath => formData.append('filePaths', filePath));
         formData.append('title', title);
@@ -343,6 +345,8 @@ const Upload: React.FC = () => {
             }
         } catch (error) {
             console.error('Error during submission:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -353,7 +357,12 @@ const Upload: React.FC = () => {
 
     return (
         <div className={classes.container}>
-            {isConfirmationVisible ? (
+            {isLoading ? (
+                <div>
+                <h2>Submitting...</h2>
+                <p>Please wait while your submission is being processed.</p>
+            </div>
+            ) : isConfirmationVisible ? (
                 <Confirmation 
                     title={title} 
                     resourceType={resourceType} 
