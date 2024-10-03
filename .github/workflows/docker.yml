@@ -53,7 +53,8 @@ jobs:
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev" >> $GITHUB_ENV
           else
-            echo "tags=${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
+            echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }} 
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_ENV
           fi
       - name: Build and push Docker image
         id: push
