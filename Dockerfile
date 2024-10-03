@@ -5,6 +5,7 @@ SHELL ["/bin/bash", "-c"]
 
 COPY . /zenodo_jupyterlab_extension
 
+USER root
 WORKDIR /zenodo_jupyterlab_extension
 
 #install correct version of Node
@@ -15,6 +16,7 @@ RUN conda upgrade -c conda-forge nodejs && \
     python3 -m pip install . && \
     jupyter server extension enable zenodo_jupyterlab.server
 
+USER jovyan
 WORKDIR /home/jovyan/work
 # Expose port and run JupyterLab
 EXPOSE 8888
