@@ -17,7 +17,7 @@ RUN conda upgrade -c conda-forge nodejs && \
     jupyter server extension enable zenodo_jupyterlab.server
 
 USER jovyan
-WORKDIR /home/jovyan/work
+WORKDIR $HOME
 # Expose port and run JupyterLab
 EXPOSE 8888
 CMD ["jupyter", "lab", "--ip=*", "--NotebookApp.token=''", "--NotebookApp.password=''", "--no-browser", "--allow-root"]
