@@ -12,7 +12,6 @@ RUN conda upgrade -c conda-forge nodejs && \
     python3 -m pip install --upgrade pip && \
     python3 -m pip install -r requirements.txt && \
     jlpm && jlpm run build && \
-    # Install and enable extension
     python3 -m pip install . && \
     jupyter server extension enable zenodo_jupyterlab.server
 
