@@ -114,3 +114,42 @@ export async function fetchSandboxStatus() {
         return null;
     }
 }
+
+export async function downloadFile(recordID: string, fileName: string) {
+    try {
+        // Fetch the _xsrf token
+        const xsrfTokenResponse = await fetch('zenodo-jupyterlab/xsrf_token', {
+            method: 'GET',
+        });
+        const xsrfTokenData = await xsrfTokenResponse.json();
+        const xsrfToken = xsrfTokenData.xsrfToken;
+        const response = await fetch('zenodo-jupyterlab/download-file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRFToken': xsrfToken  // Add the XSRF token here
+            },
+            body: JSON.stringify({
+                file_name: fileName,
+                record_id: recordID
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to download file: ${response.statusText}`);
+        }
+
+        // Convert the response into a blob and create a download link
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove(); // Remove the link after download
+        window.URL.revokeObjectURL(url); // Clean up URL object
+    } catch (error) {
+        console.error('Error downloading file:', error);
+    }
+}
