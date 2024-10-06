@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import FileBrowser from './FileBrowser';
 import Confirmation from './confirmation';
-import { depositUpload } from '../API/API_functions';
+import { depositUpload, getEnvVariable } from '../API/API_functions';
 import { UploadPayload } from './type';
 
 const useStyles = createUseStyles({
@@ -236,6 +236,11 @@ const Upload: React.FC = () => {
     const [isSandbox, setIsSandbox] = useState(false);
     const [description, setDescription] = useState('');
     const [expandedFile, setExpandedFile] = useState<string | null>(null);
+    const [submissionSuccess, setSubmissionSuccess] = useState(false);
+    const [submissionFailure, setSubmissionFailure] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [recordLink, setRecordLink] = useState('');
+    const [recordSandbox, setRecordSandbox] = useState(false);
 
     useEffect(() => {
         async function fetchSandboxStatus() {
@@ -302,6 +307,7 @@ const Upload: React.FC = () => {
     };
 
     const handleConfirm = async () => {
+        setIsLoading(true);
         const formData = new FormData();
         selectedFilePaths.forEach(filePath => formData.append('filePaths', filePath));
         formData.append('title', title);
@@ -326,18 +332,45 @@ const Upload: React.FC = () => {
             console.log(`${key}: ${value}`);
         }
         console.log(JSON.stringify(payload));
-        const response = await depositUpload(payload);
-        console.log(response['status']);
+        try {
+            const response = await depositUpload(payload);
+            console.log(response['status']);
+            
+            if (response['status'] == "200") {
+                setSubmissionSuccess(true); // Mark submission as successful
+                setIsConfirmationVisible(false); // Hide the confirmation section
+                setSubmissionFailure(false);
+                const sandbox = await getEnvVariable('ZENODO_SANDBOX');
+                setRecordSandbox(sandbox['ZENODO_SANDBOX']==='true' ? true : false);
+                setRecordLink(response['recordID']);
+            } else {
+                setSubmissionFailure(true);
+                setIsConfirmationVisible(false);
+                setSubmissionSuccess(false);
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const fileName = (filePath: string) => {
         const segments = filePath.split('/');
         return segments.pop();
     }
+    const removeCreator = (index: number) => {
+        setCreators(creators.filter((_, i) => i !== index));
+    };
 
     return (
         <div className={classes.container}>
-            {isConfirmationVisible ? (
+            {isLoading ? (
+                <div>
+                <h2>Submitting...</h2>
+                <p>Please wait while your submission is being processed.</p>
+            </div>
+            ) : isConfirmationVisible ? (
                 <Confirmation 
                     title={title} 
                     resourceType={resourceType} 
@@ -349,6 +382,27 @@ const Upload: React.FC = () => {
                     onEdit={handleEdit} 
                     onConfirm={handleConfirm}
                 />
+            ) : submissionSuccess ? (
+                <div>
+                    <h2>Submission Successful!</h2>
+                    <p>Your information has been successfully submitted.</p>
+                    {recordSandbox ? (
+                        <div>
+                            <p>Your record has not been published yet. Click here to view it: <a href={'https://sandbox.zenodo.org/uploads/' + recordLink} target='_blank'>Record</a>.</p>
+                        </div>
+                    )
+                    :
+                    (
+                        <div>
+                            <p>Your record has not been published yet. Click here to view it: <a href={'https://zenodo.org/uploads/' + recordLink} target='_blank'>Record</a>.</p>
+                        </div>
+                    )}
+                </div>
+            ) : submissionFailure ? (
+                <div>
+                    <h2>Submission Failure!</h2>
+                    <p>Your information has NOT been successfully submitted. Please try again.</p>
+                </div>
             ) : (
                 <>
                     <h1 className={classes.heading}>Upload</h1>
@@ -459,6 +513,9 @@ const Upload: React.FC = () => {
                                     placeholder="Affiliation"
                                     className={classes.creatorInput}
                                 />
+                                {index > 0 && (
+                                    <button type="button" onClick={() => removeCreator(index)} className={classes.removeButton}>Remove</button>
+                                )}
                             </div>
                         ))}
                             <button type="button" onClick={addCreator} className={classes.addButton}>Add creator</button>

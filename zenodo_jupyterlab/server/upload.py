@@ -23,16 +23,27 @@ async def createMetadata(zAPI, recordID, form_data):
     response = zAPI.set_deposit_metadata(recordID, json_metadata)
     return response
 
+async def uploadFiles(zAPI, recordID, fileArray):
+    for file in fileArray:
+        fileName = file.split('/')[-1]
+        try: 
+            response = zAPI.upload_file_deposit(recordID, fileName, file)
+        except: 
+            return None
+    return response
+
 async def upload(zAPI, form_data):
     if zAPI == None:
         return None
     try:
         recordID = await createDeposit(zAPI)
         response = await createMetadata(zAPI, str(recordID), form_data)
-        if response != None:
-            return "Success"
-        else:
-            return "Adding the metadata returned a None response."
+        if response == None:
+            return None
+        response = await uploadFiles(zAPI, recordID, form_data.get('filePaths'))
+        if response == None:
+            return "File failure in checking"
+        return "200", recordID
     except:
-        return None
+        return None, ''
 
