@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import FileBrowser from './FileBrowser';
 import Confirmation from './confirmation';
-import { depositUpload } from '../API/API_functions';
+import { depositUpload, getEnvVariable } from '../API/API_functions';
 import { UploadPayload } from './type';
 
 const useStyles = createUseStyles({
@@ -239,6 +239,8 @@ const Upload: React.FC = () => {
     const [submissionSuccess, setSubmissionSuccess] = useState(false);
     const [submissionFailure, setSubmissionFailure] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [recordLink, setRecordLink] = useState('');
+    const [recordSandbox, setRecordSandbox] = useState(false);
 
     useEffect(() => {
         async function fetchSandboxStatus() {
@@ -338,6 +340,9 @@ const Upload: React.FC = () => {
                 setSubmissionSuccess(true); // Mark submission as successful
                 setIsConfirmationVisible(false); // Hide the confirmation section
                 setSubmissionFailure(false);
+                const sandbox = await getEnvVariable('ZENODO_SANDBOX');
+                setRecordSandbox(sandbox['ZENODO_SANDBOX']==='true' ? true : false);
+                setRecordLink(response['recordID']);
             } else {
                 setSubmissionFailure(true);
                 setIsConfirmationVisible(false);
@@ -381,11 +386,22 @@ const Upload: React.FC = () => {
                 <div>
                     <h2>Submission Successful!</h2>
                     <p>Your information has been successfully submitted.</p>
+                    {recordSandbox ? (
+                        <div>
+                            <p>Your record has not been published yet. Click here to view it: <a href={'https://sandbox.zenodo.org/uploads/' + recordLink} target='_blank'>Record</a>.</p>
+                        </div>
+                    )
+                    :
+                    (
+                        <div>
+                            <p>Your record has not been published yet. Click here to view it: <a href={'https://zenodo.org/uploads/' + recordLink} target='_blank'>Record</a>.</p>
+                        </div>
+                    )}
                 </div>
             ) : submissionFailure ? (
                 <div>
                     <h2>Submission Failure!</h2>
-                    <p>Your information has NOT been successfully submitted.</p>
+                    <p>Your information has NOT been successfully submitted. Please try again.</p>
                 </div>
             ) : (
                 <>

@@ -117,8 +117,8 @@ class ZenodoAPIHandler(APIHandler):
                 if ZenodoAPIHandler.zAPI == None:
                     self.finish({'status': 'Please Log In before trying to '})
                 else:
-                    response = await upload(ZenodoAPIHandler.zAPI, form_data)
-                    self.finish({'status': response})
+                    response, recordID = await upload(ZenodoAPIHandler.zAPI, form_data)
+                    self.finish({'status': response, 'recordID': recordID})
                     """ if response == None:
                         self.finish({'status': '0'})
                     else:

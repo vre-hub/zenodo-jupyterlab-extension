@@ -43,7 +43,7 @@ async def upload(zAPI, form_data):
         response = await uploadFiles(zAPI, recordID, form_data.get('filePaths'))
         if response == None:
             return "File failure in checking"
-        return "200"
+        return "200", recordID
     except:
-        return None
+        return None, ''
 
