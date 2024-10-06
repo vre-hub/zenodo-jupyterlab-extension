@@ -354,6 +354,9 @@ const Upload: React.FC = () => {
         const segments = filePath.split('/');
         return segments.pop();
     }
+    const removeCreator = (index: number) => {
+        setCreators(creators.filter((_, i) => i !== index));
+    };
 
     return (
         <div className={classes.container}>
@@ -494,6 +497,9 @@ const Upload: React.FC = () => {
                                     placeholder="Affiliation"
                                     className={classes.creatorInput}
                                 />
+                                {index > 0 && (
+                                    <button type="button" onClick={() => removeCreator(index)} className={classes.removeButton}>Remove</button>
+                                )}
                             </div>
                         ))}
                             <button type="button" onClick={addCreator} className={classes.addButton}>Add creator</button>
