@@ -34,13 +34,13 @@ export async function requestAPI(endPoint: string, init: RequestInit): Promise<a
     const settings = ServerConnection.makeSettings();
     const requestUrl = URLExt.join(settings.baseUrl, endPoint);
 
-    const csrfToken = await getCsrfToken();
-    if (!csrfToken) {
+    //const csrfToken = await getCsrfToken();
+    /* if (!csrfToken) {
         throw new Error('CSRF token not available');
-    }
+    } */
     const headers = {
         'Content-Type': 'application/json',
-        'X-XSRFToken': csrfToken // Adjust header name as per your server configuration
+        // 'X-XSRFToken': csrfToken // Adjust header name as per your server configuration
     };
 
     let response: Response;
@@ -57,7 +57,7 @@ export async function requestAPI(endPoint: string, init: RequestInit): Promise<a
     }
 }
 
-async function getCsrfToken(): Promise<string | undefined> {
+/* async function getCsrfToken(): Promise<string | undefined> {
     try {
         const response = await fetch('/zenodo-jupyterlab/xsrf_token'); // Replace with your actual endpoint
         if (!response.ok) {
@@ -69,4 +69,4 @@ async function getCsrfToken(): Promise<string | undefined> {
         console.error('Failed to fetch CSRF token:', error);
         return undefined;
     }
-}
+} */
