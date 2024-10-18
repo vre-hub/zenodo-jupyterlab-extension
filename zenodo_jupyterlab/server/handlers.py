@@ -38,10 +38,10 @@ class CodeHandler(APIHandler):
         response = await checkZenodoConnection()
         self.finish({'status': response}) """
 
-class XSRFTokenHandler(JupyterHandler):
+""" class XSRFTokenHandler(JupyterHandler):
     async def get(self):
         xsrf_token = self.xsrf_token
-        self.finish({'xsrfToken': xsrf_token.decode('utf-8') if isinstance(xsrf_token, bytes) else xsrf_token})
+        self.finish({'xsrfToken': xsrf_token.decode('utf-8') if isinstance(xsrf_token, bytes) else xsrf_token}) """
 
 class SearchRecordHandler(APIHandler):
     async def get(self):
@@ -181,7 +181,7 @@ def setup_handlers(web_app):
     handlers = [
         (url_path_join(base_path, 'env'), EnvHandler),
         (url_path_join(base_path, 'code'), CodeHandler),
-        (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
+        #(url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
         #(url_path_join(base_path, 'test-connection'), ZenodoTestHandler),
         (url_path_join(base_path, 'search-records'), SearchRecordHandler),
         (url_path_join(base_path, 'search-communities'), SearchCommunityHandler),

@@ -34,18 +34,18 @@ export async function requestAPI(endPoint: string, init: RequestInit): Promise<a
     const settings = ServerConnection.makeSettings();
     const requestUrl = URLExt.join(settings.baseUrl, endPoint);
 
-    //const csrfToken = await getCsrfToken();
-    /* if (!csrfToken) {
+    /* const csrfToken = await getCsrfToken();
+    if (!csrfToken) {
         throw new Error('CSRF token not available');
-    } */
-    const headers = {
+    }  */
+    /* const headers = {
         'Content-Type': 'application/json',
-        // 'X-XSRFToken': csrfToken // Adjust header name as per your server configuration
-    };
+        'X-XSRFToken': csrfToken // Adjust header name as per your server configuration
+    }; */
 
     let response: Response;
     try {
-        response = await fetch(requestUrl, { ...init, headers});
+        response = await ServerConnection.makeRequest(requestUrl, init, settings);
 
         if (!response.ok) {
             throw new ResponseError(response, `Response error: ${await response.text()}`);

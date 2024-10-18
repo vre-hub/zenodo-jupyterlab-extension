@@ -101,14 +101,10 @@ export async function getServerRootDir() {
 
 export async function fetchSandboxStatus() {
     try {
-        let response = await fetch('zenodo-jupyterlab/env?env_var=ZENODO_SANDBOX');
-        if (response.ok) {
-            let data = await response.json();
-            return data.ZENODO_SANDBOX;
-        } else {
-            console.error('Failed to fetch sandbox status');
-            return null;
-        }
+        const data = await requestAPI(`zenodo-jupyterlab/env?env_var=${encodeURIComponent('ZENODO_SANDBOX')}`, {
+            method: 'GET'
+        });
+        return(data.json().ZENODO_SANDBOX);
     } catch (error) {
         console.error('Error fetching sandbox status:', error);
         return null;
@@ -117,18 +113,14 @@ export async function fetchSandboxStatus() {
 
 export async function downloadFile(recordID: string, fileName: string) {
     try {
-        // Fetch the _xsrf token
+        /* // Fetch the _xsrf token
         const xsrfTokenResponse = await fetch('zenodo-jupyterlab/xsrf_token', {
             method: 'GET',
         });
         const xsrfTokenData = await xsrfTokenResponse.json();
-        const xsrfToken = xsrfTokenData.xsrfToken;
-        const response = await fetch('zenodo-jupyterlab/download-file', {
+        const xsrfToken = xsrfTokenData.xsrfToken; */
+        const response = await requestAPI('zenodo-jupyterlab/download-file', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-XSRFToken': xsrfToken  // Add the XSRF token here
-            },
             body: JSON.stringify({
                 file_name: fileName,
                 record_id: recordID
