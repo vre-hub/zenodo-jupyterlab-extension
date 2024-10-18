@@ -68,8 +68,9 @@ class FileBrowserHandler(APIHandler):
     async def get(self):
         # Use the home directory as the root directory
         #root_dir = os.getenv("HOME")
-        relative_path = self.get_query_argument('path', '')
-        full_path = os.path.join(os.getcwd(), relative_path)
+        """ relative_path = self.get_query_argument('path', '')
+        full_path = os.path.join(os.getcwd(), relative_path) """
+        full_path = os.getcwd()
 
         # Check if the directory exists
         if not os.path.isdir(full_path):
@@ -171,7 +172,8 @@ class DownloadFileHandler(APIHandler):
 
 class ServerInfoHandler(APIHandler):
     async def get(self):
-        home_dir = os.getenv("HOME")
+        #home_dir = os.getenv("HOME")
+        home_dir = os.getcwd()
         # Respond with the $HOME directory
         self.finish({'root_dir': home_dir})
 
