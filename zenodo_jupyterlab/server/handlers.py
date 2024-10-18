@@ -4,8 +4,7 @@ import json
 from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
-from tornado.httpclient import AsyncHTTPClient
-import httpx
+import requests
 
 from .upload import upload
 from .testConnection import checkZenodoConnection
@@ -140,32 +139,34 @@ class DownloadFileHandler(APIHandler):
             return
         
         # Get the file name from the URL (this assumes the URL ends with the file name)
-        file_path = os.path.join(home_dir, file_name)  # Full path to save the file
         file_url = f'https://zenodo.org/records/{recordID}/files/{file_name}'
+        if '/' in file_name:
+            file_name =  file_name.replace('/', '_')
+            #self.finish({'status': file_name})
+        file_path = os.path.join(home_dir, file_name)  # Full path to save the file
 
         try:
-            # Use Tornado's AsyncHTTPClient to stream the file directly into the desired location
-            async with httpx.AsyncClient() as client:
-                response = await client.get(file_url)
+            response = requests.get(file_url)
 
-                if response.status_code != 200:
-                    self.set_status(500)
-                    self.finish({'status': f'Failed to download file: {response.status_code}'})
-                    return
+            if response.status_code != 200:
+                self.set_status(500)
+                self.finish({'status': f'Failed to download file: {response.status_code}'})
+                return
 
-                # Stream and write the file directly to the home directory
-                with open(file_path, 'wb') as f:
-                    f.write(response.content)  # Write the file body to the specified path
+            # Stream and write the file directly to the home directory
+            with open(file_path, 'wb') as f:
+                f.write(response.content)  # Write the file body to the specified path
 
 
             # File saved successfully in the remote home directory
-            self.set_header('Content-Type', 'application/json')
-            self.finish({'status': f'File downloaded successfully to {file_path}'})
+            #self.set_header('Content-Type', 'application/json')
+            self.finish({'status': response.status_code})
+            return
 
 
-        except:
+        except Exception as e:
             self.set_status(500)
-            self.finish({'status': f'Error during request'})
+            self.finish({'status': f'Error during request: {e}'})
 
 class ServerInfoHandler(APIHandler):
     async def get(self):

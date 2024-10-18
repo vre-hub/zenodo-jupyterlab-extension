@@ -409,7 +409,7 @@ const SearchWidget: React.FC = () => {
                                                                         {recordInfo.filelist.map((file: string, index: number) => (
                                                                             <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
                                                                             <span>{getFileNameFromUrl(file)}</span>
-                                                                            <button onClick={() => downloadFile(result.id, getFileNameFromUrl(file))} className={classes.button} style={{ marginLeft: '10px' }}>
+                                                                            <button onClick={() => downloadFile(result.id, file)} className={classes.button} style={{ marginLeft: '10px' }}>
                                                                                 📥 {/* You can replace this with an icon from a library if desired */}
                                                                             </button>
                                                                         </li>
