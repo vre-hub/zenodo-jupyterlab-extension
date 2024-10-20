@@ -134,7 +134,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
             try {
                 if (!currentPath) return;
                 console.log(currentPath, rootPath);
-                const response = await fetch(`/zenodo-jupyterlab/files?path=${encodeURIComponent(currentPath)}`);
+                const response = await fetch(`/zenodo-jupyterlab/files?path=${encodeURIComponent('')}`);
                 if (response.ok) {
                     const data = await response.json();
                     setEntries(data.entries || []);
