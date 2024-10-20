@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { searchRecords, searchCommunities, recordInformation } from '../API/API_functions';
+import { searchRecords, searchCommunities, recordInformation, downloadFile } from '../API/API_functions';
 import { createUseStyles } from 'react-jss';
 import clsx from 'clsx';
 
@@ -313,12 +313,12 @@ const SearchWidget: React.FC = () => {
         return fileName;
     }
 
-    function cleanUrl(url: string): string {
+/*     function cleanUrl(url: string): string {
         // Remove "/api" and "/content" from the URL
         return url
             .replace('/api', '') // Remove "/api"
             .replace('/content', ''); // Remove "/content"
-    }
+    } */
 
     return (
         <div className={classes.searchWidget}>
@@ -407,7 +407,12 @@ const SearchWidget: React.FC = () => {
                                                                     <p><strong>Files:</strong></p>
                                                                     <ul>
                                                                         {recordInfo.filelist.map((file: string, index: number) => (
-                                                                            <li key={index}><a href={cleanUrl(file)} target='_blank' rel='noopener noreferrer'>{getFileNameFromUrl(file)}</a></li>
+                                                                            <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                                                                            <span>{getFileNameFromUrl(file)}</span>
+                                                                            <button onClick={() => downloadFile(result.id, file)} className={classes.button} style={{ marginLeft: '10px' }}>
+                                                                                📥 {/* You can replace this with an icon from a library if desired */}
+                                                                            </button>
+                                                                        </li>
                                                                         ))}
                                                                     </ul>
                                                                 </div>

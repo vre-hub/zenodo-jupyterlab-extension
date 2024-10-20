@@ -101,16 +101,53 @@ export async function getServerRootDir() {
 
 export async function fetchSandboxStatus() {
     try {
-        let response = await fetch('zenodo-jupyterlab/env?env_var=ZENODO_SANDBOX');
-        if (response.ok) {
-            let data = await response.json();
-            return data.ZENODO_SANDBOX;
-        } else {
-            console.error('Failed to fetch sandbox status');
-            return null;
-        }
+        const data = await requestAPI(`zenodo-jupyterlab/env?env_var=${encodeURIComponent('ZENODO_SANDBOX')}`, {
+            method: 'GET'
+        });
+        return(data.json().ZENODO_SANDBOX);
     } catch (error) {
         console.error('Error fetching sandbox status:', error);
         return null;
+    }
+}
+
+export async function downloadFile(recordID: string, filePath: string) {
+    try {
+        /* // Fetch the _xsrf token
+        const xsrfTokenResponse = await fetch('zenodo-jupyterlab/xsrf_token', {
+            method: 'GET',
+        });
+        const xsrfTokenData = await xsrfTokenResponse.json();
+        const xsrfToken = xsrfTokenData.xsrfToken; */
+        const start = filePath.indexOf('files/') + 'files/'.length; // Find the start index
+        const end = filePath.indexOf('/content'); // Find the end index
+        const fileName = filePath.substring(start, end);
+        //console.log(fileName, recordID);
+        const response = await requestAPI('zenodo-jupyterlab/download-file', {
+            method: 'POST',
+            body: JSON.stringify({
+                file_name: fileName,
+                record_id: recordID
+            }),
+        });
+
+        console.log(response['status']);
+
+        /* if (!response.ok) {
+            throw new Error(`Failed to download file: ${response.status}`);
+        } */
+
+        /* // Convert the response into a blob and create a download link
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove(); // Remove the link after download
+        window.URL.revokeObjectURL(url); // Clean up URL object */
+    } catch {
+        console.error('Error downloading file:');
     }
 }

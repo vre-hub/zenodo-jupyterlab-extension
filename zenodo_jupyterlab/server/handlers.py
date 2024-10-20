@@ -4,10 +4,12 @@ import json
 from jupyter_server.base.handlers import APIHandler, JupyterHandler
 from jupyter_server.utils import url_path_join
 import os
+import requests
 
 from .upload import upload
 from .testConnection import checkZenodoConnection
 from .search import searchRecords, searchCommunities, recordInformation
+from notebook.services.contents.manager import ContentsManager
 #from eossr.api.zenodo import ZenodoAPI
 
 
@@ -36,10 +38,10 @@ class CodeHandler(APIHandler):
         response = await checkZenodoConnection()
         self.finish({'status': response}) """
 
-class XSRFTokenHandler(JupyterHandler):
+""" class XSRFTokenHandler(JupyterHandler):
     async def get(self):
         xsrf_token = self.xsrf_token
-        self.finish({'xsrfToken': xsrf_token.decode('utf-8') if isinstance(xsrf_token, bytes) else xsrf_token})
+        self.finish({'xsrfToken': xsrf_token.decode('utf-8') if isinstance(xsrf_token, bytes) else xsrf_token}) """
 
 class SearchRecordHandler(APIHandler):
     async def get(self):
@@ -65,15 +67,21 @@ class RecordInfoHandler(APIHandler):
 class FileBrowserHandler(APIHandler):
     async def get(self):
         # Use the home directory as the root directory
-        root_dir = os.getenv("HOME")
+        #root_dir = os.getenv("HOME")
         relative_path = self.get_query_argument('path', '')
-        full_path = os.path.join(root_dir, relative_path)
+        full_path = os.path.join(os.getcwd(), relative_path)
+        print(relative_path, full_path)
 
-        # Check if the directory exists
-        if not os.path.isdir(full_path):
+        if '..' in full_path or not os.path.isdir(full_path):
             self.set_status(404)
             self.finish({"error": "Directory not found"})
             return
+
+        """ # Check if the directory exists
+        if not os.path.isdir(full_path):
+            self.set_status(404)
+            self.finish({"error": "Directory not found"})
+            return """
 
         entries = []
         for entry in os.listdir(full_path):
@@ -84,7 +92,8 @@ class FileBrowserHandler(APIHandler):
             entries.append({
                 "name": entry,
                 "type": "directory" if os.path.isdir(entry_path) else "file",
-                "path": os.path.relpath(entry_path, root_dir).replace('\\', '/'),  # Use relative path from home directory
+                #"path": os.path.relpath(entry_path, os.getcwd()).replace('\\', '/'),  # Use relative path from home directory,
+                "path": os.path.join(full_path, entry),
                 "modified": datetime.fromtimestamp(entry_stat.st_mtime, tz=timezone.utc).isoformat(),
                 "size": entry_stat.st_size
             })
@@ -115,8 +124,8 @@ class ZenodoAPIHandler(APIHandler):
                 if ZenodoAPIHandler.zAPI == None:
                     self.finish({'status': 'Please Log In before trying to '})
                 else:
-                    response = await upload(ZenodoAPIHandler.zAPI, form_data)
-                    self.finish({'status': response})
+                    response, recordID = await upload(ZenodoAPIHandler.zAPI, form_data)
+                    self.finish({'status': response, 'recordID': recordID})
                     """ if response == None:
                         self.finish({'status': '0'})
                     else:
@@ -124,11 +133,53 @@ class ZenodoAPIHandler(APIHandler):
             else:
                 self.finish(json.dumps('null'))
 
+class DownloadFileHandler(APIHandler):
+    async def post(self):
+        data = self.get_json_body()
+        file_name = data.get('file_name', '')
+        recordID = data.get('record_id', '')
 
+        # Define the path to save the file in the server's HOME directory
+        home_dir = os.getenv("HOME")  # Get the HOME directory
+        if not home_dir:
+            self.set_status(500)
+            self.finish({'status': 'Error: HOME directory not found.'})
+            return
+        
+        # Get the file name from the URL (this assumes the URL ends with the file name)
+        file_url = f'https://zenodo.org/records/{recordID}/files/{file_name}'
+        if '/' in file_name:
+            file_name =  file_name.replace('/', '_')
+            #self.finish({'status': file_name})
+        file_path = os.path.join(home_dir, file_name)  # Full path to save the file
+
+        try:
+            response = requests.get(file_url)
+
+            if response.status_code != 200:
+                self.set_status(500)
+                self.finish({'status': f'Failed to download file: {response.status_code}'})
+                return
+
+            # Stream and write the file directly to the home directory
+            with open(file_path, 'wb') as f:
+                f.write(response.content)  # Write the file body to the specified path
+
+
+            # File saved successfully in the remote home directory
+            #self.set_header('Content-Type', 'application/json')
+            self.finish({'status': response.status_code})
+            return
+
+
+        except Exception as e:
+            self.set_status(500)
+            self.finish({'status': f'Error during request: {e}'})
 
 class ServerInfoHandler(APIHandler):
     async def get(self):
         home_dir = os.getenv("HOME")
+        #home_dir = os.getcwd()
         # Respond with the $HOME directory
         self.finish({'root_dir': home_dir})
 
@@ -140,14 +191,15 @@ def setup_handlers(web_app):
     handlers = [
         (url_path_join(base_path, 'env'), EnvHandler),
         (url_path_join(base_path, 'code'), CodeHandler),
-        (url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
+        #(url_path_join(base_path, 'xsrf_token'), XSRFTokenHandler),
         #(url_path_join(base_path, 'test-connection'), ZenodoTestHandler),
         (url_path_join(base_path, 'search-records'), SearchRecordHandler),
         (url_path_join(base_path, 'search-communities'), SearchCommunityHandler),
         (url_path_join(base_path, 'record-info'), RecordInfoHandler),
         (url_path_join(base_path, 'files'), FileBrowserHandler),
         (url_path_join(base_path, 'server-info'), ServerInfoHandler),
-        (url_path_join(base_path, 'zenodo-api'), ZenodoAPIHandler)
+        (url_path_join(base_path, 'zenodo-api'), ZenodoAPIHandler),
+        (url_path_join(base_path, 'download-file'), DownloadFileHandler)
     ]
 
     web_app.add_handlers(".*$", handlers)
