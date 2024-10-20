@@ -70,6 +70,7 @@ class FileBrowserHandler(APIHandler):
         #root_dir = os.getenv("HOME")
         relative_path = self.get_query_argument('path', '')
         full_path = os.path.join(os.getcwd(), relative_path)
+        print(relative_path, full_path)
 
         if '..' in full_path or not os.path.isdir(full_path):
             self.set_status(404)

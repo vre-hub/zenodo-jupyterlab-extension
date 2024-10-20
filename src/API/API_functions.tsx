@@ -147,7 +147,7 @@ export async function downloadFile(recordID: string, filePath: string) {
         a.click();
         a.remove(); // Remove the link after download
         window.URL.revokeObjectURL(url); // Clean up URL object */
-    } catch (error) {
-        console.error('Error downloading file:', error);
+    } catch {
+        console.error('Error downloading file:');
     }
 }
