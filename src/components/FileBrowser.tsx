@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons';
 import { getServerRootDir } from '../API/API_functions';
 import { FileEntry, OnSelectFile } from './type';
+import { requestAPI } from '../API/handler';
 
 const useStyles = createUseStyles({
     container: {
@@ -134,16 +135,18 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ onSelectFile }) => {
             try {
                 if (!currentPath) return;
                 console.log(currentPath, rootPath);
-                const response = await fetch(`/zenodo-jupyterlab/files?path=${encodeURIComponent('')}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setEntries(data.entries || []);
+                const response = await requestAPI(`/zenodo-jupyterlab/files?path=${encodeURIComponent(currentPath)}`, {
+                    method: 'GET'
+                });
+                setEntries(response.entries || []);
+                /* if (response.ok) {
+                    setEntries(response.entries || []);
                 } else {
                     setError('Failed to fetch file entries.');
-                }
-            } catch (error) {
+                } */
+            } catch {
                 setError('Error fetching file entries.');
-                console.error('Error fetching file entries:', error);
+                console.error('Error fetching file entries:');
             } finally {
                 setLoading(false);
             }
